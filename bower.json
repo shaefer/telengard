@@ -1,0 +1,13 @@
+{
+  "name": "telengard",
+  "version": "0.0.1",
+  "dependencies": {
+    "json2": "*",
+    "jquery": "*",
+    "underscore": "*",
+    "seedrandom": "*",
+    "chai": "*",
+    "mocha": "*",
+    "sinon": "*"
+    }
+}
