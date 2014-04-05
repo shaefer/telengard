@@ -22,7 +22,7 @@ Wall.prototype.toString = function () {
 };
 Wall.prototype.hasWall = function () {
     var firstChar = Number(this.id.toString().substring(0, 1))
-    console.debug(firstChar)
+    //console.debug(firstChar)
     return firstChar > 6
 };
 
@@ -66,5 +66,5 @@ function Room(x,y,z) {
     }
 };
 Room.prototype.toString = function () {
-    return "(" + this.x + ", " + this.y + ", " + this.z + "), Room Id: " + this.id + ", North Wall: " + this.getNorthWall().toString()
+    return "(" + this.x + ", " + this.y + ", " + this.z + "), Room Id: " + this.id + ", North Wall: " + this.getNorthWall().hasWall() + ", South Wall: " + this.getSouthWall().hasWall() + ", EastWall: " + this.getEastWall().hasWall() + ", West Wall: " + this.getWestWall().hasWall() + ")";
 };

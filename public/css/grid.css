@@ -9,19 +9,15 @@
     background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.7) 100%), url('http://i.imgur.com/GySvQ.png') repeat 0 0;
 }
 .level {
-   width: 880px;
-   height: 880px; 
+   
 }
 .dungeon {
     border-collapse: collapse;
-    position: relative;
-    left: 40px;
-    top: 40px;
 }
 .dungeon td {
     border: 1px solid #EEE;
-    height: 77px;
-    width: 77px;
+    height: 60px;
+    width: 60px;
 }
 .dungeon td.westWall {
     border-left:  1px solid black !important;
@@ -38,4 +34,7 @@
 .room {
     position: relative;
     border: 1px solid #000;
+}
+.currentLocation {
+    background-color: red;
 }

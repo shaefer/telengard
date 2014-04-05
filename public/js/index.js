@@ -1,56 +1,70 @@
 $(document).ready(init);
-function init()
-{
+function init() {
     console.warn('init');
-
-    draw(2,2,0, 2)
+    var app = new Telengard();
+    var start = new Date();
+    app.render(app.currentPosition,app.currentLevel,app.viewRadius);
+    var end = new Date();
+    console.warn('Time to draw: ' + (end.getTime() - start.getTime()) + "ms");
 }
 
-function draw(x,y,z,radius)
-{
-    if (!radius)
-    {
-        console.warn('no radius was specified')
-        radius = 5;
-    }
-
-    var width = 10;
-    var height = 10;
-    var maxWidthIndex = width - 1;
-    var maxHeightIndex = height - 1;
-
-    var cx = x - radius > 0 ? x - radius : 0;
-    var cy = y - radius > 0 ? x - radius : 0;
-    var mx = x + radius < maxHeightIndex ? x + radius : maxHeightIndex;
-    var my = y + radius < maxWidthIndex ? y + radius : maxWidthIndex;
-    var cz = z;
-
-    var table = $('<table>');
-    table.addClass('dungeon');
-    for (var y = cy; y <= my;y++ )
-    {
-        var row = $('<tr>');
-        table.append(row);
-        for (var x = cx; x <= mx;x++ )
-        {
-            var cell = $('<td>');
-            row.append(cell);
-            cell.addClass("x" + x + "y" + y)
-            var room = new Room(x, y, cz);
-            console.warn(room.toString())
-            console.warn(room.getNorthWall().hasWall());
-            if (y == 0 || room.getNorthWall().hasWall())
-                cell.addClass("northWall")
-            if (x == my || room.getEastWall().hasWall())
-                cell.addClass("eastWall")
-            if (y == mx || room.getSouthWall().hasWall())
-                cell.addClass("southWall")
-            if (x == 0 || room.getWestWall().hasWall())
-                cell.addClass("westWall")
-        }        
-    }
-    table.appendTo($('.level'))
+function Position(x,y,z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+Position.prototype.toString = function() {
+    return "(" + this.x + ", " + this.y + ", " + this.z + ")"; 
 }
 
+function Telengard() {
+    var app = this;
+    this.currentPosition = new Position(5,5,0);
+    this.currentLevel = {depth:0, width:20, height:20};
+    this.viewRadius = 3;
+    this.keyboard = new Keyboard(app);
+    this.setPosition = function (pos) {
+        var self = this;
+        this.currentPosition = pos;
+        this.render(this.currentPosition, this.currentLevel, this.viewRadius);
+    };
+    this.render = function(pos, level, radius) {
+        //pos is the current position. Should be center with squares in each direction equal to radius so radius 2 = 3x3 grid.
+        var container = $('.level').empty();
+        var table = $('<table class="dungeon">').appendTo(container);
+        for(var row = pos.y - radius;row <= pos.y + radius;row++) {
+            var trow = $('<tr>').appendTo(table);
+            for(var col = pos.x - radius;col <= pos.x + radius;col++) {
+                var cell = $('<td>').addClass("x" + col + "y" + row).appendTo(trow);
+                if (row == pos.y && col == pos.x) 
+                    cell.addClass("currentLocation");
 
-        
+                var room = new Room(col, row, level.depth);
+                if (row == 0 || room.getNorthWall().hasWall())
+                    cell.addClass("northWall")
+                if (col == level.width - 1 || room.getEastWall().hasWall())
+                    cell.addClass("eastWall")
+                if (row == level.height - 1 || room.getSouthWall().hasWall())
+                    cell.addClass("southWall")
+                if (col == 0 || room.getWestWall().hasWall())
+                    cell.addClass("westWall")
+
+                if (row == -1)
+                    cell.addClass("southWall")
+                if (col == -1)
+                    cell.addClass("eastWall")
+                if (row >= level.height)
+                    cell.addClass("northWall")
+                if (col >= level.width)
+                    cell.addClass("westWall")
+
+                if (row < 0 || row >= level.height)
+                    cell.addClass("offGrid")
+                if (col < 0 || cell >= level.width)
+                    cell.addClass("offGrid")
+
+                cell.html(col + "," + row);
+            }
+        }
+    };
+}  
