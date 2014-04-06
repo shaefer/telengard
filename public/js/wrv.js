@@ -26,12 +26,27 @@ Wall.prototype.hasWall = function () {
     return firstChar > 6
 };
 
+function DungeonLevel(z) {
+    Math.seedrandom(z);
+    this.id = Math.random().toString().substring(2);
+    this.depth = z;
+    var firstChar = Number(this.id.toString().substring(0, 1));
+    if (firstChar >= 0 && firstChar <=4) {
+        this.width = 5;
+        this.height = 5;
+    }
+    else {
+        this.width = 10;
+        this.height = 10;
+    }
+}
+
 function Room(x,y,z) {
     this.x = x;
     this.y = y;
     this.z = z;
     Math.seedrandom(x.toString() + y.toString() + z.toString());
-    this.id = Math.random();
+    this.id = Math.random().toString().substring(2);
     this.nwVertex = function () {
         var self = this;
         return new Vertex(self.x, self.y, self.z)
@@ -63,6 +78,21 @@ function Room(x,y,z) {
     this.getWestWall = function () {
         var self = this;
         return new Wall(self.nwVertex(), self.swVertex())
+    }
+    this.getWestLimit = function(pos) {
+        //if we start to use offset positionj it will change this to be slightly more complicated.
+        return pos.x == 0;
+    }
+    this.getNorthLimit = function(pos) {
+        return pos.y == 0
+    }
+    this.getEastLimit = function(pos) {
+        var dungeonLevel = new DungeonLevel(pos.z);
+        return pos.x == dungeonLevel.width - 1;
+    }
+    this.getSouthLimit = function(pos) {
+        var dungeonLevel = new DungeonLevel(pos.z);
+        return pos.y == dungeonLevel.height - 1;
     }
 };
 Room.prototype.toString = function () {

@@ -3,7 +3,7 @@ function Keyboard(app) {
     this.leftArrow = function(app) {
         var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getWestWall().hasWall())
+        if (!room.getWestWall().hasWall() && !room.getWestLimit(pos))
         {
             var nextPos = new Position(pos.x - 1, pos.y, pos.z);
             app.setPosition(nextPos);
@@ -17,7 +17,7 @@ function Keyboard(app) {
 	this.rightArrow = function() {
 	    var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getEastWall().hasWall())
+        if (!room.getEastWall().hasWall() && !room.getEastLimit(pos))
         {
             var nextPos = new Position(pos.x + 1, pos.y, pos.z);
             app.setPosition(nextPos);
@@ -31,7 +31,7 @@ function Keyboard(app) {
 	this.upArrow = function() {
 	    var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getNorthWall().hasWall())
+        if (!room.getNorthWall().hasWall() && !room.getNorthLimit(pos))
         {
             var nextPos = new Position(pos.x, pos.y - 1, pos.z);
             app.setPosition(nextPos);
@@ -45,7 +45,7 @@ function Keyboard(app) {
 	this.downArrow = function() {
 	    var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getSouthWall().hasWall())
+        if (!room.getSouthWall().hasWall() && !room.getSouthLimit(pos))
         {
             var nextPos = new Position(pos.x, pos.y + 1, pos.z);
             app.setPosition(nextPos);

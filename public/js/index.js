@@ -19,8 +19,8 @@ Position.prototype.toString = function() {
 
 function Telengard() {
     var app = this;
-    this.currentPosition = new Position(5,5,0);
-    this.currentLevel = {depth:0, width:20, height:20};
+    this.currentPosition = new Position(2,2,0);
+    this.currentLevel = new DungeonLevel(0);
     this.viewRadius = 3;
     this.keyboard = new Keyboard(app);
     this.setPosition = function (pos) {
