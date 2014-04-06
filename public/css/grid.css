@@ -8,33 +8,37 @@
     background: -ms-linear-gradient(top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.7) 100%), url('http://i.imgur.com/GySvQ.png') repeat 0 0;
     background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.7) 100%), url('http://i.imgur.com/GySvQ.png') repeat 0 0;
 }
-.level {
-   
-}
+.level {}
 .dungeon {
-    border-collapse: collapse;
+    border-collapse: collapse; 
+    margin-left: auto;
+    margin-right: auto;  
+    background-image: url(../images/dungeon_floor.jpg);
 }
 .dungeon td {
-    border: 1px solid #EEE;
-    height: 60px;
-    width: 60px;
+    border: 1px solid transparent;
+    height: 150px;
+    width: 150px;
 }
 .dungeon td.westWall {
-    border-left:  1px solid black !important;
+    border-left:  1px solid white !important;
 }
 .dungeon td.eastWall {
-    border-right:  1px solid black !important;
+    border-right:  1px solid white !important;
 }
 .dungeon td.northWall {
-    border-top:  1px solid black !important;
+    border-top:  1px solid white !important;
 }
 .dungeon td.southWall {
-    border-bottom:  1px solid black !important;
+    border-bottom:  1px solid white !important;
 }
 .room {
     position: relative;
-    border: 1px solid #000;
+    border: 1px solid #FFF;
 }
 .currentLocation {
-    background-color: red;
+    background-image: url(../images/barbarian.png);
+    background-size:auto 150px;
+    background-repeat:no-repeat;
+    background-position:center; 
 }

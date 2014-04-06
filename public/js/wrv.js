@@ -32,12 +32,12 @@ function DungeonLevel(z) {
     this.depth = z;
     var firstChar = Number(this.id.toString().substring(0, 1));
     if (firstChar >= 0 && firstChar <=4) {
-        this.width = 5;
-        this.height = 5;
+        this.width = 50;
+        this.height = 50;
     }
     else {
-        this.width = 10;
-        this.height = 10;
+        this.width = 100;
+        this.height = 100;
     }
 }
 

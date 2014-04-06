@@ -21,7 +21,7 @@ function Telengard() {
     var app = this;
     this.currentPosition = new Position(2,2,0);
     this.currentLevel = new DungeonLevel(0);
-    this.viewRadius = 3;
+    this.viewRadius = 2;
     this.keyboard = new Keyboard(app);
     this.setPosition = function (pos) {
         var self = this;
