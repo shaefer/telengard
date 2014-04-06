@@ -1,5 +1,8 @@
 function Keyboard(app) {
 	var _keyboard = this;
+    this.directionMessage = function(direction, pos) {
+        return "You moved <span class='command'>"+direction+"</span> to " + pos.x + "," + pos.y
+    }
     this.leftArrow = function(app) {
         var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
@@ -7,6 +10,7 @@ function Keyboard(app) {
         {
             var nextPos = new Position(pos.x - 1, pos.y, pos.z);
             app.setPosition(nextPos);
+            app.console(this.directionMessage("west", nextPos));
         }
         else
         {
@@ -21,6 +25,7 @@ function Keyboard(app) {
         {
             var nextPos = new Position(pos.x + 1, pos.y, pos.z);
             app.setPosition(nextPos);
+            app.console(this.directionMessage("east", nextPos));
         }
         else
         {
@@ -35,6 +40,7 @@ function Keyboard(app) {
         {
             var nextPos = new Position(pos.x, pos.y - 1, pos.z);
             app.setPosition(nextPos);
+            app.console(this.directionMessage("north", nextPos));
         }
         else
         {
@@ -49,6 +55,7 @@ function Keyboard(app) {
         {
             var nextPos = new Position(pos.x, pos.y + 1, pos.z);
             app.setPosition(nextPos);
+            app.console(this.directionMessage("south", nextPos));
         }
         else
         {

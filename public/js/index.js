@@ -17,6 +17,23 @@ Position.prototype.toString = function() {
     return "(" + this.x + ", " + this.y + ", " + this.z + ")"; 
 }
 
+Number.prototype.padLeft = function(base,chr){
+    var  len = (String(base || 10).length - String(this).length)+1;
+    return len > 0? new Array(len).join(chr || '0')+this : this;
+}
+
+function toTimestamp(d) {
+    var dformat = [
+    (d.getMonth()+1).padLeft(),
+    d.getDate().padLeft(),
+    d.getFullYear()].join('/')+
+    ' ' +
+    [d.getHours().padLeft(),
+    d.getMinutes().padLeft(),
+    d.getSeconds().padLeft()].join(':');
+    return dformat;
+}
+
 function Telengard() {
     var app = this;
     this.currentPosition = new Position(2,2,0);
@@ -27,6 +44,9 @@ function Telengard() {
         var self = this;
         this.currentPosition = pos;
         this.render(this.currentPosition, this.currentLevel, this.viewRadius);
+    };
+    this.console = function(message) {
+        $('.textContainer').prepend($("<div class='consoleMessage'>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"))
     };
     this.render = function(pos, level, radius) {
         //pos is the current position. Should be center with squares in each direction equal to radius so radius 2 = 3x3 grid.

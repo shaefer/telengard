@@ -13,7 +13,9 @@
     border-collapse: collapse; 
     margin-left: auto;
     margin-right: auto;  
-    background-image: url(../images/dungeon_floor.jpg);
+    background-image: url(../images/dungeon_floor_dark.jpg);
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .dungeon td {
     border: 1px solid transparent;
@@ -21,16 +23,16 @@
     width: 150px;
 }
 .dungeon td.westWall {
-    border-left:  1px solid white !important;
+    border-left:  4px solid white !important;
 }
 .dungeon td.eastWall {
-    border-right:  1px solid white !important;
+    border-right:  4px solid white !important;
 }
 .dungeon td.northWall {
-    border-top:  1px solid white !important;
+    border-top:  4px solid white !important;
 }
 .dungeon td.southWall {
-    border-bottom:  1px solid white !important;
+    border-bottom:  4px solid white !important;
 }
 .room {
     position: relative;
@@ -41,4 +43,18 @@
     background-size:auto 150px;
     background-repeat:no-repeat;
     background-position:center; 
+}
+
+.textContainer {
+
+}
+.consoleMessage {
+    position:relative;
+    font: monospace;
+}
+.timestamp {
+    font-size: .8em;
+    position:absolute;
+    right:0;
+    top:0;
 }
