@@ -11,6 +11,7 @@ function Keyboard(app) {
             var nextPos = new Position(pos.x - 1, pos.y, pos.z);
             app.setPosition(nextPos);
             app.console(this.directionMessage("west", nextPos));
+            app.randomEvent();
         }
         else
         {
@@ -26,6 +27,7 @@ function Keyboard(app) {
             var nextPos = new Position(pos.x + 1, pos.y, pos.z);
             app.setPosition(nextPos);
             app.console(this.directionMessage("east", nextPos));
+            app.randomEvent();
         }
         else
         {
@@ -41,6 +43,7 @@ function Keyboard(app) {
             var nextPos = new Position(pos.x, pos.y - 1, pos.z);
             app.setPosition(nextPos);
             app.console(this.directionMessage("north", nextPos));
+            app.randomEvent();
         }
         else
         {
@@ -56,6 +59,7 @@ function Keyboard(app) {
             var nextPos = new Position(pos.x, pos.y + 1, pos.z);
             app.setPosition(nextPos);
             app.console(this.directionMessage("south", nextPos));
+            app.randomEvent();
         }
         else
         {
