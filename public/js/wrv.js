@@ -1,6 +1,12 @@
 //http://pcg.wikidot.com/pcg-algorithm:dungeon-generation
 //http://pcg.wdfiles.com/local--files/pcg-algorithm%3Amaze/growingtree.py
 
+function Position(x,y,z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+
 function Vertex(x,y,z) {
     this.x = x;
     this.y = y;
