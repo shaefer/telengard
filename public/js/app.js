@@ -95,8 +95,9 @@ function Telengard() {
             var critMult = crit ? 2 : 1;
             //combat prowess should determine str multiplier...maybe even crit mult
             //weapon should determine bonus
-            var additionalDamage = Number(id.toString().substring(4, 6))/3;
-            var damage = Math.round((player.strength + additionalDamage) * 1.5 * critMult);
+            var additionalDamage = Number(id.toString().substring(4, 5))/3;
+            var prowessMultiplier = Number("1." + player.prowess);
+            var damage = Math.round((player.strength + additionalDamage) * prowessMultiplier * critMult);
             return {hit:true, crit:crit, damage:damage}
         }
         else

@@ -9,7 +9,7 @@ function PlayerCharacter() {
     this.strength = 10 + (Number(rand.toString().substring(1, 2))/2);
     this.intelligence = 10 + (Number(rand.toString().substring(2, 3))/2);
     this.luck = 10 + (Number(rand.toString().substring(3, 4))/2);
-    this.prowess = 10 + (Number(rand.toString().substring(4, 5))/2);
+    this.prowess = 0 + (Number(rand.toString().substring(4, 5))/2);
 
     this.exp = 0;
 }
