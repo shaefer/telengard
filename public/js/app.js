@@ -38,7 +38,7 @@ function Telengard() {
     this.beginCombat = function() {
         console.warn('beginCombat')
         this.inCombat = true;
-        this.validOptions = ["[F]lee", "[A]ttack"];
+        this.validOptions = ["[<span class='command'>F</span>]lee", "[<span class='command'>A</span>]ttack"];
         var monster = this.getMonster();
         this.currentMonster = monster;
         var pos = this.currentPosition;
@@ -50,20 +50,59 @@ function Telengard() {
 
     this.attack = function() {
         this.console("You have " + this.player.hp + " hp. The " + this.currentMonster.name + " has " + this.currentMonster.hp + " hp.");
-        this.console("You strike for 20 damage.")
-        this.currentMonster.hp = this.currentMonster.hp - 20;
-        if (this.currentMonster.hp <= 0)
+        var strike = this.strike();
+        if (strike.hit)
         {
-            this.console("You killed the " + this.currentMonster.name + "!");
-            this.endCombat();
+            this.console("You strike for <span class='command'>"+strike.damage+"</span> damage.")
+            this.currentMonster.hp = this.currentMonster.hp - strike.damage;
+            if (this.currentMonster.hp <= 0)
+            {
+                this.console("You killed the <span class='command'>" + this.currentMonster.name + "</span>!");
+                this.endCombat();
+            }
+            else
+            {
+                this.stateOptions();
+            }
         }
         else
         {
+            this.console("You missed the <span class='command'>" + this.currentMonster.name + "</span>");
             this.stateOptions();
         }
+        console.warn(this.player);
         //calculate to hit vs current monster ac
         //display hit or miss and damage.
         //redisplay options
+    };
+
+    this.strike = function() {
+        var player = this.player;
+        var toHit = 50 + this.player.strength;
+        Math.seedrandom(new Date().getTime());
+        var id = Math.random().toString().substring(2);
+        this.console("Strike roll: " + id)
+        var swing = Number(id.toString().substring(0, 2));
+        if (swing <= toHit)
+        {
+            var critRoll = Number(id.toString().substring(2, 4));
+            this.console('crit roll: ' + critRoll)
+            var crit = critRoll >= 90 ? true : false;
+            if (crit)
+            {
+                this.console("You scored a critical hit!");
+            }
+            var critMult = crit ? 2 : 1;
+            //combat prowess should determine str multiplier...maybe even crit mult
+            //weapon should determine bonus
+            var additionalDamage = Number(id.toString().substring(4, 6))/3;
+            var damage = Math.round((player.strength + additionalDamage) * 1.5 * critMult);
+            return {hit:true, crit:crit, damage:damage}
+        }
+        else
+        {
+            return {hit:false, crit:false, damage:0}
+        }
     };
 
     this.flee = function() {
