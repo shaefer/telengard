@@ -6,6 +6,9 @@ function Position(x,y,z) {
     this.y = y;
     this.z = z;
 }
+Position.prototype.toString = function() {
+    return "(" + this.x + ", " + this.y + ", " + this.z + ")"; 
+}
 
 function Vertex(x,y,z) {
     this.x = x;

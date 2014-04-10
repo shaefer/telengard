@@ -8,8 +8,9 @@ function init() {
     console.warn('Time to draw: ' + (end.getTime() - start.getTime()) + "ms");
 }
 
-Position.prototype.toString = function() {
-    return "(" + this.x + ", " + this.y + ", " + this.z + ")"; 
+function GetIdChar(rand, index) {
+    console.warn("Index for GetIdChar: " + index);
+    return Number(rand.toString().substring(index, index + 1));
 }
 
 Number.prototype.padLeft = function(base,chr){

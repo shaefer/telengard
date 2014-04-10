@@ -132,6 +132,10 @@ function Telengard() {
             return new Behir(monsterId);
         }
     };
+    this.statsDisplay = function() {
+        $('.col3').empty().append(this.player.toDisplay())
+    };
+    this.statsDisplay();
     this.render = function(pos, level, radius) {
         //pos is the current position. Should be center with squares in each direction equal to radius so radius 2 = 3x3 grid.
         var container = $('.level').empty();
