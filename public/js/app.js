@@ -53,6 +53,7 @@ function Telengard() {
         var strike = this.strike();
         if (strike.hit)
         {
+            console.warn(strike);
             this.console("You strike for <span class='command'>"+strike.damage+"</span> damage.")
             this.currentMonster.hp = this.currentMonster.hp - strike.damage;
             if (this.currentMonster.hp <= 0)
@@ -66,9 +67,7 @@ function Telengard() {
         {
             this.console("You missed the <span class='command'>" + this.currentMonster.name + "</span>");
         }
-        this.monsterAttack = function() {
-
-        };
+        this.monsterAttack()
         this.stateOptions();
         console.warn(this.player);
         //calculate to hit vs current monster ac
@@ -76,9 +75,13 @@ function Telengard() {
         //redisplay options
     };
 
+    this.monsterAttack = function() {
+
+    };
+
     this.strike = function() {
         var player = this.player;
-        var toHit = 50 + this.player.strength;
+        var toHit = Calculation.toHitMonster(player);
         Math.seedrandom(new Date().getTime());
         var id = Math.random().toString().substring(2);
         this.console("Strike roll: " + id)
@@ -93,14 +96,9 @@ function Telengard() {
             {
                 this.console("You scored a critical hit!");
             }
-            var critMult = crit ? player.critMultiplier : 1;
             //combat prowess should determine str multiplier...maybe even crit mult
             //weapon should determine bonus
-            var additionalDamage = Number(id.toString().substring(5, 6))/3;
-            var damage = Math.round(
-                ((player.strength * player.prowessMultiplier) + additionalDamage) * critMult
-            );
-            return {hit:true, crit:crit, damage:damage, calculation:"((" + player.strength + " * " + player.prowessMultiplier + ") + " + additionalDamage + ") * " + critMult }
+            return {hit:true, crit:crit, damage:Calculation.playerDamage(player, crit) }
         }
         else
         {
