@@ -18,7 +18,7 @@ function PlayerCharacter() {
 
 	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/
     this.critPercent = (this.luck/2) + (this.prowess/1);
-
+    this.prowessMultiplier = Number("1." + this.prowess);
     this.exp = 0;
 
     this.toDisplay = function() {

@@ -59,17 +59,17 @@ function Telengard() {
             {
                 this.console("You killed the <span class='command'>" + this.currentMonster.name + "</span>!");
                 this.endCombat();
-            }
-            else
-            {
-                this.stateOptions();
+                return;
             }
         }
         else
         {
             this.console("You missed the <span class='command'>" + this.currentMonster.name + "</span>");
-            this.stateOptions();
         }
+        this.monsterAttack = function() {
+
+        };
+        this.stateOptions();
         console.warn(this.player);
         //calculate to hit vs current monster ac
         //display hit or miss and damage.
@@ -85,20 +85,22 @@ function Telengard() {
         var swing = Number(id.toString().substring(0, 2));
         if (swing <= toHit)
         {
-            var critRoll = Number(id.toString().substring(2, 4));
-            this.console('crit roll: ' + critRoll)
-            var crit = critRoll >= 90 ? true : false;
+            var critRoll = Number(id.toString().substring(2, 5))/10;
+            var critTarget = 100 - (Math.round(player.critPercent * 10)/10);
+            var crit = critRoll >= critTarget ? true : false;
+            this.console("Crit Roll: " + critRoll + " vs " + critTarget);
             if (crit)
             {
                 this.console("You scored a critical hit!");
             }
-            var critMult = crit ? 2 : 1;
+            var critMult = crit ? player.critMultiplier : 1;
             //combat prowess should determine str multiplier...maybe even crit mult
             //weapon should determine bonus
-            var additionalDamage = Number(id.toString().substring(4, 5))/3;
-            var prowessMultiplier = Number("1." + player.prowess);
-            var damage = Math.round((player.strength + additionalDamage) * prowessMultiplier * critMult);
-            return {hit:true, crit:crit, damage:damage}
+            var additionalDamage = Number(id.toString().substring(5, 6))/3;
+            var damage = Math.round(
+                ((player.strength * player.prowessMultiplier) + additionalDamage) * critMult
+            );
+            return {hit:true, crit:crit, damage:damage, calculation:"((" + player.strength + " * " + player.prowessMultiplier + ") + " + additionalDamage + ") * " + critMult }
         }
         else
         {
