@@ -82,22 +82,19 @@ function Telengard() {
     this.strike = function() {
         var player = this.player;
         var toHit = Calculation.toHitMonster(player);
-        Math.seedrandom(new Date().getTime());
-        var id = Math.random().toString().substring(2);
-        this.console("Strike roll: " + id)
+        var id = GetRand();
+        console.debug("Strike roll: " + id)
         var swing = Number(id.toString().substring(0, 2));
         if (swing <= toHit)
         {
             var critRoll = Number(id.toString().substring(2, 5))/10;
-            var critTarget = 100 - (Math.round(player.critPercent * 10)/10);
+            var critTarget = 100 - (Math.round(player.critPercent() * 10)/10);
             var crit = critRoll >= critTarget ? true : false;
             this.console("Crit Roll: " + critRoll + " vs " + critTarget);
             if (crit)
             {
                 this.console("You scored a critical hit!");
             }
-            //combat prowess should determine str multiplier...maybe even crit mult
-            //weapon should determine bonus
             return {hit:true, crit:crit, damage:Calculation.playerDamage(player, crit) }
         }
         else
@@ -107,8 +104,21 @@ function Telengard() {
     };
 
     this.flee = function() {
-        this.console("You have fled from the " + this.currentMonster.name);
-        this.endCombat();
+        var player = this.player;
+        var rand = GetRand();
+        var fleeTarget = 100 - (Math.round(player.fleePercent() * 10)/10)
+        var fleeRoll = Number(rand.toString().substring(0, 3))/10;
+        var fled = fleeRoll >= 100 - fleeTarget;
+        if (fled)
+        {
+            this.console("You have fled from the " + this.currentMonster.name);
+            this.endCombat();
+        }
+        else
+        {
+            this.console("You were not quick enough to escape from the <span class='command'>" + this.currentMonster.name + "</span>");
+            this.stateOptions();
+        }
     };
 
     this.endCombat = function() {

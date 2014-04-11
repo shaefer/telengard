@@ -1,3 +1,8 @@
+function GetRand() {
+    Math.seedrandom(new Date().getTime());
+    return Math.random().toString().substring(2);
+}
+
 function GetIdChar(rand, index) {
     console.warn("Index for GetIdChar: " + index);
     return Number(rand.toString().substring(index, index + 1));
