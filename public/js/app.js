@@ -130,17 +130,10 @@ function Telengard() {
 
     this.getMonster = function() {
         console.warn('getMonster')
-        Math.seedrandom(new Date().getTime());
-        var monsterId = Math.random().toString().substring(2);
-        var firstPair = Number(monsterId.toString().substring(0, 2));
-        if (firstPair <= 49) {
-            this.console("A <span class='command'>dragon</span> stands before you!");
-            return new Dragon(monsterId);
-        }
-        else {
-            this.console("A <span class='command'>behir</span> looms above you!");
-            return new Behir(monsterId);
-        }
+        var monster = GetMonster(this.currentPosition);
+        var foundMonsterPhrase = GetMonsterFoundPhrase(monster.name);
+        this.console(foundMonsterPhrase);
+        return monster;
     };
     this.statsDisplay = function() {
         $('.col3').empty().append(this.player.toDisplay())
