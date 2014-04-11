@@ -1,16 +1,16 @@
 function GetMonster() {
     var roll = DiceUtils.d10().total - 1;
-    if (roll <= 0)
+    if (roll == 0)
         return new Dragon();
-    if (roll > 0 && roll <= 1)
+    if (roll == 1)
         return new Behir();
-    if (roll > 1 && roll <= 3)
+    if (roll.inRange(2, 3))
     	return new TrollFeral();
-    if (roll > 3 && roll <= 5)
+    if (roll.inRange(4, 5))
     	return new TrollWarrior();
-    if (roll > 5 && roll <= 7)
+    if (roll.inRange(6, 7))
     	return new DireRat();
-    if (roll > 7 && roll <= 9)
+    if (roll.inRange(8, 9))
     	return new Basilisk();
 }
 

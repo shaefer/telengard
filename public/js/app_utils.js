@@ -8,6 +8,9 @@ function GetIdChar(rand, index) {
     return Number(rand.toString().substring(index, index + 1));
 }
 
+Number.prototype.inRange = function(from, to) {
+    return this >= from && this <= to;
+}
 Number.prototype.padLeft = function(base,chr){
     var  len = (String(base || 10).length - String(this).length)+1;
     return len > 0? new Array(len).join(chr || '0')+this : this;
