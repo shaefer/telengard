@@ -43,7 +43,7 @@ function Telengard() {
         this.currentMonster = monster;
         var pos = this.currentPosition;
         var monsterImg = $("<img class='monster' src='"+monster.src+"'>");
-        monsterImg.css({top:(-monster.height/1.25) + "px", left:(-monster.width/1.25) + "px"})
+        monsterImg.css({top:(-monster.height/1.25) + "px", left:(-monster.width/1.25) + "px", width:monster.width+"px", height:monster.height+"px"})
         $('.x' + pos.x + 'y' + pos.y).append(monsterImg);
         this.stateOptions();
     };

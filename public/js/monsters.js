@@ -18,11 +18,11 @@ function GetMonsterFoundPhrase(monsterName) {
 	Math.seedrandom(new Date().getTime());
     var id = Math.random().toString().substring(2);
     var digit = Number(id.toString().substring(0, 1));
-    if (digit <= 3)
+    if (digit.inRange(0,3))
     	return "A menacing " + monsterName + " appears from around a corner.";
-    if (digit > 3 && digit <= 6)
+    if (digit.inRange(4,6))
     	return "A vicious " + monsterName + " is ready to attack.";
-    if (digit > 6)
+    if (digit.inRange(7,9))
     	return "An impressive " + monsterName + " looms in front of you."; 
 }
 
@@ -92,8 +92,8 @@ function Basilisk() {
 	this.id = id;
     this.name = "Basilisk";
     this.src = "/images/basilisk__storn_cook.png";
-    this.width = 600;
-    this.height = 346;
+    this.width = 600/2;
+    this.height = 346/2;
     var r = 2;
     this.hp = 50 + GetIdChar(id, r++) + GetIdChar(id, r++);
 }
