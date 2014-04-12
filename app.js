@@ -34,7 +34,7 @@ app.configure(function() {
 });
 
 if (!module.parent) {
-  server.listen(config.port);
+  server.listen(process.env.PORT || config.port);
   console.log('Server started at %s', (new Date()).toUTCString());
   console.log('Listening on port %s', server.address().port);
 }
