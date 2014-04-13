@@ -40,6 +40,7 @@ function Telengard() {
         this.inCombat = true;
         this.validOptions = ["[<span class='command'>F</span>]lee", "[<span class='command'>A</span>]ttack"];
         var monster = this.getMonster();
+        console.warn(monster);
         this.currentMonster = monster;
         var pos = this.currentPosition;
         var monsterImg = $("<img class='monster' src='"+monster.src+"'>");
