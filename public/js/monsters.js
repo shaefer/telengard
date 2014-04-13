@@ -6,7 +6,7 @@ function GetMonster(pos) {
     				Monsters.Gorgon,
     					Monsters.WarTroll, 
     						Monsters.Basilisk, 
-    						Monsters.Cloaker,
+    						Monsters.Unicorn,
     							Monsters.Chuul,
     							Monsters.DarkNaga,
     								Monsters.KoboldMerc,
@@ -87,4 +87,7 @@ BuildMonster("SkeletalDragon", "Skeletal Dragon", "/images/dragon_skeletal__brun
 BuildMonster("ShamblingMound", "Shambing Mound", "/images/shambling_mound__matt_bulahao.png", 296, 268, 1.2, HpFuncBuilder(2, 20, 20));
 
 BuildMonster("Gorgon", "Gorgon", "/images/gorgon__tadas_sidlauskas.png", 300, 253, 1, HpFuncBuilder(3, 20, 80));
+
+BuildMonster("Unicorn", "Unicorn", "/images/unicorn__jeff_ward.png", 270, 300, 1.5, HpFuncBuilder(3, 10, 40));
+
 
