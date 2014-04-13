@@ -88,6 +88,30 @@ BuildMonster("ShamblingMound", "Shambing Mound", "/images/shambling_mound__matt_
 
 BuildMonster("Gorgon", "Gorgon", "/images/gorgon__tadas_sidlauskas.png", 300, 253, 1, HpFuncBuilder(3, 20, 80));
 
+
 BuildMonster("Unicorn", "Unicorn", "/images/unicorn__jeff_ward.png", 270, 300, 1.5, HpFuncBuilder(3, 10, 40));
+BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, HpFuncBuilder(1, 20, 40));
+BuildMonster("Coautl", "Coautl", "/images/coautl__tadas_sidlauskas.png", 300, 300, 1.5, HpFuncBuilder(1, 20, 60));
+BuildMonster("Djinn", "Djinn", "/images/genie_djinn__simon_buckroyd.png", 215, 300, 1.5, HpFuncBuilder(2, 20, 50));
+BuildMonster("SlimeCrawler", "Slime Crawler", "/images/slime_crawler.png", 200, 186, 1.5, HpFuncBuilder(1, 10, 20));
+BuildMonster("ShockerLizard", "Shocker Lizard", "/images/shocker_lizard__matt_bulahao.png", 150, 124, 1, HpFuncBuilder(1, 10, 10));
+BuildMonster("Girallon", "Girallon", "/images/girallon__eric_quigley.png", 240, 300, 1, HpFuncBuilder(2, 10, 50));
 
+BuildMonster("Wyvern", "Wyvern", "/images/wyvern__eric_quigley.png", 300, 277, 1, HpFuncBuilder(1, 20, 60));
+BuildMonster("Hydra", "Hydra", "/images/hydra__jacqui_davis.png", 194, 300, 1, HpFuncBuilder(1, 10, 60));
+BuildMonster("IceGolem", "Ice Golem", "/images/golem_ice__malcolm_mcclinton.png", 237, 300, 1, HpFuncBuilder(1, 20, 80));
+BuildMonster("Redcap", "Redcap", "/images/redcap__bruno_balixa.png", 150, 126, 1, HpFuncBuilder(1, 20, 30));
+BuildMonster("Shoggoth", "Shoggoth", "/images/shoggoth__matt_bulahao.png", 300, 250, 1.5, HpFuncBuilder(1, 20, 60));
 
+BuildMonster("Otyugh", "Otyugh", "/images/otyugh__bruno_balixa.png", 291, 300, 1.5, HpFuncBuilder(1, 20, 60));
+BuildMonster("Lamia", "Lamia", "/images/lamia__bruno_balixa.png", 291, 300, 1.5, HpFuncBuilder(1, 20, 60));
+BuildMonster("SkeletalMage", "Skeletal Mage", "/images/skeleton_halfling__nicole_cardiff.png", 237, 300, 2, HpFuncBuilder(1, 20, 60));
+BuildMonster("DireTiger", "Dire Tiger", "/images/tiger_dire__felipe_gaona.png", 200, 217, 1, HpFuncBuilder(1, 20, 60));
+BuildMonster("FleshGolem", "Flesh Golem", "/images/golem_flesh__matt_bulahao.png", 226, 300, 1.5, HpFuncBuilder(1, 20, 70));
+
+BuildMonster("DireLion", "Dire Lion", "/images/lion_dire__eric_quigley.png", 300, 226, 1.5, HpFuncBuilder(1, 20, 70));
+BuildMonster("KoboldLeader", "Kobold Leader", "/images/kobold_leader__bruno_balixa.png", 139, 150, 1, HpFuncBuilder(2, 20, 20));
+BuildMonster("GiantFlytrap", "Giant Flytrap", "/images/flytrap_giant__jacqui_davis.png", 194, 300, 1.5, HpFuncBuilder(1, 20, 30));
+
+BuildMonster("EarthElemental", "Earth Elemental", "/images/elemental_earth_wtrees__ryan_sumo.png", 274, 300, 1, HpFuncBuilder(1, 20, 100));
+BuildMonster("AirElemental", "Air Elemental", "/images/elemental_air__david_rabbitte_nobg.png", 250, 300, 1, HpFuncBuilder(1, 20, 80));
