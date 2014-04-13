@@ -25,14 +25,14 @@ var Monster = Class.extend({
   }
 });
 
-var BuildMonster = function(varName, name, src, width, height, hpFunc) {
+var BuildMonster = function(varName, name, src, width, height, scale, hpFunc) {
 	Monsters[varName] = Monster.extend({
 		init: function(level){
 			this._super(level);
 			this.name = name;
 			this.src = src;
-			this.width = width;
-			this.height = height;
+			this.width = width/scale;
+			this.height = height/scale;
 			this.hp = hpFunc();
 		}
 	})
@@ -43,15 +43,15 @@ var HpFuncBuilder = function(num, sides, mod) {
 };
 
 var Monsters = {};
-BuildMonster("DireRat", "Dire Rat", "/images/rat_dire__ryan_sumo.png", 212/4, 241/4, HpFuncBuilder(1, 10, 30));
-BuildMonster("OrcLeader", "Orc Leader", "/images/orc_king__eric_quigley.png", 240/1.8, 300/1.8, HpFuncBuilder(2, 10, 30));
-BuildMonster("FeralTroll", "Feral Troll", "/images/troll_feral__forrest_imel.png", 300/1.5, 256/1.5, HpFuncBuilder(2, 10, 60));
-BuildMonster("Behir", "Behir", "/images/behir__bruno_balixa_lq.png", 350/1.5, 361/1.5, HpFuncBuilder(2, 10, 80));
-BuildMonster("RedDragon", "Red Dragon", "/images/dragon_red__malcolm_mcclinton_nobg_lq.png", 500, 353, HpFuncBuilder(3, 10, 100));
-BuildMonster("WarTroll", "War Troll", "/images/troll_warrior__bruno_balixa.png", 236/1.5, 300/1.5, HpFuncBuilder(2, 10, 70));
-BuildMonster("Basilisk", "Basilisk", "/images/basilisk__storn_cook.png", 600/3, 346/3, HpFuncBuilder(2, 10, 50));
-BuildMonster("DireBat", "Dire Bat", "/images/bat_dire__nicole_cardiff.png", 300/3, 232/3, HpFuncBuilder(2, 10, 20));
-BuildMonster("KoboldMerc", "Kobold Mercenary", "/images/kobold_wsword__bruno_balixa.png", 139, 150, HpFuncBuilder(2, 10, 20));
-BuildMonster("Skeleton", "Iron Skeleton", "/images/skeleton_2__bruno_balixa.png", 277/1.8, 300/1.8, HpFuncBuilder(3, 10, 10));
-BuildMonster("IronGolem", "Iron Golem", "/images/golem_iron__bruno_balixa.png", 244, 300, HpFuncBuilder(3, 10, 100));
-BuildMonster("DireCrocodile", "Dire Crocodile", "/images/crocodile_dire__malcolm_mcclinton.png", 300/1.5, 218/1.5, HpFuncBuilder(3, 10, 40));
+BuildMonster("DireRat", "Dire Rat", "/images/rat_dire__ryan_sumo.png", 212, 241, 4, HpFuncBuilder(1, 10, 30));
+BuildMonster("OrcLeader", "Orc Leader", "/images/orc_king__eric_quigley.png", 240, 300, 1.8, HpFuncBuilder(2, 10, 30));
+BuildMonster("FeralTroll", "Feral Troll", "/images/troll_feral__forrest_imel.png", 300, 256, 1.5, HpFuncBuilder(2, 10, 60));
+BuildMonster("Behir", "Behir", "/images/behir__bruno_balixa_lq.png", 350, 361, 1.5, HpFuncBuilder(2, 10, 80));
+BuildMonster("RedDragon", "Red Dragon", "/images/dragon_red__malcolm_mcclinton_nobg_lq.png", 500, 353, 1, HpFuncBuilder(3, 10, 100));
+BuildMonster("WarTroll", "War Troll", "/images/troll_warrior__bruno_balixa.png", 236, 300, 1.5, HpFuncBuilder(2, 10, 70));
+BuildMonster("Basilisk", "Basilisk", "/images/basilisk__storn_cook.png", 600, 346, 3, HpFuncBuilder(2, 10, 50));
+BuildMonster("DireBat", "Dire Bat", "/images/bat_dire__nicole_cardiff.png", 300, 232, 3, HpFuncBuilder(2, 10, 20));
+BuildMonster("KoboldMerc", "Kobold Mercenary", "/images/kobold_wsword__bruno_balixa.png", 139, 150, 1, HpFuncBuilder(2, 10, 20));
+BuildMonster("Skeleton", "Iron Skeleton", "/images/skeleton_2__bruno_balixa.png", 277, 300, 1.8, HpFuncBuilder(3, 10, 10));
+BuildMonster("IronGolem", "Iron Golem", "/images/golem_iron__bruno_balixa.png", 244, 300, 1, HpFuncBuilder(3, 10, 100));
+BuildMonster("DireCrocodile", "Dire Crocodile", "/images/crocodile_dire__malcolm_mcclinton.png", 300, 218, 1.5, HpFuncBuilder(3, 10, 40));
