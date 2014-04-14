@@ -2,6 +2,9 @@ var Calculation = {
 	toHitMonster:function(player) {
 		return 50 + player.prowess;
 	},
+	toHitPlayer:function(player, monster) {
+		return 50 + monster.prowess - player.agility - player.luck;
+	},
 	playerDamage:function(player, crit) {
 		var critMult = crit ? player.critMultiplier() : 1;
 		return Math.round(
