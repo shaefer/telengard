@@ -54,6 +54,7 @@ var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, pr
 			this.height = height/scale;
 			this.hp = hpFunc();
 			this.strength = 10 + DiceUtils.roll(1,5,0).total;
+            this.intelligence = 10 + DiceUtils.roll(1,5,0).total;
 			this.prowess = prowessFunc();
 			this.weaponDamage = function(){
 				return RollFuncBuilder(1,7,3)();
@@ -62,30 +63,15 @@ var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, pr
 	})
 };
 
-var RollFuncBuilder = function(num, sides, mod) {
-	return function() {return DiceUtils.roll(num, sides, mod).total;};
-};
-
-var ProwessLevel = function(pow) {
-	//no prowess, 0-1 (almost none), (1-2), (1-3), (2-3), (2-4), (2-6), (3-6), (4-6), (3-8), (4-8), (5-8), (6-8), (4-10), (5-10), (6-10), (7-10), (8-10), (5-12), (6-12), (7-12), (8-12), (9-12), (8-20), (10-20), (15-20)
-	var prowessLevel = [RollFuncBuilder(0,0,0), RollFuncBuilder(1,2,-1), RollFuncBuilder(1,3,0), RollFuncBuilder(1,2,1), RollFuncBuilder(1,3,1), RollFuncBuilder(1,5,1),
-				RollFuncBuilder(1,4,2), RollFuncBuilder(1,3,3), RollFuncBuilder(1,6,2), RollFuncBuilder(1,5,3), RollFuncBuilder(1,4,4), RollFuncBuilder(1,3,5),
-				RollFuncBuilder(1,7,3), RollFuncBuilder(1,6,4), RollFuncBuilder(1,5,5), RollFuncBuilder(1,4,6), RollFuncBuilder(1,3,7), RollFuncBuilder(1,8,4),
-				RollFuncBuilder(1,7,5), RollFuncBuilder(1,6,6), RollFuncBuilder(1,5,7), RollFuncBuilder(1,4,8), RollFuncBuilder(1,13,7), RollFuncBuilder(1,11,9),
-				RollFuncBuilder(1,6,14)
-				];
-	return prowessLevel[pow];
-}
-
 var Monsters = {};
-BuildMonster("DireBat", "Dire Bat", "/images/bat_dire__nicole_cardiff.png", 300, 232, 3, RollFuncBuilder(2, 10, 20), ProwessLevel(0));
-BuildMonster("DireRat", "Dire Rat", "/images/rat_dire__ryan_sumo.png", 212, 241, 4, RollFuncBuilder(1, 10, 30), ProwessLevel(0));
-BuildMonster("SlimeCrawler", "Slime Crawler", "/images/slime_crawler.png", 200, 186, 1.5, RollFuncBuilder(1, 10, 20), ProwessLevel(0));
-BuildMonster("Skeleton", "Skeleton", "/images/skeleton_2__bruno_balixa.png", 277, 300, 1.8, RollFuncBuilder(3, 10, 10), ProwessLevel(0));
+BuildMonster("DireBat", "Dire Bat", "/images/bat_dire__nicole_cardiff.png", 300, 232, 3, RollFuncBuilder(2, 10, 20), DieLevel(0));
+BuildMonster("DireRat", "Dire Rat", "/images/rat_dire__ryan_sumo.png", 212, 241, 4, RollFuncBuilder(1, 10, 30), DieLevel(0));
+BuildMonster("SlimeCrawler", "Slime Crawler", "/images/slime_crawler.png", 200, 186, 1.5, RollFuncBuilder(1, 10, 20), DieLevel(0));
+BuildMonster("Skeleton", "Skeleton", "/images/skeleton_2__bruno_balixa.png", 277, 300, 1.8, RollFuncBuilder(3, 10, 10), DieLevel(0));
 
-BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, RollFuncBuilder(1, 20, 40), ProwessLevel(1));
-BuildMonster("Basilisk", "Basilisk", "/images/basilisk__storn_cook.png", 600, 346, 3, RollFuncBuilder(2, 10, 50), ProwessLevel(1));
-BuildMonster("ShockerLizard", "Shocker Lizard", "/images/shocker_lizard__matt_bulahao.png", 150, 124, 1, RollFuncBuilder(1, 10, 10), ProwessLevel(1));
+BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, RollFuncBuilder(1, 20, 40), DieLevel(1));
+BuildMonster("Basilisk", "Basilisk", "/images/basilisk__storn_cook.png", 600, 346, 3, RollFuncBuilder(2, 10, 50), DieLevel(1));
+BuildMonster("ShockerLizard", "Shocker Lizard", "/images/shocker_lizard__matt_bulahao.png", 150, 124, 1, RollFuncBuilder(1, 10, 10), DieLevel(1));
 
 BuildMonster("OrcLeader", "Orc Leader", "/images/orc_king__eric_quigley.png", 240, 300, 1.8, RollFuncBuilder(2, 10, 30), RollFuncBuilder(1,2,0));
 BuildMonster("FeralTroll", "Feral Troll", "/images/troll_feral__forrest_imel.png", 300, 256, 1.5, RollFuncBuilder(2, 10, 60), RollFuncBuilder(1,1,0));

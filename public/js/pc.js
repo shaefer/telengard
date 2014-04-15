@@ -7,6 +7,7 @@ function PlayerCharacter() {
     this.level = 1;
 
     this.hp = 20 + GetIdChar(rand, r++);
+    this.maxHp = this.hp;
     this.mp = 5 + GetIdChar(rand, r++)/2;
 
     this.strength = 10 + GetIdChar(rand, r++)/2;
@@ -17,6 +18,7 @@ function PlayerCharacter() {
     this.prowess = 0 + GetIdChar(rand, r++)/2;
 
 	this.exp = 0;
+	this.expToNext = 1000;
 
 	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/
     this.critPercent = function () {
@@ -36,6 +38,18 @@ function PlayerCharacter() {
     this._fleePercent = this.fleePercent();
     this._critMultiplier = this.critMultiplier();
     this._damageMultiplier = this.damageMultiplier();
+
+    this.awardExperience = function(exp) {
+    	this.exp += exp;
+    	if (this.exp >= this.expToNext) {
+    		this.exp = this.exp - this.expToNext; //keep leftover
+    		this.levelUp();
+    	}
+    };
+
+    this.levelUp = function() {
+
+    }
 
     this.toDisplay = function() {
     	return prettyPrint(this);

@@ -64,7 +64,7 @@ function Telengard() {
             this.currentMonster.hp = this.currentMonster.hp - strike.damage;
             if (this.currentMonster.hp <= 0)
             {
-                this.console("You killed the <span class='command'>" + this.currentMonster.name + "</span>!");
+                this.monsterDeath();
                 this.endCombat();
                 return;
             }
@@ -79,6 +79,11 @@ function Telengard() {
         //calculate to hit vs current monster ac
         //display hit or miss and damage.
         //redisplay options
+    };
+
+    this.monsterDeath = function() {
+        this.console("You killed the <span class='command'>" + this.currentMonster.name + "</span>!");
+        this.awardExperience();
     };
 
     this.monsterAttack = function() {
@@ -148,8 +153,13 @@ function Telengard() {
         this.validOptions = [];
     }
 
+    this.awardExperience = function() {
+        var exp = Calculation.experience(this.currentMonster);
+        this.player.awardExperience(exp);
+        this.console("You earned <span class='command'>" + exp + "</span> experience!");
+    }
+
     this.death = function() {
-        //this.endCombat();
         this.console("You died!");
         this.init();
     }
