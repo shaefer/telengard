@@ -1,6 +1,6 @@
 var Calculation = {
 	toHitMonster:function(player) {
-		return 50 + player.prowess;
+		return 50 + player.prowess + player.luck;
 	},
 	toHitPlayer:function(player, monster) {
 		return 50 + monster.prowess - player.agility - player.luck;
@@ -8,11 +8,14 @@ var Calculation = {
 	playerDamage:function(player, crit) {
 		var critMult = crit ? player.critMultiplier() : 1;
 		return Math.round(
-                ((player.strength * player.damageMultiplier()) + Calculation.weaponDamage().total) * critMult
+                ((player.strength * player.damageMultiplier()) + Calculation.weaponDamage()) * critMult
             );
 	},
+	monsterDamage:function(player, monster) {
+		return Math.round((monster.strength * Calculation.damageMultiplier(monster)) + monster.weaponDamage());
+	},
 	weaponDamage:function(weapon) {
-		return DiceUtils.d4();
+		return DiceUtils.d4().total;
 	},
 	critMultiplier:function(player) {
 		return 1.5 + (player.prowess/100);

@@ -53,7 +53,11 @@ var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, pr
 			this.width = width/scale;
 			this.height = height/scale;
 			this.hp = hpFunc();
+			this.strength = 10 + DiceUtils.roll(1,5,0).total;
 			this.prowess = prowessFunc();
+			this.weaponDamage = function(){
+				return RollFuncBuilder(1,7,3)();
+			};
 		}
 	})
 };

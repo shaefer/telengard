@@ -1,13 +1,18 @@
 function Telengard() {
-    var app = this;
-    this.currentPosition = new Position(2,2,0);
-    this.currentLevel = new DungeonLevel(0);
-    this.viewRadius = 2;
-    this.keyboard = new Keyboard(app);
-    this.inCombat = false;
-    this.validOptions = [];
-    this.player = new PlayerCharacter();
-    this.currentMonster = null;
+    this.init = function() {
+        this.currentPosition = new Position(2,2,0);
+        this.currentLevel = new DungeonLevel(0);
+        this.viewRadius = 2;
+        this.keyboard = new Keyboard(this);
+        this.inCombat = false;
+        this.validOptions = [];
+        this.player = new PlayerCharacter();
+        this.currentMonster = null;
+
+        this.statsDisplay();
+        this.startGame();
+    };
+
     this.setPosition = function (pos) {
         var self = this;
         this.currentPosition = pos;
@@ -77,7 +82,21 @@ function Telengard() {
     };
 
     this.monsterAttack = function() {
+        var toHit = Calculation.toHitPlayer(this.player, this.currentMonster);
+        var swing = DiceUtils.d100().total;
+        if (swing <= toHit)
+        {
 
+            var damage = Calculation.monsterDamage(this.player, this.currentMonster);
+            this.console("The " + this.currentMonster.name + " strikes you for <span class='command'>" + damage + "</span> damage.");
+            this.player.hp = this.player.hp - damage;
+            if (this.player.hp <= 0)
+                this.death();
+        }
+        else
+        {
+            this.console("The " + this.currentMonster.name + " <span class='command'>misses</span> you.");
+        }
     };
 
     this.strike = function() {
@@ -85,7 +104,7 @@ function Telengard() {
         var toHit = Calculation.toHitMonster(player);
         var id = GetRand();
         console.debug("Strike roll: " + id)
-        var swing = Number(id.toString().substring(0, 2));
+        var swing = DiceUtils.d100().total;
         if (swing <= toHit)
         {
             var critRoll = Number(id.toString().substring(2, 5))/10;
@@ -129,6 +148,16 @@ function Telengard() {
         this.validOptions = [];
     }
 
+    this.death = function() {
+        //this.endCombat();
+        this.console("You died!");
+        this.init();
+    }
+
+    this.startGame = function() {
+        this.render(new Position(2,2,0), new DungeonLevel(0), 2);
+    }
+
     this.getMonster = function() {
         console.warn('getMonster')
         var monster = GetMonster(this.currentPosition);
@@ -139,7 +168,6 @@ function Telengard() {
     this.statsDisplay = function() {
         $('.col3').empty().append(this.player.toDisplay())
     };
-    this.statsDisplay();
     this.render = function(pos, level, radius) {
         //pos is the current position. Should be center with squares in each direction equal to radius so radius 2 = 3x3 grid.
         var container = $('.level').empty();
@@ -179,4 +207,6 @@ function Telengard() {
             }
         }
     };
+
+    this.init();
 }  
