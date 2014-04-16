@@ -94,6 +94,7 @@ function Keyboard(app) {
         }
 	}
 
+    $(document).unbind();
 	$(document).keydown(function(e) {
         switch(e.which) {
             case Keys.Arrows.left: // left

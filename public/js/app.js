@@ -55,6 +55,7 @@ function Telengard() {
     };
 
     this.attack = function() {
+        if (!this.inCombat) return;
         this.console("You have " + this.player.hp + " hp. The " + this.currentMonster.name + " has " + this.currentMonster.hp + " hp.");
         var strike = this.strike();
         if (strike.hit)
@@ -129,6 +130,7 @@ function Telengard() {
     };
 
     this.flee = function() {
+        if (!this.inCombat) return;
         var player = this.player;
         var rand = GetRand();
         var fleeTarget = 100 - (Math.round(player.fleePercent() * 10)/10)
@@ -155,13 +157,17 @@ function Telengard() {
 
     this.awardExperience = function() {
         var exp = Calculation.experience(this.currentMonster);
-        this.player.awardExperience(exp);
+        var leveledUp = this.player.awardExperience(exp);
+        this.statsDisplay();
         this.console("You earned <span class='command'>" + exp + "</span> experience!");
+        if (leveledUp)
+            this.console("You are now level <span class='command'>" + this.player.level + "</span>!");
     }
 
     this.death = function() {
         this.console("You died!");
         this.init();
+        console.warn(this);
     }
 
     this.startGame = function() {

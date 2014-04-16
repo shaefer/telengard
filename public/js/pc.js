@@ -6,7 +6,7 @@ function PlayerCharacter() {
 
     this.level = 1;
 
-    this.hp = 20 + GetIdChar(rand, r++);
+    this.hp = 200 + GetIdChar(rand, r++);
     this.maxHp = this.hp;
     this.mp = 5 + GetIdChar(rand, r++)/2;
 
@@ -17,8 +17,8 @@ function PlayerCharacter() {
     this.luck = 0 + GetIdChar(rand, r++)/2;
     this.prowess = 0 + GetIdChar(rand, r++)/2;
 
-	this.exp = 0;
-	this.expToNext = 1000;
+	this.exp = 450;
+	this.expToNext = 500;
 
 	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/
     this.critPercent = function () {
@@ -41,14 +41,33 @@ function PlayerCharacter() {
 
     this.awardExperience = function(exp) {
     	this.exp += exp;
-    	if (this.exp >= this.expToNext) {
-    		this.exp = this.exp - this.expToNext; //keep leftover
-    		this.levelUp();
-    	}
+    	return this.levelUp();
     };
 
     this.levelUp = function() {
+		if (this.exp < this.expToNext) return false;
 
+		this.exp = this.exp - this.expToNext; //keep leftover
+		this.level++;
+		this.expToNext = Math.pow(this.level, 2)/2 * 1000;
+
+		this.strength += DiceUtils.d6().total;
+		this.intelligence+= DiceUtils.d6().total;
+		this.agility += DiceUtils.d6().total;
+		this.luck += DiceUtils.d4().total;
+		this.prowess += DiceUtils.d4().total;
+
+		var additionalHp = DiceUtils.roll(1,11,9).total;
+		this.maxHp += additionalHp;
+		if (this.hp + (additionalHp * 2) <= this.maxHp) {
+			this.hp += (additionalHp * 2);
+		}
+		else
+		{
+			this.hp = this.maxHp;
+		}
+
+		return true;
     }
 
     this.toDisplay = function() {
