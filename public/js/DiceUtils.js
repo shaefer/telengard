@@ -106,6 +106,7 @@ DiceUtils.d100 = function(modifier)
 {
 	return DiceUtils.roll(1, 100, modifier);
 };
+d00 = function() {return DiceUtils.d100().total};
 DiceUtils.rollPercentile = function()
 {
 	return DiceUtils.roll(1, 100);

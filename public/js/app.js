@@ -19,8 +19,11 @@ function Telengard() {
         this.render(this.currentPosition, this.currentLevel, this.viewRadius);
     };
     this.console = function(message) {
-        $('.textContainer').prepend($("<div class='consoleMessage'>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"))
+        $('.textContainer').prepend($("<div class='consoleMessage'>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"));
     };
+    this.debug = function(message) {
+        $('.textContainer').prepend($("<div class='consoleMessage'><span class='debug'>[DEBUG]</span>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"));
+    }
     this.stateOptions = function() {
         var join = ", "
         if (this.validOptions.length == 2)
@@ -56,7 +59,7 @@ function Telengard() {
 
     this.attack = function() {
         if (!this.inCombat) return;
-        this.console("You have " + this.player.hp + " hp. The " + this.currentMonster.name + " has " + this.currentMonster.hp + " hp.");
+        this.console("The " + this.currentMonster.name + " has " + this.currentMonster.hp + " hp.");
         var strike = this.strike();
         if (strike.hit)
         {
@@ -74,7 +77,8 @@ function Telengard() {
         {
             this.console("You missed the <span class='command'>" + this.currentMonster.name + "</span>");
         }
-        this.monsterAttack()
+        this.monsterAttack();
+        this.statsDisplay();
         this.stateOptions();
         console.warn(this.player);
         //calculate to hit vs current monster ac
@@ -85,6 +89,16 @@ function Telengard() {
     this.monsterDeath = function() {
         this.console("You killed the <span class='command'>" + this.currentMonster.name + "</span>!");
         this.awardExperience();
+        this.statsDisplay();
+    };
+
+    this.monsterAttackOfOpportunity = function() {
+        var opRoll = d00();
+        var target = 100 - Math.round(25 + this.currentMonster.prowess - (this.player.agility + this.player.luck));
+        if (opRoll <= target) {
+            this.console("The " + this.currentMonster.name + " takes advantage of your attempted flight and attacks!");
+            this.monsterAttack();
+        }
     };
 
     this.monsterAttack = function() {
@@ -103,20 +117,19 @@ function Telengard() {
         {
             this.console("The " + this.currentMonster.name + " <span class='command'>misses</span> you.");
         }
+        this.statsDisplay();
     };
 
     this.strike = function() {
         var player = this.player;
         var toHit = Calculation.toHitMonster(player);
-        var id = GetRand();
-        console.debug("Strike roll: " + id)
-        var swing = DiceUtils.d100().total;
+        var swing = d00();
         if (swing <= toHit)
         {
-            var critRoll = Number(id.toString().substring(2, 5))/10;
+            var critRoll = d00();
             var critTarget = 100 - (Math.round(player.critPercent() * 10)/10);
             var crit = critRoll >= critTarget ? true : false;
-            this.console("Crit Roll: " + critRoll + " vs " + critTarget);
+            this.debug("Crit Roll: " + critRoll + " vs " + critTarget);
             if (crit)
             {
                 this.console("You scored a critical hit!");
@@ -132,9 +145,9 @@ function Telengard() {
     this.flee = function() {
         if (!this.inCombat) return;
         var player = this.player;
-        var rand = GetRand();
-        var fleeTarget = 100 - (Math.round(player.fleePercent() * 10)/10)
-        var fleeRoll = Number(rand.toString().substring(0, 3))/10;
+        var fleeTarget = 100 - Math.round((Math.round(player.fleePercent() * 10)/10));
+        var fleeRoll = d00();
+        this.debug("Flee roll: " + fleeRoll + " vs " + fleeTarget);
         var fled = fleeRoll >= 100 - fleeTarget;
         if (fled)
         {
@@ -144,6 +157,7 @@ function Telengard() {
         else
         {
             this.console("You were not quick enough to escape from the <span class='command'>" + this.currentMonster.name + "</span>");
+            this.monsterAttackOfOpportunity();
             this.stateOptions();
         }
     };
@@ -158,7 +172,6 @@ function Telengard() {
     this.awardExperience = function() {
         var exp = Calculation.experience(this.currentMonster);
         var leveledUp = this.player.awardExperience(exp);
-        this.statsDisplay();
         this.console("You earned <span class='command'>" + exp + "</span> experience!");
         if (leveledUp)
             this.console("You are now level <span class='command'>" + this.player.level + "</span>!");
