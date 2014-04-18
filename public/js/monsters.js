@@ -1,28 +1,9 @@
 function GetMonster(pos) {
     var roll = DiceUtils.roll(2, 11, -2).total;
     console.debug("Monster roll: " + roll);
-    var level0 = [Monsters.Behir, 
-    				Monsters.Froghemoth, 
-    				Monsters.Gorgon,
-    					Monsters.WarTroll, 
-    						Monsters.Basilisk, 
-    						Monsters.Unicorn,
-    							Monsters.Chuul,
-    							Monsters.DarkNaga,
-    								Monsters.KoboldMerc,
-    								Monsters.DireBat, 
-    									Monsters.DireRat, 
-    			 					Monsters.Skeleton, 
-    			 					Monsters.OrcLeader, 
-    			 				Monsters.DireCrocodile, 
-    			 				Monsters.IronCobra,
-    			 			Monsters.FeralTroll,
-    			 			Monsters.ShamblingMound,
-    			 		Monsters.Cyclops,
-    			 	Monsters.IronGolem, 
-    			 	Monsters.SkeletalDragon,
-    			 Monsters.RedDragon];
-    var monsterFunc = level0[roll]
+    var monsterKeys = Object.keys(Monsters);
+    var key = monsterKeys[DiceUtils.roll(1,monsterKeys.length,-1).total];
+    var monsterFunc = Monsters[key];
     return new monsterFunc(pos.z);
 }
 
