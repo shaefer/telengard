@@ -31,15 +31,13 @@ function Telengard() {
         this.console(this.validOptions.join(join));
     };
     this.randomEvent = function() {
-        Math.seedrandom(new Date().getTime());
-        var randomEventId = Math.random().toString().substring(2);
-        var firstPair = Number(randomEventId.toString().substring(0, 2))
         //degrees of good events
         //random bad thing
         //totally weird event
         //battle
-        console.warn('Pair rolled for randomEvent: ' + firstPair);
-        if (firstPair <= 49) {
+        var roll = d00();
+        this.debug('Pair rolled for randomEvent: ' + roll);
+        if (roll <= 49) {
             this.beginCombat();
         }
     };

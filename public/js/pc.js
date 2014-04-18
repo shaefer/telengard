@@ -17,7 +17,7 @@ function PlayerCharacter() {
     this.luck = 0 + GetIdChar(rand, r++)/2;
     this.prowess = 0 + GetIdChar(rand, r++)/2;
 
-	this.exp = 450;
+	this.exp = 0;
 	this.expToNext = 500;
 
 	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/

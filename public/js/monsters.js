@@ -8,13 +8,12 @@ function GetMonster(pos) {
 }
 
 function GetMonsterFoundPhrase(monsterName) {
-    var id = Math.random().toString().substring(2);
-    var digit = Number(id.toString().substring(0, 1));
-    if (digit.inRange(0,3))
+    var digit = DiceUtils.roll(1,3).total;
+    if (digit == 1)
     	return "A menacing " + monsterName + " appears from around a corner.";
-    if (digit.inRange(4,6))
+    if (digit == 2)
     	return "A vicious " + monsterName + " is ready to attack.";
-    if (digit.inRange(7,9))
+    if (digit == 3)
     	return "An impressive " + monsterName + " looms in front of you."; 
 }
 
