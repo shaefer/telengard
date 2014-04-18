@@ -49,13 +49,26 @@ function DungeonLevel(z) {
         this.height = 100;
     }
 }
-
+function InRoom(room, pos) {
+    return room.x == pos.x && room.y == pos.y && room.z == pos.z;
+}
+function GetRoom(pos) {
+    return new Room(pos.x, pos.y, pos.z);
+}
 function Room(x,y,z) {
     this.x = x;
     this.y = y;
     this.z = z;
     Math.seedrandom(x.toString() + y.toString() + z.toString());
     this.id = Math.random().toString().substring(2);
+    this.hasInn = function() {
+        var innChar = GetIdCharPair(this.id, 0);
+        return innChar == 78 && z == 0 
+    };
+    this.inn = function() {
+        if (!this.hasInn()) return null;
+        return new Inn(this.id);
+    };
     this.nwVertex = function () {
         var self = this;
         return new Vertex(self.x, self.y, self.z)
@@ -105,5 +118,10 @@ function Room(x,y,z) {
     }
 };
 Room.prototype.toString = function () {
-    return "(" + this.x + ", " + this.y + ", " + this.z + "), Room Id: " + this.id + ", North Wall: " + this.getNorthWall().hasWall() + ", South Wall: " + this.getSouthWall().hasWall() + ", EastWall: " + this.getEastWall().hasWall() + ", West Wall: " + this.getWestWall().hasWall() + ")";
+    return "(" + this.x + ", " + this.y + ", " + this.z + "), Room Id: " + this.id + ", North Wall: " + this.getNorthWall().hasWall() + ", South Wall: " + this.getSouthWall().hasWall() + ", EastWall: " + this.getEastWall().hasWall() + ", West Wall: " + this.getWestWall().hasWall() + ", inn: " + this.hasInn + ")";
 };
+
+function Inn(id) {
+    this.id = id;
+    this.name = "Worthy Inn " + id;
+}

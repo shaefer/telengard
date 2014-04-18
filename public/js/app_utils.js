@@ -8,6 +8,11 @@ function GetIdChar(rand, index) {
     return Number(rand.toString().substring(index, index + 1));
 }
 
+function GetIdCharPair(rand, index) {
+    console.warn("Index for GetIdCharPair: " + index);
+    return Number(rand.toString().substring(index, index + 2));
+}
+
 Number.prototype.inRange = function(from, to) {
     return this >= from && this <= to;
 }

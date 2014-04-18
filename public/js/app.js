@@ -1,6 +1,7 @@
 function Telengard() {
     this.init = function() {
         this.currentPosition = new Position(2,2,0);
+        console.warn('room: ' + GetRoom(this.currentPosition).toString());
         this.currentLevel = new DungeonLevel(0);
         this.viewRadius = 2;
         this.keyboard = new Keyboard(this);
@@ -14,7 +15,6 @@ function Telengard() {
     };
 
     this.setPosition = function (pos) {
-        var self = this;
         this.currentPosition = pos;
         this.render(this.currentPosition, this.currentLevel, this.viewRadius);
     };
@@ -165,7 +165,17 @@ function Telengard() {
         this.currentMonster = null;
         $('.monster').remove();
         this.validOptions = [];
-    }
+        this.describePosition();
+    };
+
+    this.describePosition = function() {
+        var loc = GetRoom(this.currentPosition);
+        var inn = loc.inn();
+        if (inn != null)
+        {
+            this.console("You stand outside the " + inn.name);
+        }
+    };
 
     this.awardExperience = function() {
         var exp = Calculation.experience(this.currentMonster);
@@ -229,6 +239,14 @@ function Telengard() {
                     cell.addClass("offGrid")
                 if (col < 0 || cell >= level.width)
                     cell.addClass("offGrid")
+
+                if (room.hasInn() && InRoom(room, pos))
+                {
+                    console.warn(room.toString() + " has inn.")
+                    var inn = room.inn();
+                    cell.addClass("inn");
+                    this.console("You stand outside the " + inn.name);
+                }
 
                 cell.html(col + "," + row);
             }
