@@ -18,6 +18,7 @@ DiceResult.prototype.toString = function(){
 };
 DiceUtils = {};
 function diceComp (s, m, n, f, a) {
+	Math.seedrandom(new Date().getTime());
     m = parseInt( m );
     if( isNaN( m ) ) m = 1;
     n = parseInt( n );
@@ -60,6 +61,7 @@ DiceUtils.rollDropLowest = function(numOfDice, sidesOfDice, modifier)
 };
 DiceUtils.roll = function(numOfDice, sidesOfDice, modifier)
 {
+	Math.seedrandom(new Date().getTime());
 	if (typeof numOfDice == 'string' && numOfDice.match(/[dD]/) != null)
 		return DiceUtils.parseDice(numOfDice);
 	else if (typeof numOfDice == 'string')

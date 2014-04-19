@@ -114,12 +114,15 @@ function Keyboard(app) {
             break;
 
             case Keys.QWERTY.a:
-            if (app.inCombat) app.attack();
+            app.attack();
             break;
 
             case Keys.QWERTY.f:
-            if (app.inCombat) app.flee()
+            app.flee()
             break;
+
+            case Keys.QWERTY.r:
+            app.restAtInn(); 
 
             default: return; // exit this handler for other keys
         }

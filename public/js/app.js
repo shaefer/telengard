@@ -9,7 +9,7 @@ function Telengard() {
         this.validOptions = [];
         this.player = new PlayerCharacter();
         this.currentMonster = null;
-
+        this.debugMode = true;
         this.statsDisplay();
         this.startGame();
     };
@@ -22,7 +22,8 @@ function Telengard() {
         $('.textContainer').prepend($("<div class='consoleMessage'>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"));
     };
     this.debug = function(message) {
-        $('.textContainer').prepend($("<div class='consoleMessage'><span class='debug'>[DEBUG]</span>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"));
+        if (this.debugMode)
+            $('.textContainer').prepend($("<div class='consoleMessage'><span class='debug'>[DEBUG]</span>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"));
     }
     this.stateOptions = function() {
         var join = ", "
@@ -31,6 +32,7 @@ function Telengard() {
         this.console(this.validOptions.join(join));
     };
     this.randomEvent = function() {
+        this.player.step();
         //degrees of good events
         //random bad thing
         //totally weird event
@@ -40,6 +42,8 @@ function Telengard() {
         if (roll <= 49) {
             this.beginCombat();
         }
+        //whenever nothing random is happening describe room and options based on room features.
+        this.describePosition();
     };
     this.beginCombat = function() {
         console.warn('beginCombat')
@@ -171,29 +175,44 @@ function Telengard() {
     this.describePosition = function() {
         var loc = GetRoom(this.currentPosition);
         var inn = loc.inn();
-        if (inn != null)
+        if (inn != null && !this.inCombat)
         {
             this.console("You stand outside the " + inn.name);
+            this.validOptions = ["[<span class='command'>R</span>]est at the Inn."];
         }
+        else
+        {
+            this.validOptions = [];
+        }
+        this.stateOptions();
+    };
+
+    this.restAtInn = function() {
+        var inn = GetRoom(this.currentPosition).inn();
+        if (inn == null || this.inCombat) return;
+        this.player.rest();
+        this.statsDisplay();
+        this.console("You feel refreshed. Your hit points and magic are restored!");
     };
 
     this.awardExperience = function() {
-        var exp = Calculation.experience(this.currentMonster);
-        var leveledUp = this.player.awardExperience(exp);
+        var exp = Calculation.experience(this.player, this.currentMonster);
+        var leveledUp = this.player.awardKillAndExperience(this.currentMonster, exp);
         this.console("You earned <span class='command'>" + exp + "</span> experience!");
         if (leveledUp)
             this.console("You are now level <span class='command'>" + this.player.level + "</span>!");
-    }
+    };
 
     this.death = function() {
         this.console("You died!");
         this.init();
         console.warn(this);
-    }
+    };
 
     this.startGame = function() {
         this.render(new Position(2,2,0), new DungeonLevel(0), 2);
-    }
+        this.describePosition();
+    };
 
     this.getMonster = function() {
         console.warn('getMonster')
@@ -245,7 +264,6 @@ function Telengard() {
                     console.warn(room.toString() + " has inn.")
                     var inn = room.inn();
                     cell.addClass("inn");
-                    this.console("You stand outside the " + inn.name);
                 }
 
                 cell.html(col + "," + row);

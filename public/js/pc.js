@@ -6,9 +6,10 @@ function PlayerCharacter() {
 
     this.level = 1;
 
-    this.hp = 200 + GetIdChar(rand, r++);
+    this.hp = 20 + GetIdChar(rand, r++);
     this.maxHp = this.hp;
     this.mp = 5 + GetIdChar(rand, r++)/2;
+    this.maxMp = this.mp;
 
     this.strength = 10 + GetIdChar(rand, r++)/2;
     this.intelligence = 10 + GetIdChar(rand, r++)/2;
@@ -19,6 +20,11 @@ function PlayerCharacter() {
 
 	this.exp = 0;
 	this.expToNext = 500;
+
+	this.kills = [];
+	this.steps = 0;
+	this.stepsSinceLastRest = 0;
+	this.killsSinceLastRest = 0;
 
 	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/
     this.critPercent = function () {
@@ -39,9 +45,20 @@ function PlayerCharacter() {
     this._critMultiplier = this.critMultiplier();
     this._damageMultiplier = this.damageMultiplier();
 
-    this.awardExperience = function(exp) {
+    this.step = function() {
+    	this.steps++;
+    	this.stepsSinceLastRest++;
+    };
+
+    this.awardKillAndExperience = function(monster, exp) {
+    	this.kills.push({name:monster.name, level:monster.level});
+    	this.killsSinceLastRest++;
     	this.exp += exp;
     	return this.levelUp();
+    };
+
+    this.adventurerExperienceBonusMultiplier = function() {
+    	return 1 + this.killsSinceLastRest/100
     };
 
     this.levelUp = function() {
@@ -69,6 +86,13 @@ function PlayerCharacter() {
 
 		return true;
     }
+
+    this.rest = function() {
+		this.hp = this.maxHp;
+        this.mp = this.maxMp;
+        this.stepsSinceLastRest = 0;
+        this.killsSinceLastRest = 0;
+    };
 
     this.toDisplay = function() {
     	return prettyPrint(this);

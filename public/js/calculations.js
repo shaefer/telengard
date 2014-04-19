@@ -29,13 +29,15 @@ var Calculation = {
 	critPercent:function(player) {
 		return (player.luck/2) + (player.prowess/1);
 	},
-	experience:function(monster) {
+	experience:function(player, monster) {
 		var prowessMultiplier = 1 + (monster.prowess/100)
 		var damageMultiplier = 1 + (monster.damageLevel/10);
 		var combatExp = damageMultiplier * prowessMultiplier * monster.level;
 		var spellExp = 1 * monster.level;
 		var hpExp = monster.maxHp / 3 * monster.level;
-		return Math.round(combatExp + spellExp + hpExp);
+		var adventurerBonus = player.adventurerExperienceBonusMultiplier(); //TODO: Set a max on this?
+		console.debug(adventurerBonus);
+		return Math.round((combatExp + spellExp + hpExp) * adventurerBonus);
 	}
 }
 
