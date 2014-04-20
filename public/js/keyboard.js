@@ -15,9 +15,9 @@ function Keyboard(app) {
         return "You moved <span class='command'>"+direction+"</span> to " + pos.x + "," + pos.y
     }
     this.move = function(app, direction) {
-        if (app.inCombat)
+        if (app.busy)
         {
-            app.console("You are in combat. Please select a valid option.");
+            app.console("You are busy. Please select a valid option.");
             app.stateOptions();
             return;
         }

@@ -6,6 +6,7 @@ function Telengard() {
         this.viewRadius = 2;
         this.keyboard = new Keyboard(this);
         this.inCombat = false;
+        this.busy = false;
         this.validOptions = [];
         this.player = new PlayerCharacter();
         this.currentMonster = null;
@@ -58,6 +59,7 @@ function Telengard() {
     this.beginCombat = function() {
         console.warn('beginCombat')
         this.inCombat = true;
+        this.busy = true;
         this.validOptions = ["[<span class='command'>F</span>]lee", "[<span class='command'>A</span>]ttack"];
         var monster = this.getMonster();
         console.warn(monster);
@@ -77,6 +79,7 @@ function Telengard() {
     };
 
     this.friendlyMonster = function() {
+        this.busy = true;
         var monster = this.getMonster();
         this.currentMonster = monster;
         var pos = this.currentPosition;
@@ -95,6 +98,7 @@ function Telengard() {
         if (!this.currentGift) return;
 
         this.console("You accept the kind offer from the " + this.currentMonster.name);
+        this.busy = false;
         this.currentMonster = null;
         this.player.gold += this.currentGift;
         this.currentGift = null;
@@ -212,6 +216,7 @@ function Telengard() {
 
     this.endCombat = function() {
         this.inCombat = false;
+        this.busy = false;
         this.currentMonster = null;
         $('.monster').remove();
         this.validOptions = [];
