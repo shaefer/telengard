@@ -135,7 +135,7 @@ function Telengard() {
     };
 
     this.monsterDeath = function() {
-        this.console("You killed the <span class='command'>" + this.currentMonster.name + "</span>!");
+        this.console("You killed the <span class='monsterName'>" + this.currentMonster.name + "</span>!");
         this.awardExperience();
         this.statsDisplay();
     };
