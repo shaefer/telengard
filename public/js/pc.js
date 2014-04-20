@@ -26,6 +26,11 @@ function PlayerCharacter() {
 	this.stepsSinceLastRest = 0;
 	this.killsSinceLastRest = 0;
 
+	this.lookingForTrouble = false;
+
+	this.weapon = GetWeapon("Dagger", 0);
+	this.gold = 0;
+
 	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/
     this.critPercent = function () {
     	return Calculation.critPercent(this);

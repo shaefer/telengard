@@ -55,6 +55,7 @@
 .consoleMessage {
     position:relative;
     font: monospace;
+    padding-right: 42px;
 }
 .timestamp {
     font-size: .8em;
@@ -64,4 +65,25 @@
 }
 .command {
     color: red;
+}
+.goodEvent {
+    color:green;
+}
+.gold {
+    background-color: black;
+    color: gold;
+}
+.miss {
+    color: gray;
+}
+.experience {
+    color: blue;
+}
+.monsterName {
+    background-color:black;
+    color:orange;
+}
+.levelup {
+    background-color:black;
+    color:green;
 }

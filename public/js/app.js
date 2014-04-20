@@ -39,8 +39,18 @@ function Telengard() {
         //battle
         var roll = d00();
         this.debug('Pair rolled for randomEvent: ' + roll);
-        if (roll <= 49) {
+        var topCombatRange = 50;
+        if (this.player.lookingForTrouble) {
+            topCombatRange += 10;
+        }
+        if (roll.inRange(11, topCombatRange)) {
             this.beginCombat();
+        }
+        else if (roll.inRange(6, 10)) {
+            this.friendlyMonster();
+        }
+        else if (roll.inRange(1, 5)) {
+            this.findExtraTreasure();
         }
         //whenever nothing random is happening describe room and options based on room features.
         this.describePosition();
@@ -59,9 +69,45 @@ function Telengard() {
         this.stateOptions();
     };
 
+    this.findExtraTreasure = function() {
+        var gold = DiceUtils.roll(1, 200).total;
+        this.player.gold += gold;
+        this.console("You found a hidden alcove and within it you discover " + gold + " pieces.");
+        this.describePosition();
+    };
+
+    this.friendlyMonster = function() {
+        var monster = this.getMonster();
+        this.currentMonster = monster;
+        var pos = this.currentPosition;
+        var monsterImg = $("<img class='monster' src='"+monster.src+"'>");
+        monsterImg.css({top:(-monster.height/1.25) + "px", left:(-monster.width/1.25) + "px", width:monster.width+"px", height:monster.height+"px"})
+        $('.x' + pos.x + 'y' + pos.y).append(monsterImg);
+
+        this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
+        var gold = DiceUtils.roll(1, 300).total;
+        this.currentGift = gold;
+        this.console("<span class='goodEvent'>The " + monster.name + " likes your gumption. He offers you <span class='gold'>" + gold + "</span> gold pieces.</span>");
+        this.stateOptions();
+    };
+
+    this.acceptGift = function() {
+        if (!this.currentGift) return;
+
+        this.console("You accept the kind offer from the " + this.currentMonster.name);
+        this.currentMonster = null;
+        this.player.gold += this.currentGift;
+        this.currentGift = null;
+        this.validOptions = [];
+        $('.monster').remove();
+
+        this.statsDisplay();
+        this.describePosition();
+    };
+
     this.attack = function() {
         if (!this.inCombat) return;
-        this.console("The " + this.currentMonster.name + " has " + this.currentMonster.hp + " hp.");
+        this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> has " + this.currentMonster.hp + " hp.");
         var strike = this.strike();
         if (strike.hit)
         {
@@ -77,7 +123,7 @@ function Telengard() {
         }
         else
         {
-            this.console("You missed the <span class='command'>" + this.currentMonster.name + "</span>");
+            this.console("You <span class='miss'>missed</span> the <span class='monsterName'>" + this.currentMonster.name + "</span>");
         }
         this.monsterAttack();
         this.statsDisplay();
@@ -117,7 +163,7 @@ function Telengard() {
         }
         else
         {
-            this.console("The " + this.currentMonster.name + " <span class='command'>misses</span> you.");
+            this.console("The " + this.currentMonster.name + " <span class='miss'>misses</span> you.");
         }
         this.statsDisplay();
     };
@@ -195,12 +241,25 @@ function Telengard() {
         this.console("You feel refreshed. Your hit points and magic are restored!");
     };
 
+    this.toggleTravelMode = function() {
+        var current = this.player.lookingForTrouble;
+        if (current)
+            this.player.lookingForTrouble = false;
+        else
+            this.player.lookingForTrouble = true;
+
+        if (this.player.lookingForTrouble)
+            this.console("You are now looking for trouble.");
+        else
+            this.console("You are now traveling more carefully.");
+    }
+
     this.awardExperience = function() {
         var exp = Calculation.experience(this.player, this.currentMonster);
         var leveledUp = this.player.awardKillAndExperience(this.currentMonster, exp);
-        this.console("You earned <span class='command'>" + exp + "</span> experience!");
+        this.console("You earned <span class='experience'>" + exp + "</span> experience!");
         if (leveledUp)
-            this.console("You are now level <span class='command'>" + this.player.level + "</span>!");
+            this.console("<span class='levelup'>You are now level <span class='command'>" + this.player.level + "</span>!</span>");
     };
 
     this.death = function() {

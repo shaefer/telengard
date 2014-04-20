@@ -8,14 +8,11 @@ var Calculation = {
 	playerDamage:function(player, crit) {
 		var critMult = crit ? player.critMultiplier() : 1;
 		return Math.round(
-                ((player.strength * player.damageMultiplier()) + Calculation.weaponDamage()) * critMult
+                ((player.strength * player.damageMultiplier()) + player.weapon.damage()) * critMult
             );
 	},
 	monsterDamage:function(player, monster) {
 		return Math.round(Calculation.damageMultiplier(monster) * monster.weaponDamage());
-	},
-	weaponDamage:function(weapon) {
-		return DiceUtils.d4().total;
 	},
 	critMultiplier:function(player) {
 		return 1.5 + (player.prowess/100);

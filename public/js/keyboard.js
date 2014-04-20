@@ -123,6 +123,15 @@ function Keyboard(app) {
 
             case Keys.QWERTY.r:
             app.restAtInn(); 
+            break;
+
+            case Keys.QWERTY.t:
+            app.toggleTravelMode();
+            break;
+
+            case Keys.QWERTY.g:
+            app.acceptGift();
+            break;
 
             default: return; // exit this handler for other keys
         }
