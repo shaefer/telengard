@@ -51,4 +51,12 @@ var DieLevel = function(pow) {
 				RollFuncBuilder(1,6,14)
 				];
 	return level[pow];
-}
+};
+
+var DamageLevel = function(pow) {
+	//(1-4), (2-4), (1-6), (2-6), (1-8), (2-8), (3-8), (1-10), (2-10), (3-10), (4-10)
+	var level = [RollFuncBuilder(1,4,0), RollFuncBuilder(1,3,1), RollFuncBuilder(1,6,0), RollFuncBuilder(1,5,1), RollFuncBuilder(1,8,0), RollFuncBuilder(1,7,1),
+				 RollFuncBuilder(1,6,2), RollFuncBuilder(1,10,0), RollFuncBuilder(1,9,1), RollFuncBuilder(1,8,2), RollFuncBuilder(1,7,3)
+				];
+	return level[pow];
+};

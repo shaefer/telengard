@@ -13,17 +13,19 @@ var BuildWeapon = function(varName, name, src, width, height, scale, damageLevel
 	Weapons[varName] = Weapon.extend({
 		init: function(level){
 			this._super(level);
-			this.name = name;
 			this.src = src;
 			this.width = width/scale;
 			this.height = height/scale;
-			this.damageLevel = DamageLevel(damageLevel + this.level);
+            var weaponLevel = damageLevel + this.level;
+            this.name = WeaponDescriptions[weaponLevel] + " " + name;
+			this.damageLevel = DamageLevel(weaponLevel);
 			this.damage = function() {
 				return this.damageLevel();
 			};
 		}
 	})
 };
+var WeaponDescriptions = ["Broken", "Rusty", "Basic", "Sharpened", "Expertly Sharpened", "Crafted", "Honed", "Expertly Crafted", "Deadly", "Assassin's", "Perfect"];
 
 var Weapons = {};
 BuildWeapon("Dagger", "Dagger", "/images/dagger.png", 100, 100, 1, 0);
