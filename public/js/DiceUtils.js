@@ -80,6 +80,14 @@ DiceUtils.roll = function(numOfDice, sidesOfDice, modifier)
 	total += modifier;
 	return new DiceResult(numOfDice, sidesOfDice, modifier, total, dice);
 };
+DiceUtils.d2 = function(modifier)
+{
+    return DiceUtils.roll(1, 4, modifier);
+};
+DiceUtils.d3 = function(modifier)
+{
+    return DiceUtils.roll(1, 4, modifier);
+};
 DiceUtils.d4 = function(modifier)
 {
 	return DiceUtils.roll(1, 4, modifier);

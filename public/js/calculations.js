@@ -8,7 +8,7 @@ var Calculation = {
 	playerDamage:function(player, crit) {
 		var critMult = crit ? player.critMultiplier() : 1;
 		return Math.round(
-                ((player.strength * player.damageMultiplier()) + player.weapon.damage()) * critMult
+                ((player.weapon.damage() + player.strength) * Calculation.damageMultiplier(player)) * critMult
             );
 	},
 	monsterDamage:function(player, monster) {
@@ -18,7 +18,7 @@ var Calculation = {
 		return 1.5 + (player.prowess/100);
 	},
 	damageMultiplier:function(player) {
-		return  1 + (player.prowess/100*2);
+		return  1 + (player.prowess/100);
 	},
 	fleePercent:function(player) {
 		return 50 + (player.luck/2) * (player.agility/1);

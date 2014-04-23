@@ -1,6 +1,4 @@
 function GetMonster(pos) {
-    var roll = DiceUtils.roll(2, 11, -2).total;
-    console.debug("Monster roll: " + roll);
     var monsterKeys = Object.keys(Monsters);
     var key = monsterKeys[DiceUtils.roll(1,monsterKeys.length,-1).total];
     var monsterFunc = Monsters[key];

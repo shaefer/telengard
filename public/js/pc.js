@@ -1,22 +1,20 @@
 function PlayerCharacter() {
 	Math.seedrandom(new Date().getTime());
-    var rand = Math.random().toString().substring(2);
-    var r = 0;
-    this.id = rand;
+    this.id = Math.random().toString().substring(2);
 
     this.level = 1;
 
-    this.hp = 20 + GetIdChar(rand, r++);
+    this.hp = 20 + DiceUtils.roll(1,10).total;
     this.maxHp = this.hp;
-    this.mp = 5 + GetIdChar(rand, r++)/2;
+    this.mp = 5 + DiceUtils.roll(1,4).total;
     this.maxMp = this.mp;
 
-    this.strength = 10 + GetIdChar(rand, r++)/2;
-    this.intelligence = 10 + GetIdChar(rand, r++)/2;
-    this.agility = 10 + GetIdChar(rand, r++)/2;
+    this.strength = DiceUtils.roll(1,6,4).total; //base damage (5-10)...increase slowly...let gear do most of the increasing.
+    this.intelligence = DiceUtils.roll(1,4).total;
+    this.agility = DiceUtils.roll(1,4).total;
 
-    this.luck = 0 + GetIdChar(rand, r++)/2;
-    this.prowess = 0 + GetIdChar(rand, r++)/2;
+    this.luck = DiceUtils.roll(1,4).total;
+    this.prowess = DiceUtils.roll(1,4).total;
 
 	this.exp = 0;
 	this.expToNext = 500;
@@ -73,11 +71,15 @@ function PlayerCharacter() {
 		this.level++;
 		this.expToNext = Math.pow(this.level, 2)/2 * 1000;
 
-		this.strength += DiceUtils.d6().total;
-		this.intelligence+= DiceUtils.d6().total;
-		this.agility += DiceUtils.d6().total;
-		this.luck += DiceUtils.d4().total;
-		this.prowess += DiceUtils.d4().total;
+        var str = DiceUtils.d3().total;
+		this.strength += str;
+        var intelligence = DiceUtils.d3().total
+		this.intelligence+= intelligence;
+        var agility = DiceUtils.d3().total
+		this.agility += agility;
+        var luck = DiceUtils.d3().total;
+		this.luck += luck;
+		this.prowess += DiceUtils.d3().total;
 
 		var additionalHp = DiceUtils.roll(1,11,9).total;
 		this.maxHp += additionalHp;
@@ -89,7 +91,7 @@ function PlayerCharacter() {
 			this.hp = this.maxHp;
 		}
 
-		return true;
+		return {}};
     }
 
     this.rest = function() {

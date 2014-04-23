@@ -116,7 +116,7 @@ function Telengard() {
         if (strike.hit)
         {
             console.warn(strike);
-            this.console("You strike for <span class='command'>"+strike.damage+"</span> damage.")
+            this.console("You strike with your " + this.player.weapon.name + " for <span class='command'>"+strike.damage+"</span> damage.")
             this.currentMonster.hp = this.currentMonster.hp - strike.damage;
             if (this.currentMonster.hp <= 0)
             {
