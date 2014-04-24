@@ -79,7 +79,8 @@ function PlayerCharacter() {
 		this.agility += agility;
         var luck = DiceUtils.d3().total;
 		this.luck += luck;
-		this.prowess += DiceUtils.d3().total;
+		var prowess = DiceUtils.d3().total
+		this.prowess += prowess;
 
 		var additionalHp = DiceUtils.roll(1,11,9).total;
 		this.maxHp += additionalHp;
@@ -91,7 +92,7 @@ function PlayerCharacter() {
 			this.hp = this.maxHp;
 		}
 
-		return {}};
+		return {str:str, intelligence:intelligence, agility:agility, luck:luck, prowess:prowess, hp:additionalHp};
     }
 
     this.rest = function() {

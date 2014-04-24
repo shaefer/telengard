@@ -2,7 +2,40 @@ function GetMonster(pos) {
     var monsterKeys = Object.keys(Monsters);
     var key = monsterKeys[DiceUtils.roll(1,monsterKeys.length,-1).total];
     var monsterFunc = Monsters[key];
-    return new monsterFunc(pos.z);
+    var monsterLevel = GetMonsterLevel(pos.z);
+    var monster = new monsterFunc(monsterLevel.level, monsterLevel.template);
+   	if (monsterLevel.champion)
+   		monster.champion = true;
+   	if (monsterLevel.royalty)
+   		monster.royalty = true;
+    return monster;
+}
+
+function GetMonsterLevel(dungeonLevel) {
+	if (dungeonLevel == 0)
+		dungeonLevel = 1;
+	var levelObj = {level:dungeonLevel, template:""}
+	var monsterLevelRoll = d00();
+    if (monsterLevelRoll.inRange(51,75)) {
+    	levelObj.level += 1;
+    }
+    else if (monsterLevelRoll.inRange(76, 90)) {
+    	levelObj.level += 2;
+    }
+    else if (monsterLevelRoll.inRange(91, 99)) {
+    	levelObj.level += DiceUtils.roll(1, 3, 2).total;
+    }
+    else if (monsterLevelRoll == 100) {
+    	levelObj.level += DiceUtils.roll(1,5,5).total;
+    }
+
+    if (monsterLevelRoll.inRange(91, 99)) {
+    	levelObj.template = "Champion "; //TODO: Apply lesser template
+    }
+    else if (monsterLevelRoll == 100) {
+    	levelObj.template = "King "; //TODO: Apply major template.
+    }
+    return levelObj;
 }
 
 function GetMonsterFoundPhrase(monsterName) {
@@ -18,24 +51,31 @@ function GetMonsterFoundPhrase(monsterName) {
 var Monster = Class.extend({
   init: function(level){
   	this.id = Math.random().toString().substring(2);
-    this.level = level ? level : 1;
+  	this.level = level;
   }
 });
 
-var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, prowessLevel, damageLevel) {
+var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, prowessLevel, damageLevel, hpPerLevelFunc) {
+
 	Monsters[varName] = Monster.extend({
-		init: function(level){
+		init: function(level, template){
 			this._super(level);
-			this.name = name;
+			if (!hpPerLevelFunc) {
+				var levelsPastOne = level - 1;
+				hpPerLevelFunc = RollFuncBuilder(levelsPastOne, 16, 4*levelsPastOne);
+			}
 			this.src = src;
 			this.width = width/scale;
 			this.height = height/scale;
-			this.hp = hpFunc();
+			this.hp = hpFunc() + hpPerLevelFunc();
 			this.maxHp = this.hp;
             this.prowessLevel = prowessLevel;
-			this.prowess = DieLevel(prowessLevel)();
+			this.prowess = DieLevel(prowessLevel + level - 1)();
 			this.damageLevel = damageLevel;
-			this.weaponDamage = DamageLevel(damageLevel);
+			this.weaponDamage = DamageLevel(damageLevel + level - 1);
+			this.template = template;
+			this.creatureType = name;
+			this.name = "Level " + level + " " + this.template  + this.creatureType;;
 		}
 	})
 };

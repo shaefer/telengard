@@ -264,7 +264,10 @@ function Telengard() {
         var leveledUp = this.player.awardKillAndExperience(this.currentMonster, exp);
         this.console("You earned <span class='experience'>" + exp + "</span> experience!");
         if (leveledUp)
+        {
             this.console("<span class='levelup'>You are now level <span class='command'>" + this.player.level + "</span>!</span>");
+            console.warn(leveledUp);
+        }
     };
 
     this.death = function() {
