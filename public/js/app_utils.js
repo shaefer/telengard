@@ -1,8 +1,3 @@
-function GetRand() {
-    Math.seedrandom(new Date().getTime());
-    return Math.random().toString().substring(2);
-}
-
 function GetIdChar(rand, index) {
     return Number(rand.toString().substring(index, index + 1));
 }
@@ -18,6 +13,30 @@ Number.prototype.padLeft = function(base,chr){
     var  len = (String(base || 10).length - String(this).length)+1;
     return len > 0? new Array(len).join(chr || '0')+this : this;
 }
+
+function FindRoomsWithOnLevel(level, check) {
+    var dungeonLevel = new DungeonLevel(level);
+    var width = dungeonLevel.width;
+    var height = dungeonLevel.height;
+    var counter = 0;
+    for (var w = 0;w<width;w++) {
+        for (var h = 0;h<height;h++) {
+            var room = new Room(w, h, level);
+            if (room[check]())
+            {
+                console.warn(room.toString());
+                counter++;
+            }
+        }
+    }
+    console.warn(counter + " rooms with inns on level 0");
+}
+
+function FindRoomsWith(check) {
+    FindRoomsWithOnLevel(0, check);
+}
+
+
 
 function toTimestamp(d) {
     var dformat = 

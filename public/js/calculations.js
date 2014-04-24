@@ -54,9 +54,10 @@ var DieLevel = function(pow) {
 };
 
 var DamageLevel = function(pow) {
-	//(1-4), (2-4), (1-6), (2-6), (1-8), (2-8), (3-8), (1-10), (2-10), (3-10), (4-10)
+	//(1-4), (2-4), (1-6), (2-6), (1-8), (2-8), (3-8), (1-10), (2-10), (3-10), (4-10), (1-12), (2-12), (3-12), (4-12), (5-12)
 	var level = [RollFuncBuilder(1,4,0), RollFuncBuilder(1,3,1), RollFuncBuilder(1,6,0), RollFuncBuilder(1,5,1), RollFuncBuilder(1,8,0), RollFuncBuilder(1,7,1),
-				 RollFuncBuilder(1,6,2), RollFuncBuilder(1,10,0), RollFuncBuilder(1,9,1), RollFuncBuilder(1,8,2), RollFuncBuilder(1,7,3)
+				 RollFuncBuilder(1,6,2), RollFuncBuilder(1,10,0), RollFuncBuilder(1,9,1), RollFuncBuilder(1,8,2), RollFuncBuilder(1,7,3), RollFuncBuilder(1,12,0),
+				 RollFuncBuilder(1,11,1), RollFuncBuilder(1,10,2), RollFuncBuilder(1,9,3), RollFuncBuilder(1,8,4)
 				];
 	return level[pow];
 };

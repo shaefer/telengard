@@ -1,4 +1,4 @@
-Direction = {north:"N", south:"S", east:"E", west:"W"};
+Direction = {north:"N", south:"S", east:"E", west:"W", down:"D", up:"U"};
 
 Keys = {
     Arrows:{ 'left':37,'up':38,'right':39,'down':40 },
@@ -29,11 +29,45 @@ function Keyboard(app) {
             this.rightArrow(app);
         if (direction == Direction.west)
             this.leftArrow(app);
+        if (direction == Direction.down)
+            this.downStairs(app);
+        if (direction == Direction.up)
+            this.upStairs(app);
     }
+    this.downStairs = function(app) {
+        var pos = app.currentPosition;
+        var room = new Room(pos.x, pos.y, pos.z);
+        if (room.hasStairsDown())
+        {
+            var nextPos = new Position(pos.x, pos.y, pos.z + 1);
+            app.setPosition(nextPos);
+            app.console(this.directionMessage("down the stairs", nextPos));
+            app.randomEvent();
+        }
+        else
+        {
+            console.warn("There are no stairs going down here.");
+        }
+    };
+    this.upStairs = function(app) {
+        var pos = app.currentPosition;
+        var room = new Room(pos.x, pos.y, pos.z);
+        if (room.hasStairsUp())
+        {
+            var nextPos = new Position(pos.x, pos.y, pos.z - 1);
+            app.setPosition(nextPos);
+            app.console(this.directionMessage("up the stairs", nextPos));
+            app.randomEvent();
+        }
+        else
+        {
+            console.warn("There are no stairs going up here.");
+        }
+    };
     this.leftArrow = function(app) {
         var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getWestWall().hasWall() && !room.getWestLimit(pos))
+        if (!room.getWestWall().hasWall() && !room.getWestLimit())
         {
             var nextPos = new Position(pos.x - 1, pos.y, pos.z);
             app.setPosition(nextPos);
@@ -44,12 +78,12 @@ function Keyboard(app) {
         {
             console.warn("You can't move through walls.")
         }
-	}
+	};
 
 	this.rightArrow = function(app) {
 	    var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getEastWall().hasWall() && !room.getEastLimit(pos))
+        if (!room.getEastWall().hasWall() && !room.getEastLimit())
         {
             var nextPos = new Position(pos.x + 1, pos.y, pos.z);
             app.setPosition(nextPos);
@@ -60,12 +94,12 @@ function Keyboard(app) {
         {
             console.warn("You can't move through walls.")
         }
-	}
+	};
 
 	this.upArrow = function(app) {
 	    var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getNorthWall().hasWall() && !room.getNorthLimit(pos))
+        if (!room.getNorthWall().hasWall() && !room.getNorthLimit())
         {
             var nextPos = new Position(pos.x, pos.y - 1, pos.z);
             app.setPosition(nextPos);
@@ -76,12 +110,12 @@ function Keyboard(app) {
         {
             console.warn("You can't move through walls.")
         }
-	}
+	};
 
 	this.downArrow = function(app) {
 	    var pos = app.currentPosition;
         var room = new Room(pos.x, pos.y, pos.z);
-        if (!room.getSouthWall().hasWall() && !room.getSouthLimit(pos))
+        if (!room.getSouthWall().hasWall() && !room.getSouthLimit())
         {
             var nextPos = new Position(pos.x, pos.y + 1, pos.z);
             app.setPosition(nextPos);
@@ -92,7 +126,7 @@ function Keyboard(app) {
         {
             console.warn("You can't move through walls.")
         }
-	}
+	};
 
     $(document).unbind();
 	$(document).keydown(function(e) {
@@ -131,6 +165,14 @@ function Keyboard(app) {
 
             case Keys.QWERTY.g:
             app.acceptGift();
+            break;
+
+            case Keys.QWERTY.d:
+            _keyboard.move(app, Direction.down);
+            break;
+
+            case Keys.QWERTY.u:
+            _keyboard.move(app, Direction.up);
             break;
 
             default: return; // exit this handler for other keys

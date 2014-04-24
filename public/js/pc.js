@@ -4,7 +4,7 @@ function PlayerCharacter() {
 
     this.level = 1;
 
-    this.hp = 20 + DiceUtils.roll(1,10).total;
+    this.hp = 2000 + DiceUtils.roll(1,10).total;
     this.maxHp = this.hp;
     this.mp = 5 + DiceUtils.roll(1,4).total;
     this.maxMp = this.mp;

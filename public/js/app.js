@@ -2,7 +2,6 @@ function Telengard() {
     this.init = function() {
         this.currentPosition = new Position(2,2,0);
         console.warn('room: ' + GetRoom(this.currentPosition).toString());
-        this.currentLevel = new DungeonLevel(0);
         this.viewRadius = 2;
         this.keyboard = new Keyboard(this);
         this.inCombat = false;
@@ -17,7 +16,7 @@ function Telengard() {
 
     this.setPosition = function (pos) {
         this.currentPosition = pos;
-        this.render(this.currentPosition, this.currentLevel, this.viewRadius);
+        this.render(this.currentPosition, new DungeonLevel(this.currentPosition.z), this.viewRadius);
     };
     this.console = function(message) {
         $('.textContainer').prepend($("<div class='consoleMessage'>"+message+"<div class='timestamp'>"+toTimestamp(new Date())+"</div></div>"));
@@ -72,7 +71,8 @@ function Telengard() {
     };
 
     this.findExtraTreasure = function() {
-        var gold = DiceUtils.roll(1, 200).total;
+        var pos = this.currentPosition;
+        var gold = DiceUtils.roll(1, 200 * (pos.z + 1)).total;
         this.player.gold += gold;
         this.console("You found a hidden alcove and within it you discover " + gold + " pieces.");
         this.describePosition();
@@ -88,7 +88,7 @@ function Telengard() {
         $('.x' + pos.x + 'y' + pos.y).append(monsterImg);
 
         this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
-        var gold = DiceUtils.roll(1, 300).total;
+        var gold = DiceUtils.roll(monster.level, 300).total;
         this.currentGift = gold;
         this.console("<span class='goodEvent'>The " + monster.name + " likes your gumption. He offers you <span class='gold'>" + gold + "</span> gold pieces.</span>");
         this.stateOptions();
@@ -226,21 +226,28 @@ function Telengard() {
     this.describePosition = function() {
         var loc = GetRoom(this.currentPosition);
         var inn = loc.inn();
-        if (inn != null && !this.inCombat)
+        var validOptions = [];
+        if (inn != null && !this.busy)
         {
             this.console("You stand outside the " + inn.name);
-            this.validOptions = ["[<span class='command'>R</span>]est at the Inn."];
+            validOptions.push("[<span class='command'>R</span>]est at the Inn.");
         }
-        else
+        if (loc.hasStairsDown() && !this.busy)
         {
-            this.validOptions = [];
+            this.console("You see a set of stairs descending deeper into the dungeon.");
+            validOptions.push("Go [<span class='command'>D</span>]own the stairs.");
         }
+        if (loc.hasStairsUp() && !this.busy) {
+            this.console("You set a set of stairs ascending to a higher level of the dungeon.");
+            validOptions.push("Go [<span class='command'>U</span>]p the stairs.");
+        }
+        this.validOptions = validOptions;
         this.stateOptions();
     };
 
     this.restAtInn = function() {
         var inn = GetRoom(this.currentPosition).inn();
-        if (inn == null || this.inCombat) return;
+        if (inn == null || this.busy) return;
         this.player.rest();
         this.statsDisplay();
         this.console("You feel refreshed. Your hit points and magic are restored!");

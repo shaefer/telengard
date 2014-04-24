@@ -16,13 +16,13 @@ function GetMonsterLevel(dungeonLevel) {
 		dungeonLevel = 1;
 	var levelObj = {level:dungeonLevel, template:""}
 	var monsterLevelRoll = d00();
-    if (monsterLevelRoll.inRange(51,75)) {
+    if (monsterLevelRoll.inRange(76,85)) {
     	levelObj.level += 1;
     }
-    else if (monsterLevelRoll.inRange(76, 90)) {
+    else if (monsterLevelRoll.inRange(86, 95)) {
     	levelObj.level += 2;
     }
-    else if (monsterLevelRoll.inRange(91, 99)) {
+    else if (monsterLevelRoll.inRange(96, 99)) {
     	levelObj.level += DiceUtils.roll(1, 3, 2).total;
     }
     else if (monsterLevelRoll == 100) {

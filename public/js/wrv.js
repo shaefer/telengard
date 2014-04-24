@@ -61,13 +61,26 @@ function Room(x,y,z) {
     this.z = z;
     Math.seedrandom(x.toString() + y.toString() + z.toString());
     this.id = Math.random().toString().substring(2);
+    this.onMap = function() {
+        var dungeonLevel = new DungeonLevel(this.z);
+        return this.x >= 0 && this.y >= 0 && this.x <= dungeonLevel.width - 1 && this.y <= dungeonLevel.height - 1;
+    }
     this.hasInn = function() {
         var innChar = GetIdCharPair(this.id, 0);
-        return innChar == 78 && z == 0 
+        return innChar == 78 && z <= 5 
     };
     this.inn = function() {
         if (!this.hasInn()) return null;
         return new Inn(this.id);
+    };
+    this.hasStairsDown = function() {
+        var stairs = GetIdCharPair(this.id, 2);
+        return stairs == 77;
+    };
+    this.hasStairsUp = function() {
+        if (this.z == 0) return false;
+        var upperDungeonRoom = new Room(this.x, this.y, this.z - 1);
+        return upperDungeonRoom.hasStairsDown();
     };
     this.nwVertex = function () {
         var self = this;
@@ -101,24 +114,24 @@ function Room(x,y,z) {
         var self = this;
         return new Wall(self.nwVertex(), self.swVertex())
     }
-    this.getWestLimit = function(pos) {
+    this.getWestLimit = function() {
         //if we start to use offset positionj it will change this to be slightly more complicated.
-        return pos.x == 0;
+        return this.x == 0;
     }
-    this.getNorthLimit = function(pos) {
-        return pos.y == 0
+    this.getNorthLimit = function() {
+        return this.y == 0
     }
-    this.getEastLimit = function(pos) {
-        var dungeonLevel = new DungeonLevel(pos.z);
-        return pos.x == dungeonLevel.width - 1;
+    this.getEastLimit = function() {
+        var dungeonLevel = new DungeonLevel(this.z);
+        return this.x == dungeonLevel.width - 1;
     }
-    this.getSouthLimit = function(pos) {
-        var dungeonLevel = new DungeonLevel(pos.z);
-        return pos.y == dungeonLevel.height - 1;
+    this.getSouthLimit = function() {
+        var dungeonLevel = new DungeonLevel(this.z);
+        return this.y == dungeonLevel.height - 1;
     }
 };
 Room.prototype.toString = function () {
-    return "(" + this.x + ", " + this.y + ", " + this.z + "), Room Id: " + this.id + ", North Wall: " + this.getNorthWall().hasWall() + ", South Wall: " + this.getSouthWall().hasWall() + ", EastWall: " + this.getEastWall().hasWall() + ", West Wall: " + this.getWestWall().hasWall() + ", inn: " + this.hasInn + ")";
+    return "(" + this.x + ", " + this.y + ", " + this.z + "), Room Id: " + this.id + ", North Wall: " + this.getNorthWall().hasWall() + ", South Wall: " + this.getSouthWall().hasWall() + ", EastWall: " + this.getEastWall().hasWall() + ", West Wall: " + this.getWestWall().hasWall() + ", inn: " + this.hasInn() + ")";
 };
 
 function Inn(id) {
