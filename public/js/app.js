@@ -1,8 +1,9 @@
 function Telengard() {
     this.init = function() {
-        this.currentPosition = new Position(2,2,0);
-        console.warn('room: ' + GetRoom(this.currentPosition).toString());
-        this.viewRadius = 2;
+        this.startingPosition = new Position(2,2,0);
+        this.startingViewRadius = 2;
+        this.currentPosition = this.startingPosition;
+        this.viewRadius = this.startingViewRadius; //Should this property be on the player? -> Probably.
         this.keyboard = new Keyboard(this);
         this.inCombat = false;
         this.busy = false;
@@ -10,8 +11,6 @@ function Telengard() {
         this.player = new PlayerCharacter();
         this.currentMonster = null;
         this.debugMode = true;
-        this.statsDisplay();
-        this.startGame();
     };
 
     this.setPosition = function (pos) {
@@ -49,24 +48,20 @@ function Telengard() {
         else if (roll.inRange(6, 10)) {
             this.friendlyMonster();
         }
-        else if (roll.inRange(1, 5)) {
+        else if (roll.inRange(2, 5)) {
             this.findExtraTreasure();
+        }
+        else if (roll == 1) {
+            this.improveWeapon();
         }
         //whenever nothing random is happening describe room and options based on room features.
         this.describePosition();
     };
     this.beginCombat = function() {
         console.warn('beginCombat')
+        var monster = this.monsterAppears();
         this.inCombat = true;
-        this.busy = true;
         this.validOptions = ["[<span class='command'>F</span>]lee", "[<span class='command'>A</span>]ttack"];
-        var monster = this.getMonster();
-        console.warn(monster);
-        this.currentMonster = monster;
-        var pos = this.currentPosition;
-        var monsterImg = $("<img class='monster' src='"+monster.src+"'>");
-        monsterImg.css({top:(-monster.height/1.25) + "px", left:(-monster.width/1.25) + "px", width:monster.width+"px", height:monster.height+"px"})
-        $('.x' + pos.x + 'y' + pos.y).append(monsterImg);
         this.stateOptions();
     };
 
@@ -78,7 +73,7 @@ function Telengard() {
         this.describePosition();
     };
 
-    this.friendlyMonster = function() {
+    this.monsterAppears = function() {
         this.busy = true;
         var monster = this.getMonster();
         this.currentMonster = monster;
@@ -86,11 +81,27 @@ function Telengard() {
         var monsterImg = $("<img class='monster' src='"+monster.src+"'>");
         monsterImg.css({top:(-monster.height/1.25) + "px", left:(-monster.width/1.25) + "px", width:monster.width+"px", height:monster.height+"px"})
         $('.x' + pos.x + 'y' + pos.y).append(monsterImg);
+        return monster;
+    };
 
+    this.improveWeapon = function() {
+        var monster = this.monsterAppears();
+        var likes = LikesSynonyms[DiceUtils.roll(1, LikesSynonyms.length, -1).total]
+        var thingMonsterAdmires = ThingsMonstersLike[DiceUtils.roll(1,ThingsMonstersLike.length,-1).total];
+        this.console("<span class='goodEvent'>The " + monster.name + " "+likes+" your "+thingMonsterAdmires+". He offers upgrade your <span class='gold'>" + this.player.weapon.name + "</span>.</span>");
+        this.currentGift = {giftType:"upgradeWeapon"}
+        this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
+        this.stateOptions();
+    };
+
+    this.friendlyMonster = function() {
+        var monster = this.monsterAppears();
         this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
         var gold = DiceUtils.roll(monster.level, 300).total;
-        this.currentGift = gold;
-        this.console("<span class='goodEvent'>The " + monster.name + " likes your gumption. He offers you <span class='gold'>" + gold + "</span> gold pieces.</span>");
+        this.currentGift = {giftType:"gold", gold:gold};
+        var likes = LikesSynonyms[DiceUtils.roll(1, LikesSynonyms.length, -1).total]
+        var thingMonsterAdmires = ThingsMonstersLike[DiceUtils.roll(1,ThingsMonstersLike.length,-1).total];
+        this.console("<span class='goodEvent'>The " + monster.name + " "+likes+" your "+thingMonsterAdmires+". He offers you <span class='gold'>" + gold + "</span> gold pieces.</span>");
         this.stateOptions();
     };
 
@@ -100,7 +111,13 @@ function Telengard() {
         this.console("You accept the kind offer from the " + this.currentMonster.name);
         this.busy = false;
         this.currentMonster = null;
-        this.player.gold += this.currentGift;
+        if (this.currentGift.giftType == 'gold')
+            this.player.gold += this.currentGift.gold;
+        else if (this.currentGift.giftType == 'upgradeWeapon')
+        {
+            this.player.weapon.upgradeDamageLevel();
+            this.console("You weapon is now a: <span class='gold'>" + this.player.weapon.name + "</span>");
+        }
         this.currentGift = null;
         this.validOptions = [];
         $('.monster').remove();
@@ -272,19 +289,21 @@ function Telengard() {
         this.console("You earned <span class='experience'>" + exp + "</span> experience!");
         if (leveledUp)
         {
-            this.console("<span class='levelup'>You are now level <span class='command'>" + this.player.level + "</span>!</span>");
+            this.console("<span class='levelup'>You are now level <span class='command'>" + this.player.level + "</span>!<span>You gained "+leveledUp.str+" str</span></span>");
             console.warn(leveledUp);
         }
     };
 
     this.death = function() {
         this.console("You died!");
+        //TODO: Display stats.
         this.init();
         console.warn(this);
     };
 
     this.startGame = function() {
-        this.render(new Position(2,2,0), new DungeonLevel(0), 2);
+        this.statsDisplay();
+        this.render(this.startingPosition, new DungeonLevel(this.startingPosition.z), this.startingViewRadius);
         this.describePosition();
     };
 
