@@ -46,13 +46,13 @@ function Telengard() {
             this.beginCombat();
         }
         else if (roll.inRange(6, 10)) {
-            this.friendlyMonster();
+            this.friendlyMonster("gold");
         }
         else if (roll.inRange(2, 5)) {
             this.findExtraTreasure();
         }
         else if (roll == 1) {
-            this.improveWeapon();
+            this.friendlyMonster("upgradeWeapon");
         }
         //whenever nothing random is happening describe room and options based on room features.
         this.describePosition();
@@ -84,25 +84,27 @@ function Telengard() {
         return monster;
     };
 
-    this.improveWeapon = function() {
+    this.friendlyMonster = function(giftType) {
         var monster = this.monsterAppears();
+        this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
+        
         var likes = LikesSynonyms[DiceUtils.roll(1, LikesSynonyms.length, -1).total]
         var thingMonsterAdmires = ThingsMonstersLike[DiceUtils.roll(1,ThingsMonstersLike.length,-1).total];
-        this.console("<span class='goodEvent'>The " + monster.name + " "+likes+" your "+thingMonsterAdmires+". He offers upgrade your <span class='gold'>" + this.player.weapon.name + "</span>.</span>");
-        this.currentGift = {giftType:"upgradeWeapon"}
-        this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
+        if (giftType == "gold")
+            this.currentGift = this.getGoldGift(monster);
+        else if (giftType == "upgradeWeapon")
+            this.currentGift = this.getUpgradeWeaponGift(this.player.weapon.name);
+        this.console("<span class='goodEvent'>The " + monster.name + " "+likes+" your "+thingMonsterAdmires+". "+this.currentGift.offer+"</span>");
         this.stateOptions();
     };
 
-    this.friendlyMonster = function() {
-        var monster = this.monsterAppears();
-        this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
+    this.getUpgradeWeaponGift = function(weaponName) {
+        return {giftType:"upgradeWeapon", offer:"He offers to upgrade your <span class='gold'>" + weaponName + "</span>."}
+    };
+
+    this.getGoldGift = function(monster) {
         var gold = DiceUtils.roll(monster.level, 300).total;
-        this.currentGift = {giftType:"gold", gold:gold};
-        var likes = LikesSynonyms[DiceUtils.roll(1, LikesSynonyms.length, -1).total]
-        var thingMonsterAdmires = ThingsMonstersLike[DiceUtils.roll(1,ThingsMonstersLike.length,-1).total];
-        this.console("<span class='goodEvent'>The " + monster.name + " "+likes+" your "+thingMonsterAdmires+". He offers you <span class='gold'>" + gold + "</span> gold pieces.</span>");
-        this.stateOptions();
+        return {giftType:"gold", gold:gold, offer:"He offers you <span class='gold'>" + gold + "</span> gold pieces."};
     };
 
     this.acceptGift = function() {
