@@ -1,0 +1,9 @@
+weapons - types, damage base, magic, special powers, crit
+monsters - weaknesses, templates, weapons, champions/kings etc.
+damage - energy types?
+quests - who gives them
+spells - scry, light, fireball, healing, defense, stealth, resistance
+locations - once you know a location it shows on map even before you stand on that spot., potion shops, weapon shops
+map - show a small version of full map with locations marked on it.
+gear - armor first
+stats - how far from start you got, max chain of kills between resting, enemies defeated, races that you have defeated their king
