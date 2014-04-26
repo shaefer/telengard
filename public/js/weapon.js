@@ -23,8 +23,8 @@ var BuildWeapon = function(varName, name, src, width, height, scale, damageLevel
             this.weaponType = name;
             this.name = WeaponDescriptions[totalLevel] + " " + name;
             this.upgradeDamageLevel = function() {
-                this.damageLevel++;
-                this.name = WeaponDescriptions[this.level + this.damageLevel] + " " + this.weaponType;
+                this.level++;
+                this.name = WeaponDescriptions[this.level] + " " + this.weaponType;
             };
 			this.damage = function() {
 				return DamageLevel(this.level + this.damageLevel)();
