@@ -248,6 +248,7 @@ function Telengard() {
         var validOptions = [];
         if (inn != null && !this.busy)
         {
+            this.showInn();
             this.console("You stand outside the " + inn.name);
             validOptions.push("[<span class='command'>R</span>]est at the Inn.");
         }
@@ -262,6 +263,19 @@ function Telengard() {
         }
         this.validOptions = validOptions;
         this.stateOptions();
+    };
+
+    this.showInn = function() {
+        var pos = this.currentPosition;
+        var innImg = $("<img class='inn' src='../images/openclipart/inn.png'>");
+        innImg.css({top:-230 + "px", left:-230 + "px"})
+        $('.x' + pos.x + 'y' + pos.y).append(innImg);
+    };
+
+    this.showPlayer = function(cell) {
+        var img = $("<img class='player' src='../images/barbarian.png'>");
+        img.css({height:"150px", top:"0", left: "40px", margin:0,zIndex:1});
+        cell.append(img);
     };
 
     this.restAtInn = function() {
@@ -328,7 +342,10 @@ function Telengard() {
             for(var col = pos.x - radius;col <= pos.x + radius;col++) {
                 var cell = $('<td>').addClass("x" + col + "y" + row).appendTo(trow);
                 if (row == pos.y && col == pos.x) 
+                {
                     cell.addClass("currentLocation");
+                    this.showPlayer(cell);
+                }
 
                 var room = new Room(col, row, level.depth);
                 if (row == 0 || room.getNorthWall().hasWall())
@@ -354,14 +371,14 @@ function Telengard() {
                 if (col < 0 || cell >= level.width)
                     cell.addClass("offGrid")
 
-                if (room.hasInn() && InRoom(room, pos))
+                if (room.hasInn() && InRoom(room, pos)) //or if inn has been visited we always show it.
                 {
                     console.warn(room.toString() + " has inn.")
                     var inn = room.inn();
-                    cell.addClass("inn");
+                    cell.addClass("innLoc");
                 }
 
-                cell.html(col + "," + row);
+                cell.append($("<span>" + col + "," + row + "</span>"));
             }
         }
     };

@@ -42,10 +42,6 @@
     position:absolute;
 }
 .currentLocation {
-    background-image: url(../images/barbarian.png);
-    background-size:auto 150px;
-    background-repeat:no-repeat;
-    background-position:center; 
     position:relative;
 }
 
@@ -86,4 +82,10 @@
 .levelup {
     background-color:black;
     color:green;
+}
+.inn {
+    position: absolute;
+}
+.player {
+    position: absolute;
 }
