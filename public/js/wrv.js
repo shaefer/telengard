@@ -136,5 +136,5 @@ Room.prototype.toString = function () {
 
 function Inn(id) {
     this.id = id;
-    this.name = "Worthy Inn " + id;
+    this.name = GetTavernName(id);
 }
