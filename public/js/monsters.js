@@ -22,7 +22,7 @@ function GetMonsterLevel(dungeonLevel) {
     else if (monsterLevelRoll.inRange(86, 95)) {
     	levelObj.level += 2;
     }
-    else if (monsterLevelRoll.inRange(96, 99)) {
+    else if (monsterLevelRoll.inRange(91, 99)) {
     	levelObj.level += DiceUtils.roll(1, 3, 2).total;
     }
     else if (monsterLevelRoll == 100) {
@@ -41,11 +41,11 @@ function GetMonsterLevel(dungeonLevel) {
 function GetMonsterFoundPhrase(monsterName) {
     var digit = DiceUtils.roll(1,3).total;
     if (digit == 1)
-    	return "A menacing " + monsterName + " appears from around a corner.";
+    	return "A menacing <span class='monsterName'>" + monsterName + "</span> appears from around a corner.";
     if (digit == 2)
-    	return "A vicious " + monsterName + " is ready to attack.";
+    	return "A vicious <span class='monsterName'>" + monsterName + "</span> is ready to attack.";
     if (digit == 3)
-    	return "An impressive " + monsterName + " looms in front of you."; 
+    	return "An impressive <span class='monsterName'>" + monsterName + "</span> looms in front of you."; 
 }
 
 var Monster = Class.extend({

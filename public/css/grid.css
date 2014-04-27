@@ -68,20 +68,47 @@
 .gold {
     background-color: black;
     color: gold;
+    padding:2px 4px;
+    border-radius: 8px;
 }
 .miss {
     color: gray;
 }
 .experience {
-    color: blue;
+    background-color: black;
+    color: lightblue;
+    padding:2px 4px;
+    border-radius: 8px;
 }
 .monsterName {
     background-color:black;
     color:orange;
+    padding:2px 4px;
+    border-radius: 8px;
+}
+.friendlyMonsterName {
+    background-color:black;
+    color:green;
+    padding:2px 4px;
+    border-radius: 8px;
+}
+.location {
+    background-color:black;
+    color:white;
+    padding:2px 4px;
+    border-radius: 8px;
+}
+.injured {
+    background-color:black;
+    color:red;
+    padding:2px 4px;
+    border-radius: 8px;
 }
 .levelup {
     background-color:black;
     color:green;
+    padding:2px 4px;
+    border-radius: 8px;
 }
 .inn {
     position: absolute;

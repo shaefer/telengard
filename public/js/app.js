@@ -1,6 +1,6 @@
 function Telengard() {
     this.init = function() {
-        this.startingPosition = new Position(31,4,0);
+        this.startingPosition = new Position(2,2,0);
         this.startingViewRadius = 2;
         this.currentPosition = this.startingPosition;
         this.viewRadius = this.startingViewRadius; //Should this property be on the player? -> Probably.
@@ -69,7 +69,7 @@ function Telengard() {
         var pos = this.currentPosition;
         var gold = DiceUtils.roll(1, 200 * (pos.z + 1)).total;
         this.player.gold += gold;
-        this.console("You found a hidden alcove and within it you discover " + gold + " pieces.");
+        this.console("You found a hidden alcove and within it you discover <span class='gold'>" + gold + "</span> pieces.");
         this.describePosition();
     };
 
@@ -94,7 +94,7 @@ function Telengard() {
             this.currentGift = this.getGoldGift(monster);
         else if (giftType == "upgradeWeapon")
             this.currentGift = this.getUpgradeWeaponGift(this.player.weapon.name);
-        this.console("<span class='goodEvent'>The " + monster.name + " "+likes+" your "+thingMonsterAdmires+". "+this.currentGift.offer+"</span>");
+        this.console("<span class='goodEvent'>The <span class='friendlyMonsterName'>" + monster.name + "</span> "+likes+" your "+thingMonsterAdmires+". "+this.currentGift.offer+"</span>");
         this.stateOptions();
     };
 
@@ -110,15 +110,18 @@ function Telengard() {
     this.acceptGift = function() {
         if (!this.currentGift) return;
 
-        this.console("You accept the kind offer from the " + this.currentMonster.name);
+        var acceptStatement = "You accept the kind offer from the <span class='friendlyMonsterName'>" + this.currentMonster.name + "</span>.";
         this.busy = false;
         this.currentMonster = null;
         if (this.currentGift.giftType == 'gold')
+        {
+            this.console(acceptStatement);
             this.player.gold += this.currentGift.gold;
+        }
         else if (this.currentGift.giftType == 'upgradeWeapon')
         {
             this.player.weapon.upgradeDamageLevel();
-            this.console("You weapon is now a: <span class='gold'>" + this.player.weapon.name + "</span>");
+            this.console(acceptStatement + " Your weapon is now a: <span class='gold'>" + this.player.weapon.name + "</span>");
         }
         this.currentGift = null;
         this.validOptions = [];
@@ -130,13 +133,31 @@ function Telengard() {
 
     this.attack = function() {
         if (!this.inCombat) return;
-        this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> has " + this.currentMonster.hp + " hp.");
+        //this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> has " + this.currentMonster.hp + " hp.");
         var strike = this.strike();
         if (strike.hit)
         {
             console.warn(strike);
-            this.console("You strike with your " + this.player.weapon.name + " for <span class='command'>"+strike.damage+"</span> damage.")
+            
             this.currentMonster.hp = this.currentMonster.hp - strike.damage;
+            var crit = "";
+            if (strike.crit)
+                crit = "<span class='injured'>critically</span> ";
+            if (this.currentMonster.hp <= this.currentMonster.maxHp/4 && !this.currentMonster.nearDeath)
+            {
+                this.currentMonster.nearDeath = true;
+                this.console("You "+crit+"strike with your " + this.player.weapon.name + " for <span class='command'>"+strike.damage+"</span> damage. The <span class='monsterName'>" + this.currentMonster.name + "</span> is <span class='injured'>near death</span>.");
+            }
+            else if (this.currentMonster.hp <= this.currentMonster.maxHp/2 && !this.currentMonster.bloodied)
+            {
+                this.currentMonster.bloodied = true;
+                this.console("You "+crit+"strike with your " + this.player.weapon.name + " for <span class='command'>"+strike.damage+"</span> damage. The <span class='monsterName'>" + this.currentMonster.name + "</span> has been <span class='injured'>seriously injured</span>.");
+            }
+            else
+            {
+                this.console("You "+crit+"strike with your " + this.player.weapon.name + " for <span class='command'>"+strike.damage+"</span> damage.");
+            }
+            
             if (this.currentMonster.hp <= 0)
             {
                 this.monsterDeath();
@@ -167,7 +188,7 @@ function Telengard() {
         var opRoll = d00();
         var target = 100 - Math.round(25 + this.currentMonster.prowess - (this.player.agility + this.player.luck));
         if (opRoll <= target) {
-            this.console("The " + this.currentMonster.name + " takes advantage of your attempted flight and attacks!");
+            this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> takes advantage of your attempted flight and attacks!");
             this.monsterAttack();
         }
     };
@@ -179,14 +200,14 @@ function Telengard() {
         {
 
             var damage = Calculation.monsterDamage(this.player, this.currentMonster);
-            this.console("The " + this.currentMonster.name + " strikes you for <span class='command'>" + damage + "</span> damage.");
+            this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> strikes you for <span class='command'>" + damage + "</span> damage.");
             this.player.hp = this.player.hp - damage;
             if (this.player.hp <= 0)
                 this.death();
         }
         else
         {
-            this.console("The " + this.currentMonster.name + " <span class='miss'>misses</span> you.");
+            this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> <span class='miss'>misses</span> you.");
         }
         this.statsDisplay();
     };
@@ -201,10 +222,6 @@ function Telengard() {
             var critTarget = 100 - (Math.round(player.critPercent() * 10)/10);
             var crit = critRoll >= critTarget ? true : false;
             this.debug("Crit Roll: " + critRoll + " vs " + critTarget);
-            if (crit)
-            {
-                this.console("You scored a critical hit!");
-            }
             return {hit:true, crit:crit, damage:Calculation.playerDamage(player, crit) }
         }
         else
@@ -249,7 +266,7 @@ function Telengard() {
         if (inn != null && !this.busy)
         {
             this.showInn();
-            this.console("You stand outside the " + inn.name);
+            this.console("You stand outside the <span class='location'>" + inn.name + "</span>");
             validOptions.push("[<span class='command'>R</span>]est at the Inn.");
         }
         if (loc.hasStairsDown() && !this.busy)
