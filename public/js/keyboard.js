@@ -175,6 +175,10 @@ function Keyboard(app) {
             _keyboard.move(app, Direction.up);
             break;
 
+            case Keys.QWERTY.m:
+            app.toggleDebugMode();
+            break;
+
             default: return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)

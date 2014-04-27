@@ -304,17 +304,20 @@ function Telengard() {
     };
 
     this.toggleTravelMode = function() {
-        var current = this.player.lookingForTrouble;
-        if (current)
-            this.player.lookingForTrouble = false;
-        else
-            this.player.lookingForTrouble = true;
-
+        this.player.lookingForTrouble = !this.player.lookingForTrouble;
         if (this.player.lookingForTrouble)
             this.console("You are now looking for trouble.");
         else
             this.console("You are now traveling more carefully.");
     }
+
+    this.toggleDebugMode = function() {
+        this.debugMode = !this.debugMode;
+        if (this.debugMode)
+            this.console("Debugging on.");
+        else
+            this.console("Debugging off.");
+    };
 
     this.awardExperience = function() {
         var exp = Calculation.experience(this.player, this.currentMonster);
