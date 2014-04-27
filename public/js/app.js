@@ -67,7 +67,7 @@ function Telengard() {
 
     this.findExtraTreasure = function() {
         var pos = this.currentPosition;
-        var gold = DiceUtils.roll(1, 200 * (pos.z + 1)).total;
+        var gold = DiceUtils.roll(1, 100 * (pos.z + 1)).total;
         this.player.gold += gold;
         this.console("You found a hidden alcove and within it you discover <span class='gold'>" + gold + "</span> pieces.");
         this.describePosition();
@@ -103,7 +103,7 @@ function Telengard() {
     };
 
     this.getGoldGift = function(monster) {
-        var gold = DiceUtils.roll(monster.level, 300).total;
+        var gold = DiceUtils.roll(monster.level, 200).total;
         return {giftType:"gold", gold:gold, offer:"He offers you <span class='gold'>" + gold + "</span> gold pieces."};
     };
 
@@ -271,15 +271,29 @@ function Telengard() {
         }
         if (loc.hasStairsDown() && !this.busy)
         {
+            this.showStairsDown();
             this.console("You see a set of stairs descending deeper into the dungeon.");
             validOptions.push("Go [<span class='command'>D</span>]own the stairs.");
         }
         if (loc.hasStairsUp() && !this.busy) {
+            this.showStairsUp();
             this.console("You set a set of stairs ascending to a higher level of the dungeon.");
             validOptions.push("Go [<span class='command'>U</span>]p the stairs.");
         }
         this.validOptions = validOptions;
         this.stateOptions();
+    };
+
+    this.showStairsUp = function() {
+        var pos = this.currentPosition;
+        var img = $("<img class='stairsup' src='../images/img_trans.gif'>");
+        $('.x' + pos.x + 'y' + pos.y).append(img);
+    };
+
+    this.showStairsDown = function() {
+        var pos = this.currentPosition;
+        var img = $("<img class='stairsdown' src='../images/img_trans.gif'>");
+        $('.x' + pos.x + 'y' + pos.y).append(img);
     };
 
     this.showInn = function() {

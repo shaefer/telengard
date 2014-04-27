@@ -122,3 +122,19 @@
     background-size: 150px 150px;
     position: relative;
 }
+.stairsdown {
+    width:150px;
+    height:75px;
+    left:-5px;
+    top:37.5px;
+    background-image: url(../images/opengameart/stairs_down_sm.png);
+    position: absolute;
+}
+.stairsup {
+    width:150px;
+    height:150px;
+    left:-5px;
+    top:-10px;
+    background-image: url(../images/opengameart/stairs_up.png);
+    position: absolute;
+}
