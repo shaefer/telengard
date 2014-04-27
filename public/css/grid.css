@@ -89,3 +89,9 @@
 .player {
     position: absolute;
 }
+.innLoc {
+    background-image: url(../images/openclipart/inn.png);
+    background-position: center;
+    background-size: 150px 150px;
+    position: relative;
+}

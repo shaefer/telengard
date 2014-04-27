@@ -1,6 +1,6 @@
 function Telengard() {
     this.init = function() {
-        this.startingPosition = new Position(2,2,0);
+        this.startingPosition = new Position(31,4,0);
         this.startingViewRadius = 2;
         this.currentPosition = this.startingPosition;
         this.viewRadius = this.startingViewRadius; //Should this property be on the player? -> Probably.
@@ -8,7 +8,7 @@ function Telengard() {
         this.inCombat = false;
         this.busy = false;
         this.validOptions = [];
-        this.player = new PlayerCharacter();
+        this.player = new PlayerCharacter(this.startingPosition);
         this.currentMonster = null;
         this.debugMode = true;
     };
@@ -31,7 +31,7 @@ function Telengard() {
         this.console(this.validOptions.join(join));
     };
     this.randomEvent = function() {
-        this.player.step();
+        this.player.step(this.currentPosition);
         //degrees of good events
         //random bad thing
         //totally weird event
@@ -346,7 +346,7 @@ function Telengard() {
                     cell.addClass("currentLocation");
                     this.showPlayer(cell);
                 }
-
+                var roomPos = new Position(col, row, level.depth);
                 var room = new Room(col, row, level.depth);
                 if (row == 0 || room.getNorthWall().hasWall())
                     cell.addClass("northWall")
@@ -371,7 +371,7 @@ function Telengard() {
                 if (col < 0 || cell >= level.width)
                     cell.addClass("offGrid")
 
-                if (room.hasInn() && InRoom(room, pos)) //or if inn has been visited we always show it.
+                if (room.hasInn() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
                 {
                     console.warn(room.toString() + " has inn.")
                     var inn = room.inn();
@@ -379,6 +379,26 @@ function Telengard() {
                 }
 
                 cell.append($("<span>" + col + "," + row + "</span>"));
+            }
+        }
+        //after grid has been rendered.
+        var northRoom = new Room(pos.x, pos.y - 1, pos.z);
+        northRoom.dir = "north";
+        var eastRoom = new Room(pos.x + 1, pos.y, pos.z);
+        eastRoom.dir = "east";
+        var southRoom = new Room(pos.x, pos.y + 1, pos.z);
+        southRoom.dir = "south";
+        var westRoom = new Room(pos.x - 1, pos.y, pos.z);
+        westRoom.dir = "west";
+
+        var adjacentRooms = [northRoom, southRoom, eastRoom, westRoom];
+        for(var i = 0;i<adjacentRooms.length;i++) {
+            var room = adjacentRooms[i];
+            if (room.hasInn() && d00() <= 50)
+            {
+                this.console("You hear the sounds of merriment to the "+room.dir+"...it could be an <span class='gold'>inn</span>.");
+                this.player.visited.push(room.getPosition());
+                $(".x" + room.x + "y" + room.y).addClass("innLoc");
             }
         }
     };

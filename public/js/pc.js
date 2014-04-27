@@ -1,4 +1,4 @@
-function PlayerCharacter() {
+function PlayerCharacter(startingPos) {
 	Math.seedrandom(new Date().getTime());
     this.id = Math.random().toString().substring(2);
 
@@ -23,6 +23,7 @@ function PlayerCharacter() {
 	this.steps = 0;
 	this.stepsSinceLastRest = 0;
 	this.killsSinceLastRest = 0;
+	this.visited = [startingPos];
 
 	this.lookingForTrouble = false;
 
@@ -48,9 +49,17 @@ function PlayerCharacter() {
     this._critMultiplier = this.critMultiplier();
     this._damageMultiplier = this.damageMultiplier();
 
-    this.step = function() {
+    this.step = function(pos) {
     	this.steps++;
     	this.stepsSinceLastRest++;
+    	this.visited.push(pos);
+    };
+
+    this.hasVisited = function(pos) {
+    	console.warn('checking for has visited on: ' + pos.toString());
+    	var index = this.visited.map(function(e) { return e.toString(); }).indexOf(pos.toString());
+    	console.warn("Found index: " + index);
+    	return index != -1
     };
 
     this.awardKillAndExperience = function(monster, exp) {

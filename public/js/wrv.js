@@ -82,37 +82,32 @@ function Room(x,y,z) {
         var upperDungeonRoom = new Room(this.x, this.y, this.z - 1);
         return upperDungeonRoom.hasStairsDown();
     };
+    this.getPosition = function() {
+        return new Position(this.x, this.y, this.z);
+    };
     this.nwVertex = function () {
-        var self = this;
-        return new Vertex(self.x, self.y, self.z)
+        return new Vertex(this.x, this.y, this.z);
     };
     this.neVertex = function () {
-        var self = this;
-        return new Vertex(self.x + 1, self.y, self.z)
+        return new Vertex(this.x + 1, this.y, this.z);
     };
     this.seVertex = function () {
-        var self = this;
-        return new Vertex(self.x + 1, self.y + 1, self.z)
+        return new Vertex(this.x + 1, this.y + 1, this.z);
     };
     this.swVertex = function () {
-        var self = this;
-        return new Vertex(self.x, self.y + 1, self.z)
+        return new Vertex(this.x, this.y + 1, this.z);
     };
     this.getNorthWall = function () {
-        var self = this;
-        return new Wall(self.nwVertex(), self.neVertex())
+        return new Wall(this.nwVertex(), this.neVertex());
     }
     this.getEastWall = function () {
-        var self = this;
-        return new Wall(self.neVertex(), self.seVertex())
+        return new Wall(this.neVertex(), this.seVertex());
     }
     this.getSouthWall = function () {
-        var self = this;
-        return new Wall(self.swVertex(), self.seVertex())
+        return new Wall(this.swVertex(), this.seVertex());
     }
     this.getWestWall = function () {
-        var self = this;
-        return new Wall(self.nwVertex(), self.swVertex())
+        return new Wall(this.nwVertex(), this.swVertex());
     }
     this.getWestLimit = function() {
         //if we start to use offset positionj it will change this to be slightly more complicated.
