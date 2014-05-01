@@ -3,6 +3,7 @@ function PlayerCharacter(startingPos) {
     this.id = Math.random().toString().substring(2);
 
     this.level = 1;
+    this.role = "Knight";
 
     this.hp = 2000 + DiceUtils.roll(1,10).total;
     this.maxHp = this.hp;
@@ -38,7 +39,7 @@ function PlayerCharacter(startingPos) {
     	return Calculation.fleePercent(this);
     };
     this.critMultiplier = function(){
-    	return Calculation.critMultiplier(this);
+    	return Calculation.critMultiplier(this, this.weapon);
     }
     this.damageMultiplier = function() {
     	return Calculation.damageMultiplier(this);

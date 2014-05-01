@@ -6,16 +6,15 @@ var Calculation = {
 		return 50 + monster.prowess - player.agility - player.luck;
 	},
 	playerDamage:function(player, crit) {
-		var critMult = crit ? player.critMultiplier() : 1;
-		return Math.round(
-                ((player.weapon.damage() + player.strength) * Calculation.damageMultiplier(player)) * critMult
-            );
+		var baseDamage = (player.weapon.damage() + player.strength) * Calculation.damageMultiplier(player);
+		if (!crit) return Math.round(baseDamage);
+		return Math.round((baseDamage * player.critMultiplier()) + player.weapon.bonusCritDamage());
 	},
 	monsterDamage:function(player, monster) {
 		return Math.round(Calculation.damageMultiplier(monster) * monster.weaponDamage());
 	},
-	critMultiplier:function(player) {
-		return 1.5 + (player.prowess/100);
+	critMultiplier:function(player, weapon) {
+		return 1.5 + weapon.critPercent + (player.prowess/100);
 	},
 	damageMultiplier:function(player) {
 		return  1 + (player.prowess/100);

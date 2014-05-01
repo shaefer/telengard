@@ -120,7 +120,7 @@ function Telengard() {
         }
         else if (this.currentGift.giftType == 'upgradeWeapon')
         {
-            this.player.weapon.upgradeDamageLevel();
+            this.player.weapon.upgrade();
             this.console(acceptStatement + " Your weapon is now a: <span class='gold'>" + this.player.weapon.name + "</span>");
         }
         this.currentGift = null;
