@@ -286,14 +286,12 @@ function Telengard() {
 
     this.showStairsUp = function() {
         var pos = this.currentPosition;
-        var img = $("<img class='stairsup' src='../images/img_trans.gif'>");
-        $('.x' + pos.x + 'y' + pos.y).append(img);
+        $('.x' + pos.x + 'y' + pos.y).addClass("stairsup");
     };
 
     this.showStairsDown = function() {
         var pos = this.currentPosition;
-        var img = $("<img class='stairsdown' src='../images/img_trans.gif'>");
-        $('.x' + pos.x + 'y' + pos.y).append(img);
+        $('.x' + pos.x + 'y' + pos.y).addClass("stairsdown");
     };
 
     this.showInn = function() {
@@ -407,9 +405,17 @@ function Telengard() {
 
                 if (room.hasInn() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
                 {
-                    console.warn(room.toString() + " has inn.")
-                    var inn = room.inn();
                     cell.addClass("innLoc");
+                }
+
+                if (room.hasStairsDown() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
+                {
+                    cell.addClass("stairsdown");
+                }
+
+                if (room.hasStairsUp() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
+                {
+                    cell.addClass("stairsup");
                 }
 
                 cell.append($("<span>" + col + "," + row + "</span>"));
