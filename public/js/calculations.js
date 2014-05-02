@@ -6,7 +6,10 @@ var Calculation = {
 		return 50 + monster.prowess - player.agility - player.luck;
 	},
 	playerDamage:function(player, crit) {
-		var baseDamage = (player.weapon.damage() + player.strength) * Calculation.damageMultiplier(player);
+		var weaponDamage = player.weapon.damage();
+		var dmgMult = Calculation.damageMultiplier(player);
+		var baseDamage = (weaponDamage + DiceUtils.roll(1, player.strength).total) * dmgMult;
+		console.warn("wd: " + weaponDamage + " str: " + player.strength + " mult: " + dmgMult + " total: " + baseDamage);
 		if (!crit) return Math.round(baseDamage);
 		return Math.round((baseDamage * player.critMultiplier()) + player.weapon.bonusCritDamage());
 	},
@@ -23,7 +26,7 @@ var Calculation = {
 		return 50 + (player.luck/2) * (player.agility/1);
 	},
 	critPercent:function(player) {
-		return (player.luck/2) + (player.prowess/1);
+		return 1 + (player.luck/100) + (player.prowess/100) + player.weapon.critPercent;
 	},
 	experience:function(player, monster) {
 		var prowessMultiplier = 1 + (monster.prowess/100)

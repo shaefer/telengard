@@ -218,8 +218,8 @@ function Telengard() {
         var swing = d00();
         if (swing <= toHit)
         {
-            var critRoll = d00();
-            var critTarget = 100 - (Math.round(player.critPercent() * 10)/10);
+            var critRoll = d0000()/100;
+            var critTarget = 100 - (Math.round(player.critPercent() * 10)/100);
             var crit = critRoll >= critTarget ? true : false;
             this.debug("Crit Roll: " + critRoll + " vs " + critTarget);
             return {hit:true, crit:crit, damage:Calculation.playerDamage(player, crit) }

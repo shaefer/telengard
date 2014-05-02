@@ -18,22 +18,38 @@ var BuildWeapon = function(varName, name, src, width, height, scale, baseDamage,
 			this.src = src;
 			this.width = width/scale;
 			this.height = height/scale;
-      this.critPercent = critPercent;
-      this.bonusCritDamageLevel = bonusCritDamageLevel;
-      this.baseDamage = baseDamage;
-      var totalLevel = this.level + baseDamage;
-      this.weaponType = name;
-      this.name = WeaponDescriptions[this.level] + " " + name;
-      this.upgrade = function() {
-          this.level++;
-          this.name = WeaponDescriptions[this.level] + " " + this.weaponType;
-      };
-			this.damage = function() {
-				return DamageLevel(this.level)() + BaseWeaponDamage(this.baseDamage)();
+			this.critPercent = critPercent;
+			this.bonusCritDamageLevel = bonusCritDamageLevel;
+			this.baseDamage = baseDamage;
+			var totalLevel = this.level + baseDamage;
+			this.weaponType = name;
+			this.upgrade = function() {
+			  this.level++;
+			  this.name = this.buildWeaponName();
 			};
-      this.bonusCritDamage = function() {
-        return BonusCritDamage(this.bonusCritDamageLevel)();
-      };
+			this.damage = function() {
+				var additionalDamage = 0;
+				if (this.level > 0)
+					additionalDamage = DamageLevel(this.level - 1)()
+				return additionalDamage + BaseWeaponDamage(this.baseDamage)();
+			};
+			this.bonusCritDamage = function() {
+				return BonusCritDamage(this.bonusCritDamageLevel)();
+			};
+			this.critPercentDescriptionIndex = function() {
+				return Math.floor(this.critPercent/5*100);
+			};
+			this.buildWeaponName = function() {
+				var name = this.weaponType;
+				if (this.critPercent > 0)
+					name = BonusCritMultiplierDescriptions[this.critPercentDescriptionIndex()] + " " + name;
+				if (this.level > 0)
+					name = "+" + this.level + " " + name;
+				if (this.bonusCritDamageLevel > 0)
+					name = BonusCritDamageDescriptions[this.bonusCritDamageLevel] + " " + name;
+				return name;
+			};
+			this.name = this.buildWeaponName();
 		}
 	})
 };
@@ -53,13 +69,12 @@ var BonusCritDamage = function(pow) {
     return level[pow];
 };
 
-//currently maps to weapon level
-var WeaponDescriptions = ["Broken", "Rusty", "Basic", "Sharpened", "Expertly Sharpened", "Crafted", "Honed", "Expertly Crafted", "Deadly", "Assassin's", "Perfect"];
 //TODO: Create named mappings for features of weapon that affect crit percent and crit bonus damage (baseDamage is the type of weapon itself)
-var BonusCritDamageDescriptions = ["Biting", "Vicious", "Bloody", "Maiming", "Eviscerating"];
+var BonusCritDamageDescriptions = ["", "Sharpened", "Harsh", "Stinging", "Biting", "Vicious", "Bloody", "Brutal", "Maiming", "Deadly", "Eviscerating"];
+var BonusCritMultiplierDescriptions = ["Stone", "Copper", "Bronze", "Bone", "Iron", "Steel", "Gold", "Obsidian", "Crystal", "Silver", "Jade", "Ruby", "Emerald", "Sapphire", "Titanium", "Meteorite", "Diamond", "Mithral", "Dragon-Claw", "Adamant"];
 
 var Weapons = {};
 BuildWeapon("Dagger", "Dagger", "/images/dagger.png", 100, 100, 1, 0, 0, 0);
-BuildWeapon("ShortSword", "Short Sword", "/images/shortsword.png", 100, 100, 1, 1, 0.01, 0);
-BuildWeapon("LongSword", "Long Sword", "/images/sword.png", 100, 100, 1, 2, 0.02, 0);
-BuildWeapon("Battleaxe", "Battleaxe", "/images/axe.png", 100, 100, 1, 3, 0.03, 0);
+BuildWeapon("ShortSword", "Short Sword", "/images/shortsword.png", 100, 100, 1, 1, 0, 0);
+BuildWeapon("LongSword", "Long Sword", "/images/sword.png", 100, 100, 1, 2, 0, 0);
+BuildWeapon("Battleaxe", "Battleaxe", "/images/axe.png", 100, 100, 1, 3, 0, 0);

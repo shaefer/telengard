@@ -10,7 +10,7 @@ function PlayerCharacter(startingPos) {
     this.mp = 5 + DiceUtils.roll(1,4).total;
     this.maxMp = this.mp;
 
-    this.strength = DiceUtils.roll(1,6,4).total; //base damage (5-10)...increase slowly...let gear do most of the increasing.
+    this.strength = DiceUtils.roll(1,4).total; //base damage (1-4)...increase slowly...let gear do most of the increasing.
     this.intelligence = DiceUtils.roll(1,4).total;
     this.agility = DiceUtils.roll(1,4).total;
 
@@ -28,10 +28,9 @@ function PlayerCharacter(startingPos) {
 
 	this.lookingForTrouble = false;
 
-	this.weapon = GetWeapon("Dagger", 0);
+	this.weapon = GetWeapon("Dagger", 0); //1-4 damage.
 	this.gold = 0;
 
-	/** Half of luck plus prowess = Level 1 has: 0 - 6.75% chance of crit**/
     this.critPercent = function () {
     	return Calculation.critPercent(this);
     };
@@ -113,7 +112,22 @@ function PlayerCharacter(startingPos) {
     };
 
     this.toDisplay = function() {
-    	return prettyPrint(this);
+    	//return prettyPrint(this);
+    	var display = "";
+    	display += "<div>Level: " + this.level + "</div>";
+    	display += "<div>Class: " + this.role + "</div>";
+    	display += "<div>Hp: " + this.hp + "/" + this.maxHp + "</div>";
+    	display += "<div>Str: " + this.strength + "</div>";
+    	display += "<div>Int: " + this.intelligence + "</div>";
+    	display += "<div>Agi: " + this.agility + "</div>";
+    	display += "<div>Lck: " + this.luck + "</div>";
+    	display += "<div>Prw: " + this.prowess + "</div>";
+    	display += "<div>Crit%: " + this.critPercent() + "</div>";
+    	display += "<div>Crit x: " + this.critMultiplier() + "</div>";
+    	display += "<div>Dmg x: " + this.damageMultiplier() + "</div>";
+    	display += "<div>Flee%: " + this.fleePercent() + "</div>";
+    	display += "<div>Weapon: " + this.weapon.name + "</div>";
+    	return display;
     };
 }
 PlayerCharacter.prototype.toString = function() {
