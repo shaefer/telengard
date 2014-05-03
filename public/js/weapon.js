@@ -21,20 +21,27 @@ var BuildWeapon = function(varName, name, src, width, height, scale, baseDamage,
 			this.critPercent = critPercent;
 			this.bonusCritDamageLevel = bonusCritDamageLevel;
 			this.baseDamage = baseDamage;
+			this.baseDamageFn = BaseWeaponDamage(this.baseDamage);
+			this.levelDamageFn = DamageLevel(this.level - 1);
+			this.bonusCritDamageFn = BonusCritDamage(this.bonusCritDamageLevel);
 			var totalLevel = this.level + baseDamage;
 			this.weaponType = name;
 			this.upgrade = function() {
 			  this.level++;
+			  this.levelDamageFn = DamageLevel(this.level - 1);
 			  this.name = this.buildWeaponName();
 			};
 			this.damage = function() {
 				var additionalDamage = 0;
 				if (this.level > 0)
-					additionalDamage = DamageLevel(this.level - 1)()
-				return additionalDamage + BaseWeaponDamage(this.baseDamage)();
+					additionalDamage = this.levelDamageFn.fn()
+				return additionalDamage + this.baseDamageFn.fn();
+			};
+			this.baseDamageDisplay = function() {
+				return this.baseDamageFn.num + "d" + this.baseDamage
 			};
 			this.bonusCritDamage = function() {
-				return BonusCritDamage(this.bonusCritDamageLevel)();
+				return this.bonusCritDamageFn.fn();
 			};
 			this.critPercentDescriptionIndex = function() {
 				return Math.floor(this.critPercent/5*100);
@@ -48,6 +55,18 @@ var BuildWeapon = function(varName, name, src, width, height, scale, baseDamage,
 				if (this.bonusCritDamageLevel > 0)
 					name = BonusCritDamageDescriptions[this.bonusCritDamageLevel] + " " + name;
 				return name;
+			};
+			this.toDisplay = function() {
+				var desc = "";
+				desc += "<div>Weapon: " + this.name + "</div>";
+				var levelDamage = "";
+				if (this.level > 0)
+					levelDamage = " + " + this.levelDamageFn.toDisplay();
+				desc += "<div class='indent'>Damage: " + this.baseDamageFn.toDisplay() + levelDamage + "</div>";
+				desc += "<div class='indent'>Crit Damage Bonus: +" + this.bonusCritDamageFn.toDisplay() + "</div>";
+				if (this.critPercent > 0)
+				desc += "<div class='indent'>Crit % Bonus: " + this.critPercent + "%</div>";
+				return desc;
 			};
 			this.name = this.buildWeaponName();
 		}

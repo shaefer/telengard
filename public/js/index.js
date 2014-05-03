@@ -3,4 +3,5 @@ function init() {
     console.warn('init');
     var app = new Telengard();
     app.startGame();
+    app.friendlyMonster("upgradeWeapon");
 }

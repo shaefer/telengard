@@ -33,6 +33,7 @@ function Keyboard(app) {
             this.downStairs(app);
         if (direction == Direction.up)
             this.upStairs(app);
+        app.statsDisplay();
     }
     this.downStairs = function(app) {
         var pos = app.currentPosition;

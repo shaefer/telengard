@@ -43,6 +43,12 @@ function PlayerCharacter(startingPos) {
     this.damageMultiplier = function() {
     	return Calculation.damageMultiplier(this);
     }
+    this.toHit = function() {
+    	return Calculation.toHitMonster(this);
+    }
+    this.dodge = function() {
+    	return (100 - Calculation.toHitPlayerBase(this));
+    }
     
     this._critPercent = this.critPercent();
     this._fleePercent = this.fleePercent();
@@ -52,7 +58,8 @@ function PlayerCharacter(startingPos) {
     this.step = function(pos) {
     	this.steps++;
     	this.stepsSinceLastRest++;
-    	this.visited.push(pos);
+    	if (!this.hasVisited(pos))
+    		this.visited.push(pos);
     };
 
     this.hasVisited = function(pos) {
@@ -116,6 +123,13 @@ function PlayerCharacter(startingPos) {
     	var display = "";
     	display += "<div>Level: " + this.level + "</div>";
     	display += "<div>Class: " + this.role + "</div>";
+    	display += "<div>Exp: " + this.exp + "/" + this.expToNext + "</div>";
+    	display += "<div>Gold: " + this.gold + "</div>";
+
+    	display += "<div>Steps: " + this.steps + "</div>";
+    	display += "<div>Kills: " + this.kills.length + "</div>";
+    	display += "<div>Rooms visited: " + this.visited.length + "</div>";
+
     	display += "<div>Hp: " + this.hp + "/" + this.maxHp + "</div>";
     	display += "<div>Str: " + this.strength + "</div>";
     	display += "<div>Int: " + this.intelligence + "</div>";
@@ -126,7 +140,11 @@ function PlayerCharacter(startingPos) {
     	display += "<div>Crit x: " + this.critMultiplier() + "</div>";
     	display += "<div>Dmg x: " + this.damageMultiplier() + "</div>";
     	display += "<div>Flee%: " + this.fleePercent() + "</div>";
-    	display += "<div>Weapon: " + this.weapon.name + "</div>";
+    	display += "<div>Hit%: " + this.toHit() + "</div>";
+    	display += "<div>Dodge%: " + this.dodge() + " - monster's prowess score.</div>";
+    	display += this.weapon.toDisplay();
+
+    	display += "<div>lookingForTrouble: " + this.lookingForTrouble + "</div>";
     	return display;
     };
 }

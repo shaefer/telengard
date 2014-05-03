@@ -2,8 +2,11 @@ var Calculation = {
 	toHitMonster:function(player) {
 		return 50 + player.prowess + player.luck;
 	},
+	toHitPlayerBase:function(player) {
+		return 50 - player.agility - player.luck;
+	},
 	toHitPlayer:function(player, monster) {
-		return 50 + monster.prowess - player.agility - player.luck;
+		return Calculation.toHitPlayerBase(player) + monster.prowess;
 	},
 	playerDamage:function(player, crit) {
 		var weaponDamage = player.weapon.damage();
@@ -41,7 +44,22 @@ var Calculation = {
 }
 
 var RollFuncBuilder = function(num, sides, mod) {
-	return function() {return DiceUtils.roll(num, sides, mod).total;};
+	return {
+		num:num,
+		sides:sides,
+		mod:mod,
+		toDisplay:function() {
+			var modDesc = "";
+			if (mod < 0)
+				modDesc = "-" + mod;
+			if (mod > 0)
+				modDesc = "+" + mod;
+			return num + "d" + sides + modDesc;
+		},
+		fn:function() {
+			return DiceUtils.roll(num, sides, mod).total;
+		}
+	};
 };
 
 var DieLevel = function(pow) {

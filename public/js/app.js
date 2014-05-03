@@ -321,6 +321,7 @@ function Telengard() {
             this.console("You are now looking for trouble.");
         else
             this.console("You are now traveling more carefully.");
+        this.statsDisplay();
     }
 
     this.toggleDebugMode = function() {
@@ -437,7 +438,8 @@ function Telengard() {
             if (room.hasInn() && d00() <= 50)
             {
                 this.console("You hear the sounds of merriment to the "+room.dir+"...it could be an <span class='gold'>inn</span>.");
-                this.player.visited.push(room.getPosition());
+                if (!this.player.hasVisited(room.getPosition()))
+                    this.player.visited.push(room.getPosition());
                 $(".x" + room.x + "y" + room.y).addClass("innLoc");
             }
         }
