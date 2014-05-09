@@ -38,24 +38,37 @@ function Telengard() {
         //battle
         var roll = d00();
         this.debug('Pair rolled for randomEvent: ' + roll);
-        var topCombatRange = 50;
+        var percentChanceOfCombat = 30;
         if (this.player.lookingForTrouble) {
-            topCombatRange += 10;
+            percentChanceOfCombat += 10;
         }
-        if (roll.inRange(11, topCombatRange)) {
-            this.beginCombat();
+        var percentChanceOfFriendlyMonsterGivingGold = 5;
+        var percentChanceOfFindingGold = 4;
+        var percentChanceOfFriendlyMonsterUpgradingWeapon = 1;
+
+        var ranges = [];
+        ranges.push(this.getRandomEventRollRange(1, percentChanceOfCombat, "beginCombat"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterGivingGold, "friendlyMonsterGivesGold"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterUpgradingWeapon, "friendlyMonsterUpgradesWeapon"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFindingGold, "findExtraTreasure"));
+
+        var eventOccurred = false;
+        for(var i = 0;i<ranges.length;i++)
+        {
+            var range = ranges[i];
+            if (roll.inRange(range.start, range.end))
+            {
+                this[range.fnName]();
+                eventOccurred = true;
+                break;
+            }
         }
-        else if (roll.inRange(6, 10)) {
-            this.friendlyMonster("gold");
-        }
-        else if (roll.inRange(2, 5)) {
-            this.findExtraTreasure();
-        }
-        else if (roll == 1) {
-            this.friendlyMonster("upgradeWeapon");
-        }
-        //whenever nothing random is happening describe room and options based on room features.
-        this.describePosition();
+        if (!eventOccurred)
+            this.describePosition();
+    };
+    this.getRandomEventRollRange = function(start, percentChance, fn)
+    {
+        return {start:start, end:start + percentChance - 1, fnName:fn};
     };
     this.beginCombat = function() {
         console.warn('beginCombat')
@@ -84,6 +97,12 @@ function Telengard() {
         return monster;
     };
 
+    this.friendlyMonsterGivesGold = function() {
+        this.friendlyMonster("gold");
+    };
+    this.friendlyMonsterUpgradesWeapon = function() {
+        this.friendlyMonster("upgradeWeapon");
+    };
     this.friendlyMonster = function(giftType) {
         var monster = this.monsterAppears();
         this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
