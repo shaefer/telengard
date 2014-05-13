@@ -52,19 +52,22 @@ function Telengard() {
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterUpgradingWeapon, "friendlyMonsterUpgradesWeapon"));
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFindingGold, "findExtraTreasure"));
 
-        var eventOccurred = false;
+        var eventOccurred = this._fireRandomEvent(roll, ranges);
+        if (!eventOccurred)
+            this.describePosition();
+    };
+    this._fireRandomEvent = function(roll, ranges)
+    {
         for(var i = 0;i<ranges.length;i++)
         {
             var range = ranges[i];
             if (roll.inRange(range.start, range.end))
             {
                 this[range.fnName]();
-                eventOccurred = true;
-                break;
+                return true;
             }
         }
-        if (!eventOccurred)
-            this.describePosition();
+        return false;
     };
     this.getRandomEventRollRange = function(start, percentChance, fn)
     {
