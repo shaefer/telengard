@@ -63,9 +63,7 @@ function PlayerCharacter(startingPos) {
     };
 
     this.hasVisited = function(pos) {
-    	console.warn('checking for has visited on: ' + pos.toString());
     	var index = this.visited.map(function(e) { return e.toString(); }).indexOf(pos.toString());
-    	console.warn("Found index: " + index);
     	return index != -1
     };
 

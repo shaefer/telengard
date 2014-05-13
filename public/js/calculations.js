@@ -34,7 +34,13 @@ var Calculation = {
 	experience:function(player, monster) {
 		var prowessMultiplier = 1 + (monster.prowess/100)
 		var damageMultiplier = 1 + (monster.damageLevel/10);
-		var combatExp = damageMultiplier * prowessMultiplier * monster.level;
+		var differenceInLevels = monster.level - player.level;
+		var levelDiffMultiplier = 1;
+		//+1 = 50%, +2 = 75%, +3 = 115%, +4 = 150%,  
+		if (differenceInLevels > 0)
+			levelDiffMultiplier = Math.pow(1.25, differenceInLevels)
+		console.debug("damageMultiplier: " + damageMultiplier + " prowessMultiplier: " + prowessMultiplier + " monsterLevel: " + monster.level + " levelDiffMultiplier: " + levelDiffMultiplier);
+		var combatExp = damageMultiplier * prowessMultiplier * monster.level * levelDiffMultiplier;
 		var spellExp = 1 * monster.level;
 		var hpExp = monster.maxHp / 3 * monster.level;
 		var adventurerBonus = player.adventurerExperienceBonusMultiplier(); //TODO: Set a max on this?
