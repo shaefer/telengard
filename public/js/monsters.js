@@ -114,6 +114,7 @@ BuildMonster("ShamblingMound", "Shambing Mound", "/images/shambling_mound__matt_
 BuildMonster("FeralTroll", "Feral Troll", "/images/troll_feral__forrest_imel.png", 300, 256, 1.5, 0, RollFuncBuilder(2, 10, 40), 2, 3);
 BuildMonster("Coautl", "Coautl", "/images/coautl__tadas_sidlauskas.png", 300, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 1, 2);
 BuildMonster("Djinn", "Djinn", "/images/genie_djinn__simon_buckroyd.png", 215, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 2, 2);
+BuildMonster("GoblinDog", "Goblin Dog", "/images/goblin_dog__matt_bulahao.png", 300, 256, 2, 0, RollFuncBuilder(1, 20, 20), 1, 1);
 
 BuildMonster("Shoggoth", "Shoggoth", "/images/shoggoth__matt_bulahao.png", 300, 250, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 3);
 BuildMonster("Otyugh", "Otyugh", "/images/otyugh__bruno_balixa.png", 291, 300, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 2);
@@ -121,6 +122,7 @@ BuildMonster("Lamia", "Lamia", "/images/lamia__bruno_balixa.png", 291, 300, 1.5,
 BuildMonster("SkeletalMage", "Skeletal Mage", "/images/skeleton_halfling__nicole_cardiff.png", 237, 300, 2, 0, RollFuncBuilder(1, 20, 60), 0, 1);
 BuildMonster("DireTiger", "Dire Tiger", "/images/tiger_dire__felipe_gaona.png", 200, 217, 1, 1, RollFuncBuilder(1, 20, 60), 1, 3);
 BuildMonster("Wyvern", "Wyvern", "/images/wyvern__eric_quigley.png", 300, 277, 1, 1, RollFuncBuilder(1, 20, 60), 1, 3);
+BuildMonster("DireHyena", "Dire Hyena", "/images/hyena_dire__matt_bulahao.png", 300, 232, 1.5, 1, RollFuncBuilder(1, 20, 60), 2, 2);
 
 BuildMonster("Girallon", "Girallon", "/images/girallon__eric_quigley.png", 240, 300, 1, 2, RollFuncBuilder(2, 10, 50), 1, 4);
 BuildMonster("DireCrocodile", "Dire Crocodile", "/images/crocodile_dire__malcolm_mcclinton.png", 300, 218, 1.5, 2, RollFuncBuilder(3, 10, 40), 0, 3);
@@ -133,20 +135,27 @@ BuildMonster("DireLion", "Dire Lion", "/images/lion_dire__eric_quigley.png", 300
 BuildMonster("DarkNaga", "Dark Naga", "/images/naga_dark__felipe_gaona.png", 232, 300, 1.2, 4, RollFuncBuilder(3, 10, 60), 1, 1);
 BuildMonster("Chuul", "Chuul", "/images/chuul__tadas_sidlauskas.png", 300, 245, 1.2, 4, RollFuncBuilder(3, 10, 60), 1, 3);
 BuildMonster("Cloaker", "Cloaker", "/images/cloaker__adam_schmidt.png", 300, 282, 1.2, 4, RollFuncBuilder(3, 10, 60), 3, 1);
+BuildMonster("Salamander", "Salamander", "/images/salamander__simon_buckroyd.png", 293, 300, 1.2, 4, RollFuncBuilder(3, 10, 60), 2, 2);
 
 BuildMonster("Basilisk", "Basilisk", "/images/basilisk__storn_cook.png", 600, 346, 3, 6, RollFuncBuilder(2, 10, 50), 1, 1);
 BuildMonster("OrcLeader", "Orc Leader", "/images/orc_king__eric_quigley.png", 240, 300, 1.8, 6, RollFuncBuilder(4, 10, 30), 2, 2);
 BuildMonster("WarTroll", "War Troll", "/images/troll_warrior__bruno_balixa.png", 236, 300, 1.5, 6, RollFuncBuilder(2, 10, 70), 2, 3);
 BuildMonster("IceGolem", "Ice Golem", "/images/golem_ice__malcolm_mcclinton.png", 237, 300, 1, 6, RollFuncBuilder(1, 20, 80), 0, 2);
+BuildMonster("GreenDragon", "Green Dragon", "images/dragon_green__eric_quigley.png", 300, 231, 6, RollFuncBuilder(3,10,70), 3, 2);
+BuildMonster("Bulette", "Bulette", "images/bulette__ian_maclean.png", 300, 232, 6, RollFuncBuilder(2,10,60), 1, 4);
 
 BuildMonster("Froghemoth", "Froghemoth", "/images/froghemoth__eric_quigley.png", 300, 300, 1, 8, RollFuncBuilder(3, 10, 90), 0, 4);
 BuildMonster("Gorgon", "Gorgon", "/images/gorgon__tadas_sidlauskas.png", 300, 253, 1, 8, RollFuncBuilder(3, 20, 80), 0, 3);
 BuildMonster("Hydra", "Hydra", "/images/hydra__jacqui_davis.png", 194, 300, 1, 8, RollFuncBuilder(1, 10, 60), 0, 4);
 BuildMonster("FleshGolem", "Flesh Golem", "/images/golem_flesh__matt_bulahao.png", 226, 300, 1.5, 8, RollFuncBuilder(1, 20, 70), 0, 3);
+BuildMonster("BlueDragon", "Blue Dragon", "images/dragon_blue__nicole_cardiff.png", 300, 192, 1, 8, RollFuncBuilder(3, 10, 70), 3, 2);
 
 BuildMonster("EarthElemental", "Earth Elemental", "/images/elemental_earth_wtrees__ryan_sumo.png", 274, 300, 1, 10, RollFuncBuilder(1, 20, 100), 0, 2);
 BuildMonster("AirElemental", "Air Elemental", "/images/elemental_air__david_rabbitte_nobg.png", 250, 300, 1, 10, RollFuncBuilder(1, 20, 80), 0, 2);
+BuildMonster("EyeOfTheDeep", "Eye of the Deep", "/images/eye_of_the_deep_nobg__eric_quigley.png", 215, 300, 1, 10, RollFuncBuilder(2, 10, 90), 3, 3);
+BuildMonster("BlackDragon", "Black Dragon", "/images/dragon_black__forrest_imel.png", 300, 200, 1, 10, RollFuncBuilder(3, 10, 90), 4, 2);
 
+BuildMonster("DragonTurtle", "Dragon Turtle", "/images/dragon_turtle__eric_quigley.png", 411, 300, 1, 12, RollFuncBuilder(2, 10, 110), 1, 4);
 BuildMonster("IronGolem", "Iron Golem", "/images/golem_iron__bruno_balixa.png", 244, 300, 1, 12, RollFuncBuilder(3, 10, 100), 1, 3);
 BuildMonster("SkeletalDragon", "Skeletal Dragon", "/images/dragon_skeletal__bruno_balixa.png", 300, 225, 0.5, 12, RollFuncBuilder(2, 20, 85), 0, 4);
 BuildMonster("Behir", "Behir", "/images/behir__bruno_balixa_lq.png", 350, 361, 1.5, 12, RollFuncBuilder(2, 10, 80), 0, 4);
