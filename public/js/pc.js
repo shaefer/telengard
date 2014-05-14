@@ -5,7 +5,7 @@ function PlayerCharacter(startingPos) {
     this.level = 1;
     this.role = "Knight";
 
-    this.hp = 50 + DiceUtils.roll(1,10).total;
+    this.hp = 200 + DiceUtils.roll(1,10).total;
     this.maxHp = this.hp;
     this.mp = 5 + DiceUtils.roll(1,4).total;
     this.maxMp = this.mp;
