@@ -11,6 +11,8 @@ function Telengard() {
         this.player = new PlayerCharacter(this.startingPosition);
         this.currentMonster = null;
         this.debugMode = true;
+        if (Object.keys(Monsters).length == 0)
+            BuildAllMonsters();
     };
 
     this.setPosition = function (pos) {
@@ -369,7 +371,7 @@ function Telengard() {
         this.console("You died!");
         //TODO: Display stats.
         this.init();
-        console.warn(this);
+        this.startGame();
     };
 
     this.startGame = function() {

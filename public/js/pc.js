@@ -5,7 +5,7 @@ function PlayerCharacter(startingPos) {
     this.level = 1;
     this.role = "Knight";
 
-    this.hp = 2000 + DiceUtils.roll(1,10).total;
+    this.hp = 50 + DiceUtils.roll(1,10).total;
     this.maxHp = this.hp;
     this.mp = 5 + DiceUtils.roll(1,4).total;
     this.maxMp = this.mp;
@@ -134,6 +134,7 @@ function PlayerCharacter(startingPos) {
     	display += "<div>Agi: " + this.agility + "</div>";
     	display += "<div>Lck: " + this.luck + "</div>";
     	display += "<div>Prw: " + this.prowess + "</div>";
+    	display += "<div>Dmg: (" + this.weapon.damageDisplay() + " + 1d" + this.strength + ") * " + this.damageMultiplier();
     	display += "<div>Crit%: " + this.critPercent() + "</div>";
     	display += "<div>Crit x: " + this.critMultiplier() + "</div>";
     	display += "<div>Dmg x: " + this.damageMultiplier() + "</div>";

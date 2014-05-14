@@ -37,8 +37,14 @@ var BuildWeapon = function(varName, name, src, width, height, scale, baseDamage,
 					additionalDamage = this.levelDamageFn.fn()
 				return additionalDamage + this.baseDamageFn.fn();
 			};
-			this.baseDamageDisplay = function() {
-				return this.baseDamageFn.num + "d" + this.baseDamage
+			this.levelDamageDisplay = function() {
+				var levelDamage = "";
+				if (this.level > 0)
+					levelDamage = " + " + this.levelDamageFn.toDisplay();
+				return levelDamage;
+			};
+			this.damageDisplay = function() {
+				return this.baseDamageFn.toDisplay() + this.levelDamageDisplay();
 			};
 			this.bonusCritDamage = function() {
 				return this.bonusCritDamageFn.fn();
@@ -59,10 +65,7 @@ var BuildWeapon = function(varName, name, src, width, height, scale, baseDamage,
 			this.toDisplay = function() {
 				var desc = "";
 				desc += "<div>Weapon: " + this.name + "</div>";
-				var levelDamage = "";
-				if (this.level > 0)
-					levelDamage = " + " + this.levelDamageFn.toDisplay();
-				desc += "<div class='indent'>Damage: " + this.baseDamageFn.toDisplay() + levelDamage + "</div>";
+				desc += "<div class='indent'>Damage: " + this.damageDisplay() + "</div>";
 				desc += "<div class='indent'>Crit Damage Bonus: +" + this.bonusCritDamageFn.toDisplay() + "</div>";
 				if (this.critPercent > 0)
 				desc += "<div class='indent'>Crit % Bonus: " + this.critPercent + "%</div>";

@@ -1,3 +1,4 @@
+//added dependency on seedRandom
 function DiceResult(numOfDice, sidesOfDice, modifier, total, individualDice)
 {
 	this.numOfDice = numOfDice;
