@@ -180,6 +180,10 @@ function Keyboard(app) {
             app.toggleDebugMode();
             break;
 
+            case Keys.QWERTY.q:
+            app.drinkPotion();
+            break;
+
             default: return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)

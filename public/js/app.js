@@ -75,6 +75,16 @@ function Telengard() {
     {
         return {start:start, end:start + percentChance - 1, fnName:fn};
     };
+
+    this.drinkPotion = function() {
+        var descriptions = Items[0].use(this.player);
+        for(var i = 0;i<descriptions.length;i++)
+        {
+            this.console(descriptions[i]);
+        }
+        this.statsDisplay();
+    };
+
     this.beginCombat = function() {
         console.warn('beginCombat')
         var monster = this.monsterAppears();
