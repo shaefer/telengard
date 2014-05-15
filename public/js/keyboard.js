@@ -180,7 +180,7 @@ function Keyboard(app) {
             app.toggleDebugMode();
             break;
 
-            case Keys.QWERTY.q:
+            case Keys.QWERTY.i:
             app.drinkPotion();
             break;
 

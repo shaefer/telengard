@@ -77,7 +77,7 @@ function Telengard() {
     };
 
     this.drinkPotion = function() {
-        var descriptions = Items[0].use(this.player);
+        var descriptions = Items[1].use(this.player);
         for(var i = 0;i<descriptions.length;i++)
         {
             this.console(descriptions[i]);

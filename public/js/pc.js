@@ -31,6 +31,8 @@ function PlayerCharacter(startingPos) {
 	this.weapon = GetWeapon("Dagger", 0); //1-4 damage.
 	this.gold = 0;
 
+	this.buffs = [];
+
     this.critPercent = function () {
     	return Calculation.critPercent(this);
     };
@@ -60,12 +62,36 @@ function PlayerCharacter(startingPos) {
     	this.stepsSinceLastRest++;
     	if (!this.hasVisited(pos))
     		this.visited.push(pos);
+
+    	for (var i = 0;i<this.buffs.length;i++)
+    	{
+    		var buff = this.buffs[i];
+    		buff.duration -= 1;
+    		if (buff.duration == 0)
+    			buff.end(this);
+    		else
+    			console.warn(buff.duration + " more steps of buff to stat: " + buff.stat);
+    	}
+   		//TODO: remove all expired buffs.
     };
 
     this.hasVisited = function(pos) {
     	var index = this.visited.map(function(e) { return e.toString(); }).indexOf(pos.toString());
     	return index != -1
     };
+
+    this.heal = function(amount) {
+    	var newTotal = this.hp + amount;
+		if (newTotal > this.maxHp)
+			newTotal = this.maxHp
+		this.hp = newTotal;
+    };
+
+    this.addBuff = function(buff) {
+    	this.buffs.push(buff);
+    	buff.start(this);
+    };
+
 
     this.awardKillAndExperience = function(monster, exp) {
     	this.kills.push({name:monster.name, level:monster.level});
