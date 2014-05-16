@@ -44,7 +44,7 @@ var Item = Class.extend({
 Items = [];
 var healEffect = new Effect(
 	"Heal 5-15 hp", 
-	function(item, amount){return "<span>You use the " + item + " and heal " + amount + " hit points</span>"}, 
+	function(item, amount){return "<span>You heal " + amount + " hit points</span>"}, 
 	function(target){
 		var amount = DiceUtils.roll(2, 6, 3).total;
 		target.heal(amount);
@@ -54,7 +54,7 @@ var healEffect = new Effect(
 
 var strBoost = new Effect(
 	"Boost Str 1-4",
-	function(item, amount){return "<span>You use the " + item + ". Your str increases by " + amount + ".</span>"},
+	function(item, amount){return "<span>Your str increases by " + amount + ".</span>"},
 	function(target){
 		var amount = DiceUtils.d4().total;
 		target.addBuff(new Buff("strength", amount, 5));
@@ -70,4 +70,8 @@ var PotionOfHealing = function() {
 	return new Item("Potion of Healing", "potion", "player", [healEffect]);
 };
 
-Items.push(PotionOfHealing(), PotionOfStrength());
+var PotionOfStengthAndHealing = function() {
+	return new Item("Potion of Mighty Health", "potion", "player", [strBoost, healEffect])
+}
+
+Items.push(PotionOfHealing(), PotionOfStrength(), PotionOfStengthAndHealing());
