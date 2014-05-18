@@ -160,7 +160,7 @@ function Keyboard(app) {
             app.restAtInn(); 
             break;
 
-            case Keys.QWERTY.t:
+            case Keys.QWERTY.v:
             app.toggleTravelMode();
             break;
 
@@ -182,6 +182,10 @@ function Keyboard(app) {
 
             case Keys.QWERTY.i:
             app.drinkPotion();
+            break;
+
+            case Keys.QWERTY.t:
+            app.takeItem();
             break;
 
             default: return; // exit this handler for other keys

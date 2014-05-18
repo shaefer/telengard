@@ -24,8 +24,9 @@ var Buff = Class.extend({
 	}
 });
 var Item = Class.extend({
-	init: function(name, itemType, targetType, effectFuncs){
+	init: function(name, src, itemType, targetType, effectFuncs){
 		this.name = name;
+		this.src = src;
 		this.type = itemType;
 		this.targetType = targetType;
 		this.effects = effectFuncs;
@@ -38,6 +39,16 @@ var Item = Class.extend({
 			descriptions.push(this.effects[i].trigger(this.name, target)); //firing an effect returns the description of the effect.
 		}
 		return descriptions;
+	},
+	toString: function(){
+		return this.name;
+	}
+});
+
+var Potion = Item.extend({
+	init: function(name, effectFuncs) {
+		var imgNum = DiceUtils.d2().total;
+		this._super(name, "/images/openclipart/potion_"+imgNum+".png", "potion", "player", effectFuncs);
 	}
 });
 
@@ -63,15 +74,19 @@ var strBoost = new Effect(
 );
 
 var PotionOfStrength = function() {
-	return new Item("Potion of Strength", "potion", "player", [strBoost]);
+	return new Potion("Potion of Strength", [strBoost]);
 };
 
 var PotionOfHealing = function() {
-	return new Item("Potion of Healing", "potion", "player", [healEffect]);
+	return new Potion("Potion of Healing", [healEffect]);
 };
 
 var PotionOfStengthAndHealing = function() {
-	return new Item("Potion of Mighty Health", "potion", "player", [strBoost, healEffect])
+	return new Potion("Potion of Mighty Health", [strBoost, healEffect])
 }
 
-Items.push(PotionOfHealing(), PotionOfStrength(), PotionOfStengthAndHealing());
+Items.push(PotionOfHealing, PotionOfStrength, PotionOfStengthAndHealing);
+function GetRandomPotion() {
+	//TODO: Split out chance of simple potion versus combo potions.
+	return Items[DiceUtils.roll(1, Items.length, -1).total]();
+}

@@ -83,11 +83,11 @@ DiceUtils.roll = function(numOfDice, sidesOfDice, modifier)
 };
 DiceUtils.d2 = function(modifier)
 {
-    return DiceUtils.roll(1, 4, modifier);
+    return DiceUtils.roll(1, 2, modifier);
 };
 DiceUtils.d3 = function(modifier)
 {
-    return DiceUtils.roll(1, 4, modifier);
+    return DiceUtils.roll(1, 3, modifier);
 };
 DiceUtils.d4 = function(modifier)
 {

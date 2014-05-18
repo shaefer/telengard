@@ -44,15 +44,15 @@ function Telengard() {
         if (this.player.lookingForTrouble) {
             percentChanceOfCombat += 10;
         }
-        var percentChanceOfFriendlyMonsterGivingGold = 5;
-        var percentChanceOfFindingGold = 4;
+        var percentChanceOfFriendlyMonsterGivingGold = 4;
+        var percentChanceOfFindingTreasure = 5;
         var percentChanceOfFriendlyMonsterUpgradingWeapon = 1;
 
         var ranges = [];
         ranges.push(this.getRandomEventRollRange(1, percentChanceOfCombat, "beginCombat"));
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterGivingGold, "friendlyMonsterGivesGold"));
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterUpgradingWeapon, "friendlyMonsterUpgradesWeapon"));
-        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFindingGold, "findExtraTreasure"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFindingTreasure, "findExtraTreasure"));
 
         var eventOccurred = this._fireRandomEvent(roll, ranges);
         if (!eventOccurred)
@@ -77,7 +77,7 @@ function Telengard() {
     };
 
     this.drinkPotion = function() {
-        var item = Items[2];
+        var item = Items[2]();
         var descriptions = item.use(this.player);
         var message = "<span>You use the " + item.name + ". </span>";
         for(var i = 0;i<descriptions.length;i++)
@@ -97,10 +97,52 @@ function Telengard() {
     };
 
     this.findExtraTreasure = function() {
+        var treasureRoll = d00();
+        this.debug('FINDING EXTRA TREASURE ROLL: ' + treasureRoll);
+        if (treasureRoll.inRange(1, 50))
+            this.findGold();
+        else
+            this.findPotion();
+    };
+
+    this.findGold = function() {
         var pos = this.currentPosition;
-        var gold = DiceUtils.roll(1, 100 * (pos.z + 1)).total;
+        var gold = DiceUtils.roll(1, 50 * (pos.z + 1)).total;
         this.player.gold += gold;
         this.console("You found a hidden alcove and within it you discover <span class='gold'>" + gold + "</span> pieces.");
+        this.describePosition();
+    };
+
+    this.findPotion = function() {
+        this.debug("FIND POTION")
+        var potion = this.itemAppears(GetRandomPotion());
+        this.debug("POTION SELECTED: " + potion.name)
+        this.currentItem = potion;
+        this.validOptions = ["You found a "+potion.name+". [<span class='command'>T</span>]ake the " + potion.name];
+        this.stateOptions();
+    };
+
+    this.itemAppears = function(item) {
+        this.busy = true;
+        var pos = this.currentPosition;
+        var img = $("<img class='treasure' style='width:32px;height:32px' src='"+item.src+"'>");
+        $('.x' + pos.x + 'y' + pos.y).append(img);
+        return item;
+    };
+
+    this.takeItem = function() {
+        if (!this.currentItem) return;
+
+        var item = this.currentItem;
+        this.console("You pick up the " + item.name);
+        this.player.items.push(item);
+
+        this.busy = false;
+        this.currentItem = null;
+        this.validOptions = [];
+        $('.treasure').remove();
+
+        this.statsDisplay();
         this.describePosition();
     };
 
@@ -136,12 +178,22 @@ function Telengard() {
     };
 
     this.getUpgradeWeaponGift = function(weaponName) {
-        return {giftType:"upgradeWeapon", offer:"He offers to upgrade your <span class='gold'>" + weaponName + "</span>."}
+        return {
+            giftType:"upgradeWeapon", 
+            offer:"He offers to upgrade your <span class='gold'>" + weaponName + "</span>.", 
+            accept:function(player){player.weapon.upgrade()},
+            acceptedText:function(player){return " Your weapon is now a: <span class='gold'>" + player.weapon.name + "</span>"}
+        }
     };
 
     this.getGoldGift = function(monster) {
         var gold = DiceUtils.roll(monster.level, 200).total;
-        return {giftType:"gold", gold:gold, offer:"He offers you <span class='gold'>" + gold + "</span> gold pieces."};
+        return {
+            giftType:"gold", 
+            gold:gold, offer:"He offers you <span class='gold'>" + gold + "</span> gold pieces.", 
+            accept:function(player){player.gold += this.gold},
+            acceptedText:function(){return ""}
+        };
     };
 
     this.acceptGift = function() {
@@ -150,16 +202,19 @@ function Telengard() {
         var acceptStatement = "You accept the kind offer from the <span class='friendlyMonsterName'>" + this.currentMonster.name + "</span>.";
         this.busy = false;
         this.currentMonster = null;
-        if (this.currentGift.giftType == 'gold')
-        {
-            this.console(acceptStatement);
-            this.player.gold += this.currentGift.gold;
-        }
-        else if (this.currentGift.giftType == 'upgradeWeapon')
-        {
-            this.player.weapon.upgrade();
-            this.console(acceptStatement + " Your weapon is now a: <span class='gold'>" + this.player.weapon.name + "</span>");
-        }
+        // if (this.currentGift.giftType == 'gold')
+        // {
+        //     this.player.gold += this.currentGift.gold;
+        //     this.console(acceptStatement);
+        // }
+        // else if (this.currentGift.giftType == 'upgradeWeapon')
+        // {
+        //     this.player.weapon.upgrade();
+        //     this.console(acceptStatement + " Your weapon is now a: <span class='gold'>" + this.player.weapon.name + "</span>");
+        // }
+        this.currentGift.accept(this.player);
+        this.console(acceptStatement + this.currentGift.acceptedText(this.player));
+
         this.currentGift = null;
         this.validOptions = [];
         $('.monster').remove();

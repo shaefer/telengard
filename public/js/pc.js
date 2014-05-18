@@ -31,6 +31,7 @@ function PlayerCharacter(startingPos) {
 	this.weapon = GetWeapon("Dagger", 0); //1-4 damage.
 	this.gold = 0;
 
+	this.items = [];
 	this.buffs = [];
 
     this.critPercent = function () {
@@ -153,6 +154,8 @@ function PlayerCharacter(startingPos) {
     	display += "<div>Steps: " + this.steps + "</div>";
     	display += "<div>Kills: " + this.kills.length + "</div>";
     	display += "<div>Rooms visited: " + this.visited.length + "</div>";
+
+    	display += "<div>Items: [" + this.items.join(", ") + "]</div>";
 
     	display += "<div>Hp: " + this.hp + "/" + this.maxHp + "</div>";
     	display += "<div>Str: " + this.strength + "</div>";
