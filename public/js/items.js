@@ -21,6 +21,9 @@ var Buff = Class.extend({
 	},
 	end:function(target){
 		target[this.stat] -= this.amount;
+	},
+	toString:function() {
+		return "+" + this.amount + " " + this.stat + " for " + this.duration + " steps.";
 	}
 });
 var Item = Class.extend({

@@ -44,15 +44,17 @@ function Telengard() {
         if (this.player.lookingForTrouble) {
             percentChanceOfCombat += 10;
         }
-        var percentChanceOfFriendlyMonsterGivingGold = 4;
+        var percentChanceOfFriendlyMonsterGivingGold = 2;
         var percentChanceOfFindingTreasure = 5;
         var percentChanceOfFriendlyMonsterUpgradingWeapon = 1;
+        var percentChanceOfFriendlyMonsterGivingPotion = 2;
 
         var ranges = [];
         ranges.push(this.getRandomEventRollRange(1, percentChanceOfCombat, "beginCombat"));
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterGivingGold, "friendlyMonsterGivesGold"));
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterUpgradingWeapon, "friendlyMonsterUpgradesWeapon"));
         ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFindingTreasure, "findExtraTreasure"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterGivingPotion, "friendlyMonsterGivesPotion"));
 
         var eventOccurred = this._fireRandomEvent(roll, ranges);
         if (!eventOccurred)
@@ -163,6 +165,9 @@ function Telengard() {
     this.friendlyMonsterUpgradesWeapon = function() {
         this.friendlyMonster("upgradeWeapon");
     };
+    this.friendlyMonsterGivesPotion = function() {
+        this.friendlyMonster("potion");
+    };
     this.friendlyMonster = function(giftType) {
         var monster = this.monsterAppears();
         this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
@@ -173,6 +178,8 @@ function Telengard() {
             this.currentGift = this.getGoldGift(monster);
         else if (giftType == "upgradeWeapon")
             this.currentGift = this.getUpgradeWeaponGift(this.player.weapon.name);
+        else if (giftType == "potion")
+            this.currentGift = this.getPotionGift();
         this.console("<span class='goodEvent'>The <span class='friendlyMonsterName'>" + monster.name + "</span> "+likes+" your "+thingMonsterAdmires+". "+this.currentGift.offer+"</span>");
         this.stateOptions();
     };
@@ -194,6 +201,15 @@ function Telengard() {
             accept:function(player){player.gold += this.gold},
             acceptedText:function(){return ""}
         };
+    };
+
+    this.getPotionGift = function() {
+        var potion = GetRandomPotion();
+        this.itemAppears(potion);
+        return {giftType:"potion",
+        gift:potion, offer:"He offers you a <span class='gold'>" + potion.name + ".",
+        accept:function(player){player.items.push(this.gift);},
+        acceptedText:function(){return ""}}
     };
 
     this.acceptGift = function() {
@@ -218,6 +234,7 @@ function Telengard() {
         this.currentGift = null;
         this.validOptions = [];
         $('.monster').remove();
+        $('.treasure').remove();
 
         this.statsDisplay();
         this.describePosition();

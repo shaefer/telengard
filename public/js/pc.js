@@ -64,16 +64,18 @@ function PlayerCharacter(startingPos) {
     	if (!this.hasVisited(pos))
     		this.visited.push(pos);
 
-    	for (var i = 0;i<this.buffs.length;i++)
+    	for (var i = this.buffs.length - 1;i>=0;i--)
     	{
     		var buff = this.buffs[i];
     		buff.duration -= 1;
     		if (buff.duration == 0)
+    		{
     			buff.end(this);
+    			this.buffs.splice(i, 1);
+    		}
     		else
     			console.warn(buff.duration + " more steps of buff to stat: " + buff.stat);
     	}
-   		//TODO: remove all expired buffs.
     };
 
     this.hasVisited = function(pos) {
@@ -156,6 +158,7 @@ function PlayerCharacter(startingPos) {
     	display += "<div>Rooms visited: " + this.visited.length + "</div>";
 
     	display += "<div>Items: [" + this.items.join(", ") + "]</div>";
+    	display += "<div>Buffs: [" + this.buffs.join(", ") + "]</div>";
 
     	display += "<div>Hp: " + this.hp + "/" + this.maxHp + "</div>";
     	display += "<div>Str: " + this.strength + "</div>";
