@@ -70,7 +70,7 @@ var Buff = Class.extend({
 		this.duration -= 1;
 		var stillActive = this.duration > 0;
 		if (!stillActive) this.end(target);
-		return {stillActive:stillActive, message:getMessage(this.amount)};
+		return {stillActive:stillActive, message:this.getMessage(this.amount)};
 	},
 	getMessage:function(amount) {
 		if (amount > 0)
