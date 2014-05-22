@@ -71,6 +71,12 @@
     padding:2px 4px;
     border-radius: 8px;
 }
+.specialAttack {
+    background-color: black;
+    color: lime;
+    padding:2px 4px;
+    border-radius: 8px;
+}
 .miss {
     color: gray;
 }

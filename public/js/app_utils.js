@@ -14,6 +14,18 @@ Number.prototype.padLeft = function(base,chr){
     return len > 0? new Array(len).join(chr || '0')+this : this;
 }
 
+function isObject(object) {
+    return object instanceof Object;
+}
+
+function isFunction(object) {
+   return typeof(object) === 'function';
+}
+
+function isNumber(object) {
+    return typeof(object) === 'number'
+}
+
 function FindRoomsWithOnLevel(level, check) {
     var dungeonLevel = new DungeonLevel(level);
     var width = dungeonLevel.width;

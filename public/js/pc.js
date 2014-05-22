@@ -63,19 +63,21 @@ function PlayerCharacter(startingPos) {
     	this.stepsSinceLastRest++;
     	if (!this.hasVisited(pos))
     		this.visited.push(pos);
-
+    	var messages = [];
     	for (var i = this.buffs.length - 1;i>=0;i--)
     	{
     		var buff = this.buffs[i];
-    		buff.duration -= 1;
-    		if (buff.duration == 0)
+    		var results = buff.activate(this);
+    		if (!results.stillActive)
     		{
-    			buff.end(this);
+    			//display console message on buff expiration?
     			this.buffs.splice(i, 1);
     		}
     		else
     			console.warn(buff.duration + " more steps of buff to stat: " + buff.stat);
+    		messages.push(results.message);
     	}
+    	console.warn(messages);
     };
 
     this.hasVisited = function(pos) {

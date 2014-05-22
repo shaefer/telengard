@@ -10,6 +10,50 @@ var Effect = Class.extend({
 		return this.descriptionTemplateFn(item, amountOfEffect);
 	}
 });
+
+var ContinuousBuff = Class.extend({
+	init: function(stat, amount, duration){
+		this.continuous = true;
+		this.stat = stat;
+		this.amount = amount;
+		this.duration = duration;
+	},
+	activate: function(target) {
+		var amount = this.getAmount();
+		target[this.stat] += amount;
+		this.duration -= 1;
+		return {stillActive: this.duration > 0, message:this.getMessage(amount)}
+	},
+	getAmount:function() {
+		if (isNumber(this.amount))
+			return this.amount;
+		else if (isFunction(this.amount))
+			return this.amount();
+		else if (isObject(this.amount)) //really should be checking for RollObject (which is not a thing yet.)
+			return this.amount.fn();
+	},
+	getMessage:function(amount) {
+		if (amount > 0)
+			return this.stat + " went up by " + amount;
+		else if (amount < 0)
+			return this.stat + " went down by " + amount;
+		else
+			return "";
+	},
+	toString:function() {
+		if (isNumber(this.amount))
+		{
+			var sign = "+";
+			if (this.amount < 0)
+				sign = "-";
+			return sign + this.amount + " " + this.stat + " for " + this.duration + " steps.";
+		}
+		else if (isObject(this.amount))
+			return "+/-" + this.amount.toDisplay() + " " + this.stat + " for " + this.duration + " steps.";
+		else
+			return "+/-" + " some amount of " + this.stat + " for " + this.duration + " steps.";
+	}
+});
 var Buff = Class.extend({
 	init:function(stat, amount, duration){
 		this.stat = stat;
@@ -21,6 +65,20 @@ var Buff = Class.extend({
 	},
 	end:function(target){
 		target[this.stat] -= this.amount;
+	},
+	activate: function(target) {
+		this.duration -= 1;
+		var stillActive = this.duration > 0;
+		if (!stillActive) this.end(target);
+		return {stillActive:stillActive, message:getMessage(this.amount)};
+	},
+	getMessage:function(amount) {
+		if (amount > 0)
+			return this.stat + " went up by " + amount + ".";
+		else if (amount < 0)
+			return this.stat + " went down by " + amount + ".";
+		else
+			return "";
 	},
 	toString:function() {
 		return "+" + this.amount + " " + this.stat + " for " + this.duration + " steps.";

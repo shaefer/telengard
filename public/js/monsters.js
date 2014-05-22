@@ -72,12 +72,12 @@ function GetMonstersForDungeonLevel(monsters, dungeonLevel) {
 	return monstersForLevel;
 };
 var Monsters = {};
-var BuildMonster = function(varName, name, src, width, height, scale, minDungeonLevel, hpFunc, prowessLevel, damageLevel, hpPerLevelFunc) {
+var BuildMonster = function(varName, name, src, width, height, scale, minDungeonLevel, hpFunc, prowessLevel, damageLevel, specialAttack) {
 
 	Monsters[varName] = {minDungeonLevel:minDungeonLevel, constructor:Monster.extend({
 		init: function(level, template){
 			this._super(level);
-			if (!hpPerLevelFunc) {
+			if (true || !hpPerLevelFunc) {
 				var levelsPastOne = level - 1;
 				hpPerLevelFunc = RollFuncBuilder(levelsPastOne, 16, 4*levelsPastOne);
 			}
@@ -94,15 +94,40 @@ var BuildMonster = function(varName, name, src, width, height, scale, minDungeon
 			this.prowess = this.prowessFn.fn();
 			this.damageLevel = damageLevel;
 			this.weaponDamageFn = DamageLevel(damageLevel + level - 1);
-			this.weaponDamage = this.weaponDamageFn.fn;
+			this.weaponDamage = function() {
+				return this.weaponDamageFn.fn();
+			}
 			this.template = template;
 			this.creatureType = name;
-			this.name = "Level " + level + " " + this.template  + this.creatureType;;
+			this.name = "Level " + level + " " + this.template  + this.creatureType;
+			this.specialAttack = specialAttack;
 		}
 	})};
 };
 
+var SpecialAttack = Class.extend({
+	init: function(name, damageLevelBonus, percentChance, attackFunc){
+		this.name = name;
+		this.damageLevelBonus = damageLevelBonus;
+		this.percentChance = percentChance;
+		this.attack = attackFunc;
+	}
+});
 
+var AcidSpit = function() {
+	return new SpecialAttack("Acid Spit", 5, 30, function(player, monster){
+		var damageLevelPower = monster.damageLevel + monster.level - 1 + this.damageLevelBonus;
+		var damageLevel = DamageLevel(damageLevelPower);
+		damageLevel.mod += monster.level;
+		console.warn('Attacking at damageLevel: ' + damageLevelPower + " which is: " + damageLevel.toDisplay())
+		var damage = damageLevel.fn();
+		return {
+			message: "The <span class='monsterName'>" + monster.name + "</span> uses <span class='specialAttack'>" + this.name + "</span> and deals <span class='command'>" + damage + "</span> damage.",
+			damage: damage
+			//next is debuffing effects.
+		};
+	});
+};
 
 var BuildAllMonsters = function() {
 	//var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, prowessLevel, damageLevel, hpPerLevelFunc) {
@@ -111,7 +136,7 @@ var BuildAllMonsters = function() {
 	BuildMonster("ShockerLizard", "Shocker Lizard", "/images/shocker_lizard__matt_bulahao.png", 150, 124, 1, 0, RollFuncBuilder(1, 10, 10), 1, 0);
 	BuildMonster("SlimeCrawler", "Slime Crawler", "/images/slime_crawler.png", 200, 186, 1.5, 0, RollFuncBuilder(1, 10, 20), 0, 0);
 	BuildMonster("Skeleton", "Skeleton", "/images/skeleton_2__bruno_balixa.png", 277, 300, 1.8, 0, RollFuncBuilder(2, 10, 10), 0, 0);
-	BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, 0, RollFuncBuilder(1, 20, 40), 1, 1);
+	BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, 0, RollFuncBuilder(1, 20, 40), 1, 1, AcidSpit());
 	BuildMonster("Redcap", "Redcap", "/images/redcap__bruno_balixa.png", 150, 126, 1, 0, RollFuncBuilder(1, 20, 30), 1, 1);
 	BuildMonster("KoboldMerc", "Kobold Mercenary", "/images/kobold_wsword__bruno_balixa.png", 139, 150, 1, 0, RollFuncBuilder(2, 10, 20), 2, 2);
 	BuildMonster("IronCobra", "Iron Cobra", "/images/iron_cobra__matt_bulahao.png", 276, 300, 2.5, 0, RollFuncBuilder(2, 10, 30), 0, 2);
@@ -124,7 +149,7 @@ var BuildAllMonsters = function() {
 	BuildMonster("Shoggoth", "Shoggoth", "/images/shoggoth__matt_bulahao.png", 300, 250, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 3);
 	BuildMonster("Otyugh", "Otyugh", "/images/otyugh__bruno_balixa.png", 291, 300, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 2);
 	BuildMonster("Lamia", "Lamia", "/images/lamia__bruno_balixa.png", 291, 300, 1.5, 1, RollFuncBuilder(1, 20, 60), 2, 2);
-	BuildMonster("SkeletalMage", "Skeletal Mage", "/images/skeleton_halfling__nicole_cardiff.png", 237, 300, 2, 0, RollFuncBuilder(1, 20, 60), 0, 1);
+	BuildMonster("SkeletalMage", "Skeletal Mage", "/images/skeleton_halfling__nicole_cardiff.png", 237, 300, 2, 1, RollFuncBuilder(1, 20, 60), 0, 1);
 	BuildMonster("DireTiger", "Dire Tiger", "/images/tiger_dire__felipe_gaona.png", 200, 217, 1, 1, RollFuncBuilder(1, 20, 60), 1, 3);
 	BuildMonster("Wyvern", "Wyvern", "/images/wyvern__eric_quigley.png", 300, 277, 1, 1, RollFuncBuilder(1, 20, 60), 1, 3);
 	BuildMonster("DireHyena", "Dire Hyena", "/images/hyena_dire__matt_bulahao.png", 300, 232, 1.5, 1, RollFuncBuilder(1, 20, 60), 2, 2);
@@ -147,7 +172,7 @@ var BuildAllMonsters = function() {
 	BuildMonster("WarTroll", "War Troll", "/images/troll_warrior__bruno_balixa.png", 236, 300, 1.5, 6, RollFuncBuilder(2, 10, 70), 2, 3);
 	BuildMonster("IceGolem", "Ice Golem", "/images/golem_ice__malcolm_mcclinton.png", 237, 300, 1, 6, RollFuncBuilder(1, 20, 80), 0, 2);
 	BuildMonster("GreenDragon", "Green Dragon", "images/dragon_green__eric_quigley.png", 300, 231, 1, 6, RollFuncBuilder(3,10,70), 3, 2);
-	BuildMonster("Bulette", "Bulette", "images/bulette__ian_maclean.png", 300, 232, 6, 1.2, RollFuncBuilder(2,10,60), 1, 4);
+	BuildMonster("Bulette", "Bulette", "images/bulette__ian_maclean.png", 300, 232, 1.2, 6, RollFuncBuilder(2,10,60), 1, 4);
 
 	BuildMonster("Froghemoth", "Froghemoth", "/images/froghemoth__eric_quigley.png", 300, 300, 1, 8, RollFuncBuilder(3, 10, 90), 0, 4);
 	BuildMonster("Gorgon", "Gorgon", "/images/gorgon__tadas_sidlauskas.png", 300, 253, 1, 8, RollFuncBuilder(3, 20, 80), 0, 3);

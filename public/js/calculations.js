@@ -17,7 +17,11 @@ var Calculation = {
 		return Math.round((baseDamage * player.critMultiplier()) + player.weapon.bonusCritDamage());
 	},
 	monsterDamage:function(player, monster) {
-		return Math.round(Calculation.damageMultiplier(monster) * monster.weaponDamage());
+		console.warn(monster.name + " damage: " + monster.weaponDamageFn.toDisplay() + " * " + Calculation.damageMultiplier(monster));
+		var dmgMult = Calculation.damageMultiplier(monster);
+		var weaponDmg = monster.weaponDamage();
+		console.warn(monster.name + " damage: " + weaponDmg + " * " + dmgMult);
+		return Math.round(dmgMult * weaponDmg);
 	},
 	critMultiplier:function(player, weapon) {
 		return 1.5 + weapon.critPercent + (player.prowess/100);
@@ -34,13 +38,18 @@ var Calculation = {
 	experience:function(player, monster) {
 		var prowessMultiplier = 1 + (monster.prowess/100)
 		var damageMultiplier = 1 + (monster.damageLevel/10);
+		if (monster.specialAttack)
+			damageMultiplier = 1 + ((monster.specialAttack.damageLevelBonus + monster.damageLevel)/10);
 		var differenceInLevels = monster.level - player.level;
+		var specialAttackMultiplier = 1;
+		if (monster.specialAttack)
+			specialAttackMultiplier = 1.1; //10% bonus for having any special attacks. (this is in addition to the way it affects damageMultiplier)
 		var levelDiffMultiplier = 1;
 		//+1 = 50%, +2 = 75%, +3 = 115%, +4 = 150%,  
 		if (differenceInLevels > 0)
 			levelDiffMultiplier = Math.pow(1.25, differenceInLevels)
-		console.debug("damageMultiplier: " + damageMultiplier + " prowessMultiplier: " + prowessMultiplier + " monsterLevel: " + monster.level + " levelDiffMultiplier: " + levelDiffMultiplier);
-		var combatExp = damageMultiplier * prowessMultiplier * monster.level * levelDiffMultiplier;
+		console.debug("damageMultiplier: " + damageMultiplier + " prowessMultiplier: " + prowessMultiplier + " monsterLevel: " + monster.level + " levelDiffMultiplier: " + levelDiffMultiplier + " specialAttackMultiplier: " + specialAttackMultiplier);
+		var combatExp = damageMultiplier * prowessMultiplier * monster.level * levelDiffMultiplier * specialAttackMultiplier;
 		var spellExp = 1 * monster.level;
 		var hpExp = monster.maxHp / 3 * monster.level;
 		var adventurerBonus = player.adventurerExperienceBonusMultiplier(); //TODO: Set a max on this?
@@ -56,14 +65,14 @@ var RollFuncBuilder = function(num, sides, mod) {
 		mod:mod,
 		toDisplay:function() {
 			var modDesc = "";
-			if (mod < 0)
-				modDesc = "-" + mod;
-			if (mod > 0)
-				modDesc = "+" + mod;
-			return num + "d" + sides + modDesc;
+			if (this.mod < 0)
+				modDesc = "-" + this.mod;
+			if (this.mod > 0)
+				modDesc = "+" + this.mod;
+			return this.num + "d" + this.sides + modDesc;
 		},
 		fn:function() {
-			return DiceUtils.roll(num, sides, mod).total;
+			return DiceUtils.roll(this.num, this.sides, this.mod).total;
 		}
 	};
 };

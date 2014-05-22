@@ -307,18 +307,43 @@ function Telengard() {
         var swing = DiceUtils.d100().total;
         if (swing <= toHit)
         {
-
-            var damage = Calculation.monsterDamage(this.player, this.currentMonster);
-            this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> strikes you for <span class='command'>" + damage + "</span> damage.");
-            this.player.hp = this.player.hp - damage;
-            if (this.player.hp <= 0)
-                this.death();
+            if (this.currentMonster.specialAttack)
+            {
+                var specialAttack = this.currentMonster.specialAttack;
+                var specialAttackRoll = d00();
+                if (specialAttackRoll <= specialAttack.percentChance)
+                {
+                    var result = specialAttack.attack(this.player, this.currentMonster);
+                    this.console(result.message);
+                    this.player.hp = this.player.hp - result.damage;
+                    if (this.player.hp <= 0)
+                        this.death();
+                }
+                else
+                {
+                    this.monsterNormalAttack();
+                }
+            }
+            else
+            {
+                this.monsterNormalAttack();
+            }
+    
+            
         }
         else
         {
             this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> <span class='miss'>misses</span> you.");
         }
         this.statsDisplay();
+    };
+
+    this.monsterNormalAttack = function() {
+        var damage = Calculation.monsterDamage(this.player, this.currentMonster);
+        this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> strikes you for <span class='command'>" + damage + "</span> damage.");
+        this.player.hp = this.player.hp - damage;
+        if (this.player.hp <= 0)
+            this.death();
     };
 
     this.strike = function() {
