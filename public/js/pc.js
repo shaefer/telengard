@@ -67,7 +67,10 @@ function PlayerCharacter(startingPos) {
     	var buffMessages = this.activateBuffs(this.buffs);
     	var debuffMessages = this.activateBuffs(this.debuffs);
     	var messages = buffMessages.concat(debuffMessages);
-    	console(messages.join(" "));
+    	for(var i = 0;i<messages.length;i++)
+    	{
+    		console(messages[i]);
+    	}
     };
 
     this.activateBuffs = function(buffs) {
@@ -76,12 +79,15 @@ function PlayerCharacter(startingPos) {
     	{
     		var buff = buffs[i];
     		var results = buff.activate(this);
-    		messages.push(results.message);
     		if (!results.stillActive)
     		{
     			//display console message on buff expiration?
-    			messages.push(buff.name + " has worn off.");
+    			messages.push(results.message + " <span class='specialAttack'>" + buff.name + "</span> has worn off.");
     			buffs.splice(i, 1);
+    		}
+    		else
+    		{
+				messages.push(results.message);
     		}
     	}
     	if(messages.length > 0)

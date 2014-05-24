@@ -35,9 +35,9 @@ var ContinuousBuff = Class.extend({
 	},
 	getMessage:function(amount) {
 		if (amount > 0)
-			return this.stat + " went up by " + amount;
+			return "<span class='specialAttack'>" + this.name + "</span> raised your " + this.stat + " by " + amount + ".";
 		else if (amount < 0)
-			return this.stat + " went down by " + amount;
+			return "<span class='specialAttack'>" + this.name + "</span> drained your " + this.stat + " by " + amount + ".";
 		else
 			return "";
 	},
@@ -76,9 +76,9 @@ var Buff = Class.extend({
 	},
 	getMessage:function(amount) {
 		if (amount > 0)
-			return this.stat + " went up by " + amount + ".";
+			return "<span class='specialAttack'>" + this.name + "</span> raised your " + this.stat + " by " + amount + ".";
 		else if (amount < 0)
-			return this.stat + " went down by " + amount + ".";
+			return "<span class='specialAttack'>" + this.name + "</span> drained your " + this.stat + " by " + amount + ".";
 		else
 			return "";
 	},
