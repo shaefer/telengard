@@ -12,8 +12,9 @@ var Effect = Class.extend({
 });
 
 var ContinuousBuff = Class.extend({
-	init: function(stat, amount, duration){
+	init: function(name, stat, amount, duration){
 		this.continuous = true;
+		this.name = name;
 		this.stat = stat;
 		this.amount = amount;
 		this.duration = duration;
@@ -45,7 +46,7 @@ var ContinuousBuff = Class.extend({
 		{
 			var sign = "+";
 			if (this.amount < 0)
-				sign = "-";
+				sign = "";
 			return sign + this.amount + " " + this.stat + " for " + this.duration + " steps.";
 		}
 		else if (isObject(this.amount))
@@ -55,7 +56,8 @@ var ContinuousBuff = Class.extend({
 	}
 });
 var Buff = Class.extend({
-	init:function(stat, amount, duration){
+	init:function(name, stat, amount, duration){
+		this.name = name;
 		this.stat = stat;
 		this.amount = amount;
 		this.duration = duration;
@@ -129,8 +131,17 @@ var strBoost = new Effect(
 	function(item, amount){return "<span>Your str increases by " + amount + ".</span>"},
 	function(target){
 		var amount = DiceUtils.d4().total;
-		target.addBuff(new Buff("strength", amount, 5));
+		target.addBuff(new Buff("Strength Boost", "strength", amount, 5));
 		return amount;
+	}
+);
+
+var poisonEffect = new Effect(
+	"Poison 1 hp/round",
+	function(item, amount){return "You have been <span class='specialAttack'>poisoned</span>."}, 
+	function(target){
+		target.addBuff(new ContinuousBuff("Poison", "hp", -1, 5), true);
+		return 0;
 	}
 );
 

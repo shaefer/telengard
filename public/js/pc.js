@@ -33,6 +33,7 @@ function PlayerCharacter(startingPos) {
 
 	this.items = [];
 	this.buffs = [];
+	this.debuffs = [];
 
     this.critPercent = function () {
     	return Calculation.critPercent(this);
@@ -58,26 +59,34 @@ function PlayerCharacter(startingPos) {
     this._critMultiplier = this.critMultiplier();
     this._damageMultiplier = this.damageMultiplier();
 
-    this.step = function(pos) {
+    this.step = function(pos, console) {
     	this.steps++;
     	this.stepsSinceLastRest++;
     	if (!this.hasVisited(pos))
     		this.visited.push(pos);
-    	var messages = [];
-    	for (var i = this.buffs.length - 1;i>=0;i--)
+    	var buffMessages = this.activateBuffs(this.buffs);
+    	var debuffMessages = this.activateBuffs(this.debuffs);
+    	var messages = buffMessages.concat(debuffMessages);
+    	console(messages.join(" "));
+    };
+
+    this.activateBuffs = function(buffs) {
+		var messages = [];
+    	for (var i = buffs.length - 1;i>=0;i--)
     	{
-    		var buff = this.buffs[i];
+    		var buff = buffs[i];
     		var results = buff.activate(this);
+    		messages.push(results.message);
     		if (!results.stillActive)
     		{
     			//display console message on buff expiration?
-    			this.buffs.splice(i, 1);
+    			messages.push(buff.name + " has worn off.");
+    			buffs.splice(i, 1);
     		}
-    		else
-    			console.warn(buff.duration + " more steps of buff to stat: " + buff.stat);
-    		messages.push(results.message);
     	}
-    	console.warn(messages);
+    	if(messages.length > 0)
+    		console.warn(messages);
+    	return messages;
     };
 
     this.hasVisited = function(pos) {
@@ -92,9 +101,13 @@ function PlayerCharacter(startingPos) {
 		this.hp = newTotal;
     };
 
-    this.addBuff = function(buff) {
-    	this.buffs.push(buff);
-    	buff.start(this);
+    this.addBuff = function(buff, harmful) {
+    	if (harmful)
+    		this.debuffs.push(buff);
+    	else
+    		this.buffs.push(buff);
+    	if (!buff.continuous)
+    		buff.start(this);
     };
 
 
@@ -145,6 +158,7 @@ function PlayerCharacter(startingPos) {
         this.mp = this.maxMp;
         this.stepsSinceLastRest = 0;
         this.killsSinceLastRest = 0;
+        this.debuffs = [];
     };
 
     this.toDisplay = function() {
@@ -161,6 +175,7 @@ function PlayerCharacter(startingPos) {
 
     	display += "<div>Items: [" + this.items.join(", ") + "]</div>";
     	display += "<div>Buffs: [" + this.buffs.join(", ") + "]</div>";
+    	display += "<div>Debuffs: [" + this.debuffs.join(", ") + "]</div>";
 
     	display += "<div>Hp: " + this.hp + "/" + this.maxHp + "</div>";
     	display += "<div>Str: " + this.strength + "</div>";

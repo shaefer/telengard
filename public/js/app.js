@@ -33,7 +33,7 @@ function Telengard() {
         this.console(this.validOptions.join(join));
     };
     this.randomEvent = function() {
-        this.player.step(this.currentPosition);
+        this.player.step(this.currentPosition, this.console);
         //degrees of good events
         //random bad thing
         //totally weird event
@@ -315,6 +315,11 @@ function Telengard() {
                 {
                     var result = specialAttack.attack(this.player, this.currentMonster);
                     this.console(result.message);
+                    if (result.effect)
+                    {
+                        var effectDescription = result.effect.trigger(this.player, this.player);
+                        this.console(effectDescription);
+                    }
                     this.player.hp = this.player.hp - result.damage;
                     if (this.player.hp <= 0)
                         this.death();
@@ -327,9 +332,7 @@ function Telengard() {
             else
             {
                 this.monsterNormalAttack();
-            }
-    
-            
+            }    
         }
         else
         {
