@@ -5,6 +5,8 @@ function PlayerCharacter(startingPos) {
     this.level = 1;
     this.role = "Knight";
 
+    this.status = "";
+
     this.hp = 200 + DiceUtils.roll(1,10).total;
     this.maxHp = this.hp;
     this.mp = 5 + DiceUtils.roll(1,4).total;
@@ -70,6 +72,14 @@ function PlayerCharacter(startingPos) {
     	for(var i = 0;i<messages.length;i++)
     	{
     		console(messages[i]);
+    	}
+    };
+
+    this.setStatus = function(status) {
+    	if (status != this.status)
+    	{
+    		this.status = status;
+    		return true;
     	}
     };
 

@@ -87,6 +87,7 @@ function Telengard() {
             message += descriptions[i] + " ";
         }
         this.console(message);
+        this.determinePlayerStatus();
         this.statsDisplay();
     };
 
@@ -321,8 +322,7 @@ function Telengard() {
                         this.console(effectDescription);
                     }
                     this.player.hp = this.player.hp - result.damage;
-                    if (this.player.hp <= 0)
-                        this.death();
+                    this.determinePlayerStatus();
                 }
                 else
                 {
@@ -345,8 +345,7 @@ function Telengard() {
         var damage = Calculation.monsterDamage(this.player, this.currentMonster);
         this.console("The <span class='monsterName'>" + this.currentMonster.name + "</span> strikes you for <span class='command'>" + damage + "</span> damage.");
         this.player.hp = this.player.hp - damage;
-        if (this.player.hp <= 0)
-            this.death();
+        this.determinePlayerStatus();
     };
 
     this.strike = function() {
@@ -477,6 +476,32 @@ function Telengard() {
         {
             this.console("<span class='levelup'>You are now level <span class='command'>" + this.player.level + "</span>!<span>You gained "+leveledUp.str+" str</span></span>");
             console.warn(leveledUp);
+        }
+    };
+
+    this.determinePlayerStatus = function() {
+        if (this.player.hp <= 0)
+        {
+            this.player.setStatus("Dead");
+            this.death();
+        }
+        else if (this.player.hp <= this.player.maxHp/4)
+        {
+            var result = this.player.setStatus("Near Death");
+            if (result)
+                this.console("<span class='playerInjured'>You are near death.</span>")
+        }
+        else if (this.player.hp <= this.player.maxHp/2)
+        {
+            var result = this.player.setStatus("Seriously Injured");
+            if (result)
+                this.console("<span class='playerInjured'>You are seriously injured.</span>")
+        }
+        else
+        {
+            var result = this.player.setStatus("");
+            if (result)
+                this.console("<span class='goodEvent'>You feel healthy again.<span>")
         }
     };
 

@@ -110,6 +110,12 @@
     padding:2px 4px;
     border-radius: 8px;
 }
+.playerInjured {
+    background-color: red;
+    color:black;
+    padding:2px 4px;
+    border-radius: 8px;
+}
 .levelup {
     background-color:black;
     color:green;
