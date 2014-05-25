@@ -109,13 +109,53 @@ function PlayerCharacter(startingPos) {
 
     this.addBuff = function(buff, harmful) {
     	if (harmful)
-    		this.debuffs.push(buff);
+    	{
+    		return this.addBuffToList(this.debuffs, buff);
+    	}
     	else
-    		this.buffs.push(buff);
-    	if (!buff.continuous)
-    		buff.start(this);
+    	{
+    		return this.addBuffToList(this.buffs, buff);
+    	}
     };
 
+    this.addBuffToList = function(buffList, buff) {
+    	var currentBuff = this.findBuff(buffList, buff);
+    	if (currentBuff && currentBuff.continuous)
+    	{
+    		this.augmentBuff(currentBuff, buff.duration); //maybe just +1 step duration rather than full reset?
+    		return "augmented";
+    	}
+    	else if (currentBuff && !currentBuff.continuous)
+    	{
+    		console.warn('Tried to buff non continuous buff again...ignored.')
+    		return false;
+    	}
+    	else if (!currentBuff)
+    	{
+    		this.addNewBuff(buffList, buff);
+    		return true;
+    	}
+    };
+
+    this.augmentBuff = function(buff, newDuration) {
+    	buff.augment();
+    	buff.duration = newDuration;
+    };
+
+    this.addNewBuff = function(buffList, buff) {
+    	buffList.push(buff);
+		if (!buff.continuous)
+			buff.start(this);
+    };
+
+    this.findBuff = function(buffList, buff) {
+    	for(var i = 0;i<buffList.length;i++)
+    	{
+    		var currentBuff = buffList[i];
+    		if (currentBuff.name == buff.name)
+    			return currentBuff;
+    	}
+    };
 
     this.awardKillAndExperience = function(monster, exp) {
     	this.kills.push({name:monster.name, level:monster.level});

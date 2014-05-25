@@ -59,7 +59,7 @@
     right:0;
     top:0;
 }
-.command {
+.command, .badEvent {
     color: red;
 }
 .goodEvent {

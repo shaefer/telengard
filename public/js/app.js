@@ -81,7 +81,7 @@ function Telengard() {
     this.drinkPotion = function() {
         var item = Items[2]();
         var descriptions = item.use(this.player);
-        var message = "<span>You use the " + item.name + ". </span>";
+        var message = "You use the <class='item'>" + item.name + "<span>. ";
         for(var i = 0;i<descriptions.length;i++)
         {
             message += descriptions[i] + " ";

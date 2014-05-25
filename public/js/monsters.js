@@ -129,33 +129,33 @@ var AcidSpit = function() {
 	});
 };
 
-var Poison = function() {
+var Poison = function(name) {
 	return new SpecialAttack("Poison Bite", 0, 40, function(player, monster){
 		var damage = monster.weaponDamage();
 		return {
 			message: "The <span class='monsterName'>" + monster.name + "</span> uses its <span class='specialAttack'>" + this.name + "</span> and deals <span class='command'>" + damage + "</span> damage.",
 			damage: damage,
-			effect: poisonEffect
+			effect: PoisonEffect(name)
 		};
 	});
 };
 
 var BuildAllMonsters = function() {
 	//var BuildMonster = function(varName, name, src, width, height, scale, hpFunc, prowessLevel, damageLevel, hpPerLevelFunc) {
-	BuildMonster("DireBat", "Dire Bat", "/images/bat_dire__nicole_cardiff.png", 300, 232, 3, 0, RollFuncBuilder(2, 10, 20), 0, 0);
-	BuildMonster("DireRat", "Dire Rat", "/images/rat_dire__ryan_sumo.png", 212, 241, 4, 0, RollFuncBuilder(1, 10, 30), 0, 0);
-	BuildMonster("ShockerLizard", "Shocker Lizard", "/images/shocker_lizard__matt_bulahao.png", 150, 124, 1, 0, RollFuncBuilder(1, 10, 10), 1, 0);
-	BuildMonster("SlimeCrawler", "Slime Crawler", "/images/slime_crawler.png", 200, 186, 1.5, 0, RollFuncBuilder(1, 10, 20), 0, 0);
-	BuildMonster("Skeleton", "Skeleton", "/images/skeleton_2__bruno_balixa.png", 277, 300, 1.8, 0, RollFuncBuilder(2, 10, 10), 0, 0);
-	BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, 0, RollFuncBuilder(1, 20, 40), 1, 1, AcidSpit());
-	BuildMonster("Redcap", "Redcap", "/images/redcap__bruno_balixa.png", 150, 126, 1, 0, RollFuncBuilder(1, 20, 30), 1, 1);
-	BuildMonster("KoboldMerc", "Kobold Mercenary", "/images/kobold_wsword__bruno_balixa.png", 139, 150, 1, 0, RollFuncBuilder(2, 10, 20), 2, 2);
-	BuildMonster("IronCobra", "Iron Cobra", "/images/iron_cobra__matt_bulahao.png", 276, 300, 2.5, 0, RollFuncBuilder(2, 10, 30), 0, 2, Poison());
-	BuildMonster("ShamblingMound", "Shambing Mound", "/images/shambling_mound__matt_bulahao.png", 296, 268, 1.2, 0, RollFuncBuilder(2, 20, 20), 0, 2);
-	BuildMonster("FeralTroll", "Feral Troll", "/images/troll_feral__forrest_imel.png", 300, 256, 1.5, 0, RollFuncBuilder(2, 10, 40), 2, 3);
-	BuildMonster("Coautl", "Coautl", "/images/coautl__tadas_sidlauskas.png", 300, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 1, 2);
-	BuildMonster("Djinn", "Djinn", "/images/genie_djinn__simon_buckroyd.png", 215, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 2, 2);
-	BuildMonster("GoblinDog", "Goblin Dog", "/images/goblin_dog__matt_bulahao.png", 300, 256, 2, 0, RollFuncBuilder(1, 20, 20), 1, 1);
+	// BuildMonster("DireBat", "Dire Bat", "/images/bat_dire__nicole_cardiff.png", 300, 232, 3, 0, RollFuncBuilder(2, 10, 20), 0, 0);
+	// BuildMonster("DireRat", "Dire Rat", "/images/rat_dire__ryan_sumo.png", 212, 241, 4, 0, RollFuncBuilder(1, 10, 30), 0, 0);
+	// BuildMonster("ShockerLizard", "Shocker Lizard", "/images/shocker_lizard__matt_bulahao.png", 150, 124, 1, 0, RollFuncBuilder(1, 10, 10), 1, 0);
+	// BuildMonster("SlimeCrawler", "Slime Crawler", "/images/slime_crawler.png", 200, 186, 1.5, 0, RollFuncBuilder(1, 10, 20), 0, 0);
+	// BuildMonster("Skeleton", "Skeleton", "/images/skeleton_2__bruno_balixa.png", 277, 300, 1.8, 0, RollFuncBuilder(2, 10, 10), 0, 0);
+	// BuildMonster("Ankheg", "Ankheg", "/images/ankheg__matt_bulahao.png", 300, 249, 1.5, 0, RollFuncBuilder(1, 20, 40), 1, 1, AcidSpit());
+	// BuildMonster("Redcap", "Redcap", "/images/redcap__bruno_balixa.png", 150, 126, 1, 0, RollFuncBuilder(1, 20, 30), 1, 1);
+	// BuildMonster("KoboldMerc", "Kobold Mercenary", "/images/kobold_wsword__bruno_balixa.png", 139, 150, 1, 0, RollFuncBuilder(2, 10, 20), 2, 2);
+	BuildMonster("IronCobra", "Iron Cobra", "/images/iron_cobra__matt_bulahao.png", 276, 300, 2.5, 0, RollFuncBuilder(2, 10, 30), 0, 2, Poison("Iron Cobra"));
+	// BuildMonster("ShamblingMound", "Shambing Mound", "/images/shambling_mound__matt_bulahao.png", 296, 268, 1.2, 0, RollFuncBuilder(2, 20, 20), 0, 2);
+	// BuildMonster("FeralTroll", "Feral Troll", "/images/troll_feral__forrest_imel.png", 300, 256, 1.5, 0, RollFuncBuilder(2, 10, 40), 2, 3);
+	// BuildMonster("Coautl", "Coautl", "/images/coautl__tadas_sidlauskas.png", 300, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 1, 2);
+	// BuildMonster("Djinn", "Djinn", "/images/genie_djinn__simon_buckroyd.png", 215, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 2, 2);
+	// BuildMonster("GoblinDog", "Goblin Dog", "/images/goblin_dog__matt_bulahao.png", 300, 256, 2, 0, RollFuncBuilder(1, 20, 20), 1, 1);
 
 	BuildMonster("Shoggoth", "Shoggoth", "/images/shoggoth__matt_bulahao.png", 300, 250, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 3);
 	BuildMonster("Otyugh", "Otyugh", "/images/otyugh__bruno_balixa.png", 291, 300, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 2);

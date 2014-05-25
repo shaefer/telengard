@@ -77,6 +77,7 @@ var RollFuncBuilder = function(num, sides, mod) {
 	};
 };
 
+//TODO: Standardize progressions into something mathematical...they are close now.
 var DieLevel = function(pow) {
 	//(1-1), (1-2), (1-3), (2-3), (2-4), (2-6), (3-6), (4-6), (3-8), (4-8), (5-8), (6-8), (4-10), (5-10), (6-10), (7-10), (8-10), (5-12), (6-12), (7-12), (8-12), (9-12), (8-20), (10-20), (15-20)
 	var level = [RollFuncBuilder(1,1,0), RollFuncBuilder(1,2,0), RollFuncBuilder(1,3,0), RollFuncBuilder(1,2,1), RollFuncBuilder(1,3,1), RollFuncBuilder(1,5,1),
@@ -96,3 +97,10 @@ var DamageLevel = function(pow) {
 				];
 	return level[pow];
 };
+
+//avg dmg wide range
+//avg dmg med range
+//avg dmg small range
+
+//wide range (just upping max with slow upping of min(mod))
+//slow progression with min around half of roll
