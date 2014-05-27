@@ -157,6 +157,7 @@ var BuildAllMonsters = function() {
 	BuildMonster("Djinn", "Djinn", "/images/genie_djinn__simon_buckroyd.png", 215, 300, 1.5, 0, RollFuncBuilder(1, 20, 50), 2, 2);
 	BuildMonster("GoblinDog", "Goblin Dog", "/images/goblin_dog__matt_bulahao.png", 300, 256, 2, 0, RollFuncBuilder(1, 20, 20), 1, 1);
 
+	BuildMonster("Choker", "Choker", "/images/choker_bruno_balixa.png", 262, 300, 2, 1, RollFuncBuilder(1, 20, 50), 1, 0);
 	BuildMonster("Shoggoth", "Shoggoth", "/images/shoggoth__matt_bulahao.png", 300, 250, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 3);
 	BuildMonster("Otyugh", "Otyugh", "/images/otyugh__bruno_balixa.png", 291, 300, 1.5, 1, RollFuncBuilder(1, 20, 60), 0, 2);
 	BuildMonster("Lamia", "Lamia", "/images/lamia__bruno_balixa.png", 291, 300, 1.5, 1, RollFuncBuilder(1, 20, 60), 2, 2);
@@ -178,6 +179,7 @@ var BuildAllMonsters = function() {
 	BuildMonster("Cloaker", "Cloaker", "/images/cloaker__adam_schmidt.png", 300, 282, 1.2, 4, RollFuncBuilder(3, 10, 60), 3, 1);
 	BuildMonster("Salamander", "Salamander", "/images/salamander__simon_buckroyd.png", 293, 300, 1.2, 4, RollFuncBuilder(3, 10, 60), 2, 2);
 
+	BuildMonster("SpiritNaga", "Spirit Naga", "/images/naga_spirit__matt_bulahao.png", 221, 300, 1, 6, RollFuncBuilder(3, 10, 50), 3, 1);
 	BuildMonster("Basilisk", "Basilisk", "/images/basilisk__storn_cook.png", 600, 346, 3, 6, RollFuncBuilder(2, 10, 50), 1, 1);
 	BuildMonster("OrcLeader", "Orc Leader", "/images/orc_king__eric_quigley.png", 240, 300, 1.8, 6, RollFuncBuilder(4, 10, 30), 2, 2);
 	BuildMonster("WarTroll", "War Troll", "/images/troll_warrior__bruno_balixa.png", 236, 300, 1.5, 6, RollFuncBuilder(2, 10, 70), 2, 3);
