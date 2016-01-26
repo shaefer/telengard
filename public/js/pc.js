@@ -27,6 +27,7 @@ function PlayerCharacter(startingPos) {
 	this.stepsSinceLastRest = 0;
 	this.killsSinceLastRest = 0;
 	this.visited = [startingPos];
+    this.roomInfoKnown = [startingPos]; //For rooms we detected from a distance or were informed of.
 
 	this.lookingForTrouble = false;
 
@@ -109,6 +110,13 @@ function PlayerCharacter(startingPos) {
     	var index = this.visited.map(function(e) { return e.toString(); }).indexOf(pos.toString());
     	return index != -1
     };
+    this.hasRoomInfo = function(pos) {
+        var index = this.roomInfoKnown.map(function(e) { return e.toString(); }).indexOf(pos.toString());
+        return index != -1
+    }
+    this.knowsAbout = function(pos) {
+        return this.hasVisited(pos) || this.hasRoomInfo(pos);
+    };
 
     this.heal = function(amount) {
     	var newTotal = this.hp + amount;
@@ -167,11 +175,15 @@ function PlayerCharacter(startingPos) {
     	}
     };
 
-    this.awardKillAndExperience = function(monster, exp) {
-    	this.kills.push({name:monster.name, level:monster.level});
-    	this.killsSinceLastRest++;
-    	this.exp += exp;
-    	return this.levelUp();
+    this.awardKill = function(monster) {
+        this.kills.push({name:monster.name, level:monster.level});
+        this.killsSinceLastRest++;
+        return {killCount: this.kills.length, skillSinceLastRest: this.killsSinceLastRest};
+    };
+
+    this.awardExperienceAndLevelUp = function(exp) {
+        this.exp += exp;
+        return this.levelUp();
     };
 
     this.adventurerExperienceBonusMultiplier = function() {

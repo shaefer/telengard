@@ -31,6 +31,7 @@ function FindRoomsWithOnLevel(level, check) {
     var width = dungeonLevel.width;
     var height = dungeonLevel.height;
     var counter = 0;
+    var rooms = [];
     for (var w = 0;w<width;w++) {
         for (var h = 0;h<height;h++) {
             var room = new Room(w, h, level);
@@ -38,10 +39,12 @@ function FindRoomsWithOnLevel(level, check) {
             {
                 console.warn(room.toString());
                 counter++;
+                rooms.push(room);
             }
         }
     }
-    console.warn(counter + " rooms with inns on level 0");
+    console.warn(counter + " rooms with " + check + " on level " + level);
+    return rooms;
 }
 
 function FindRoomsWith(check) {
@@ -60,6 +63,11 @@ function toTimestamp(d) {
     d.getMinutes().padLeft(),
     d.getSeconds().padLeft()].join(':');
     return dformat;
+}
+
+function GetRandomItemFromArray(array) {
+    Math.seedrandom();
+    return array[Math.floor(Math.random() * array.length)];
 }
 
 function prettyPrint(obj){

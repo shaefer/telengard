@@ -3,3 +3,5 @@ exports.common = {
   port: 3002,
   app_secret: 'telengard'
 };
+
+exports.development = {};

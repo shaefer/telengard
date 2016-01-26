@@ -1,5 +1,29 @@
 function Telengard() {
     this.init = function() {
+        this.config = {
+            percentChanceOfCombat:20,
+            percentChanceOfCombatIncrease: 20,
+            percentChanceOfFriendlyMonsterGivingGold: 2,
+            percentChanceOfFindingTreasure: 4,
+            percentChanceOfFriendlyMonsterUpgradingWeapon: 1,
+            percentChanceOfFriendlyMonsterGivingPotion: 2,
+            percentChanceOfMonsterRevealingLocations: 1,
+            bonusExpForKillCount: .1,
+            bonusExpAwardedForEveryXKills: 100,
+            monsterGoldDie: 200,
+            foundGoldLevelMultiplier: 50,
+            percentChanceToFindInns: 50,
+            percentChanceToFindStairsUp: 50,
+            percentChanceToFindStairsDown: 30,
+            innExperienceMultiplier: 50,
+            stairsupExperienceMultiplier: 75,
+            stairsdownExperienceMultiplier: 100
+        };
+        this.discoveryType = {
+            inn: {mult:this.config.innExperienceMultiplier, exp: function(level) {return this.mult * level;}},
+            stairsup: {mult:this.config.stairsupExperienceMultiplier, exp: function(level) {return this.mult * level;}},
+            stairsdown: {mult:this.config.stairsdownExperienceMultiplier, exp: function(level) {return this.mult * level;}}
+        };
         this.startingPosition = new Position(2,2,0);
         this.startingViewRadius = 2;
         this.currentPosition = this.startingPosition;
@@ -40,21 +64,19 @@ function Telengard() {
         //battle
         var roll = d00();
         this.debug('Pair rolled for randomEvent: ' + roll);
-        var percentChanceOfCombat = 30;
+        var percentChanceOfCombat = this.config.percentChanceOfCombat;
         if (this.player.lookingForTrouble) {
-            percentChanceOfCombat += 10;
+            percentChanceOfCombat += this.config.percentChanceOfCombatIncrease;
         }
-        var percentChanceOfFriendlyMonsterGivingGold = 2;
-        var percentChanceOfFindingTreasure = 5;
-        var percentChanceOfFriendlyMonsterUpgradingWeapon = 1;
-        var percentChanceOfFriendlyMonsterGivingPotion = 2;
+        
 
         var ranges = [];
         ranges.push(this.getRandomEventRollRange(1, percentChanceOfCombat, "beginCombat"));
-        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterGivingGold, "friendlyMonsterGivesGold"));
-        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterUpgradingWeapon, "friendlyMonsterUpgradesWeapon"));
-        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFindingTreasure, "findExtraTreasure"));
-        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, percentChanceOfFriendlyMonsterGivingPotion, "friendlyMonsterGivesPotion"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, this.config.percentChanceOfFriendlyMonsterGivingGold, "friendlyMonsterGivesGold"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, this.config.percentChanceOfFriendlyMonsterUpgradingWeapon, "friendlyMonsterUpgradesWeapon"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, this.config.percentChanceOfFindingTreasure, "findExtraTreasure"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, this.config.percentChanceOfFriendlyMonsterGivingPotion, "friendlyMonsterGivesPotion"));
+        ranges.push(this.getRandomEventRollRange(ranges[ranges.length-1].end + 1, this.config.percentChanceOfMonsterRevealingLocations, "friendlyMonsterGivesLocationInfo"));
 
         var eventOccurred = this._fireRandomEvent(roll, ranges);
         if (!eventOccurred)
@@ -110,7 +132,7 @@ function Telengard() {
 
     this.findGold = function() {
         var pos = this.currentPosition;
-        var gold = DiceUtils.roll(1, 50 * (pos.z + 1)).total;
+        var gold = DiceUtils.roll(1, this.config.foundGoldLevelMultiplier * (pos.z + 1)).total;
         this.player.gold += gold;
         this.console("You found a hidden alcove and within it you discover <span class='gold'>" + gold + "</span> pieces.");
         this.describePosition();
@@ -169,6 +191,9 @@ function Telengard() {
     this.friendlyMonsterGivesPotion = function() {
         this.friendlyMonster("potion");
     };
+    this.friendlyMonsterGivesLocationInfo = function() {
+        this.friendlyMonster("locationInfo");
+    };
     this.friendlyMonster = function(giftType) {
         var monster = this.monsterAppears();
         this.validOptions = ["Accept the [<span class='command'>G</span>]ift"];
@@ -181,6 +206,8 @@ function Telengard() {
             this.currentGift = this.getUpgradeWeaponGift(this.player.weapon.name);
         else if (giftType == "potion")
             this.currentGift = this.getPotionGift();
+        else if (giftType == "locationInfo")
+            this.currentGift = this.getLocationInfo();
         this.console("<span class='goodEvent'>The <span class='friendlyMonsterName'>" + monster.name + "</span> "+likes+" your "+thingMonsterAdmires+". "+this.currentGift.offer+"</span>");
         this.stateOptions();
     };
@@ -195,7 +222,7 @@ function Telengard() {
     };
 
     this.getGoldGift = function(monster) {
-        var gold = DiceUtils.roll(monster.level, 200).total;
+        var gold = DiceUtils.roll(monster.level, this.config.monsterGoldDie).total;
         return {
             giftType:"gold", 
             gold:gold, offer:"He offers you <span class='gold'>" + gold + "</span> gold pieces.", 
@@ -208,12 +235,33 @@ function Telengard() {
         var potion = GetRandomPotion();
         this.itemAppears(potion);
         return {giftType:"potion",
-        gift:potion, offer:"He offers you a <span class='gold'>" + potion.name + ".",
-        accept:function(player){player.items.push(this.gift);},
+        gift:potion, offer:"He offers you a <span class='gold'>" + potion.name + "</span>.",
+        accept:function(player){player.items.push(this.gift)},
         acceptedText:function(){return ""}}
     };
 
+    this.getLocationInfo = function() {
+        var rooms = this.getRoomsWithAnyFeatureOnLevel(this.currentPosition.z);
+        console.warn(rooms);
+        var room = GetRandomItemFromArray(rooms);
+        console.warn(room);
+        return {
+            room: room,
+            giftType: "locationInfo",
+            offer: "He offers you information about the dungeon level.",
+            accept:function(player){
+                console.warn('firing accept func.')
+                player.roomInfoKnown.push(this.room.getPosition());
+            },
+            acceptedText:function() {
+                console.warn('firing acceptedText func.')
+                return " He tells you to head to " + this.room.x + ", " + this.room.y + "."
+            }
+        }
+    };
+
     this.acceptGift = function() {
+        console.warn('about to accept gift')
         if (!this.currentGift) return;
 
         var acceptStatement = "You accept the kind offer from the <span class='friendlyMonsterName'>" + this.currentMonster.name + "</span>.";
@@ -290,7 +338,7 @@ function Telengard() {
 
     this.monsterDeath = function() {
         this.console("You killed the <span class='monsterName'>" + this.currentMonster.name + "</span>!");
-        this.awardExperience();
+        this.awardExperienceForKill();
         this.statsDisplay();
     };
 
@@ -468,10 +516,30 @@ function Telengard() {
             this.console("Debugging off.");
     };
 
-    this.awardExperience = function() {
+    this.awardExperienceForKill = function() {
         var exp = Calculation.experience(this.player, this.currentMonster);
-        var leveledUp = this.player.awardKillAndExperience(this.currentMonster, exp);
-        this.console("You earned <span class='experience'>" + exp + "</span> experience!");
+        var killReport = this.player.awardKill(this.currentMonster);
+        if (killReport.killCount % this.config.bonusExpAwardedForEveryXKills == 0) {
+            var bonusExp = this.player.expToNext * this.config.bonusExpForKillCount;
+            this.console("You just killed your " + killReport.killCount + "th monster! ");
+        }
+        var leveledUp = this.player.awardExperienceAndLevelUp(exp);
+        this.reportExperienceAndLevelUp(exp, bonusExp, leveledUp);
+    };
+
+    this.awardExperienceForDiscovery = function(player, discoveryType, level) {
+        var exp = Calculation.experienceForDiscovery(player, discoveryType, level); //TODO: Implement
+        var leveledUp = player.awardExperienceAndLevelUp(exp);
+        this.reportExperienceAndLevelUp(exp, 0, leveledUp);
+    };
+
+    this.reportExperienceAndLevelUp = function(exp, bonusExp, leveledUp) {
+        var bonusPhrase = "";
+        if (bonusExp)
+            bonusPhrase = " (" + bonusExp + " bonus)"
+        else
+            bonusExp = 0;
+        this.console("You earned <span class='experience'>" + (exp+bonusExp) + "</span> experience" + bonusPhrase + "!");
         if (leveledUp)
         {
             this.console("<span class='levelup'>You are now level <span class='command'>" + this.player.level + "</span>!<span>You gained "+leveledUp.str+" str</span></span>");
@@ -528,6 +596,29 @@ function Telengard() {
     this.statsDisplay = function() {
         $('.col3').empty().append(this.player.toDisplay())
     };
+
+    this.getRoomsWithAnyFeatureOnLevel = function(level) {
+        return this.getRoomsWithOnLevel(level, "hasAnyFeature");
+    };
+
+    this.getRoomsWithOnLevel = function(level, check) {
+        var dungeonLevel = new DungeonLevel(level);
+        var width = dungeonLevel.width;
+        var height = dungeonLevel.height;
+        var rooms = [];
+        for (var w = 0;w<width;w++) {
+            for (var h = 0;h<height;h++) {
+                var room = new Room(w, h, level);
+                if (room[check]())
+                {
+                    rooms.push(room);
+                }
+            }
+        }
+        this.debug(rooms.length + " rooms with " + check + " on level " + level);
+        return rooms;
+    };
+
     this.render = function(pos, level, radius) {
         //pos is the current position. Should be center with squares in each direction equal to radius so radius 2 = 3x3 grid.
         var container = $('.level').empty();
@@ -566,17 +657,17 @@ function Telengard() {
                 if (col < 0 || cell >= level.width)
                     cell.addClass("offGrid")
 
-                if (room.hasInn() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
+                if (room.hasInn() && !InRoom(room, pos) && this.player.knowsAbout(roomPos)) //or if inn has been visited we always show it.
                 {
                     cell.addClass("innLoc");
                 }
 
-                if (room.hasStairsDown() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
+                if (room.hasStairsDown() && !InRoom(room, pos) && this.player.knowsAbout(roomPos)) //or if inn has been visited we always show it.
                 {
                     cell.addClass("stairsdown");
                 }
 
-                if (room.hasStairsUp() && !InRoom(room, pos) && this.player.hasVisited(roomPos)) //or if inn has been visited we always show it.
+                if (room.hasStairsUp() && !InRoom(room, pos) && this.player.knowsAbout(roomPos)) //or if inn has been visited we always show it.
                 {
                     cell.addClass("stairsup");
                 }
@@ -597,12 +688,27 @@ function Telengard() {
         var adjacentRooms = [northRoom, southRoom, eastRoom, westRoom];
         for(var i = 0;i<adjacentRooms.length;i++) {
             var room = adjacentRooms[i];
-            if (room.hasInn() && d00() <= 50)
+            var knownRoom = this.player.hasRoomInfo(room.getPosition());
+            if (!knownRoom && room.hasInn() && d00() <= this.config.percentChanceToFindInns)
             {
                 this.console("You hear the sounds of merriment to the "+room.dir+"...it could be an <span class='gold'>inn</span>.");
-                if (!this.player.hasVisited(room.getPosition()))
-                    this.player.visited.push(room.getPosition());
+                this.player.roomInfoKnown.push(room.getPosition());
                 $(".x" + room.x + "y" + room.y).addClass("innLoc");
+                this.awardExperienceForDiscovery(this.player, this.discoveryType.inn, room.z + 1);
+            }
+            if (!knownRoom && room.hasStairsDown() && d00() <= this.config.percentChanceToFindStairsDown)
+            {
+                this.console("<span class='gold'>You hear a strange echo to the "+room.dir+"...Could it be a way down deeper into the dungeon?</span>");
+                this.player.roomInfoKnown.push(room.getPosition());
+                $(".x" + room.x + "y" + room.y).addClass("stairsdown");
+                this.awardExperienceForDiscovery(this.player, this.discoveryType.stairsdown, room.z + 1); //You currently only get exp for finding them from a distance.
+            }
+            if (!knownRoom && room.hasStairsUp() && d00() <= this.config.percentChanceToFindStairsUp)
+            {
+                this.console("<span class='gold'>You saw a strange light to the "+room.dir+"...Could it be a way back up?</span>");
+                this.player.roomInfoKnown.push(room.getPosition());
+                $(".x" + room.x + "y" + room.y).addClass("stairsup");
+                this.awardExperienceForDiscovery(this.player, this.discoveryType.stairsup, room.z + 1);
             }
         }
     };

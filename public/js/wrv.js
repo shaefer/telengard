@@ -36,16 +36,18 @@ Wall.prototype.hasWall = function () {
 };
 
 function DungeonLevel(z) {
+    if (!isNumber(z)) throw "cannot create dungeon from a non-number"
     Math.seedrandom(z);
     this.id = Math.random().toString().substring(2);
     this.depth = z;
     var firstChar = Number(this.id.toString().substring(0, 1));
-    if (firstChar >= 0 && firstChar <=4) {
+    if (firstChar >= 0 && firstChar <=9) {
         this.width = 50;
         this.height = 50;
     }
     else {
-        this.width = 100;
+        //TODO: Handling levels of different sizes means handling mismatched layering and offsets of levels. We can do this, but the logic for stairs will need to take it into account.
+        this.width = 100; 
         this.height = 100;
     }
 }
@@ -81,6 +83,9 @@ function Room(x,y,z) {
         if (this.z == 0) return false;
         var upperDungeonRoom = new Room(this.x, this.y, this.z - 1);
         return upperDungeonRoom.hasStairsDown();
+    };
+    this.hasAnyFeature = function() {
+        return this.hasInn() || this.hasStairsDown() || this.hasStairsUp();
     };
     this.getPosition = function() {
         return new Position(this.x, this.y, this.z);

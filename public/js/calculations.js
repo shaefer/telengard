@@ -55,6 +55,9 @@ var Calculation = {
 		var adventurerBonus = player.adventurerExperienceBonusMultiplier(); //TODO: Set a max on this?
 		console.debug(adventurerBonus);
 		return Math.round((combatExp + spellExp + hpExp) * adventurerBonus);
+	},
+	experienceForDiscovery:function(player, discoveryType, level) {
+		return player.adventurerExperienceBonusMultiplier() * discoveryType.exp(level);
 	}
 }
 

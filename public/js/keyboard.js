@@ -165,6 +165,7 @@ function Keyboard(app) {
             break;
 
             case Keys.QWERTY.g:
+            console.warn('g was pressed.')
             app.acceptGift();
             break;
 
@@ -188,7 +189,9 @@ function Keyboard(app) {
             app.takeItem();
             break;
 
-            default: return; // exit this handler for other keys
+            default: 
+            console.warn(e.which)
+            return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)
     });
