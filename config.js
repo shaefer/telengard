@@ -5,3 +5,4 @@ exports.common = {
 };
 
 exports.development = {};
+exports.production = {};
