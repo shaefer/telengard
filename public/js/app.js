@@ -7,7 +7,7 @@ function Telengard() {
             percentChanceOfFindingTreasure: 4,
             percentChanceOfFriendlyMonsterUpgradingWeapon: 1,
             percentChanceOfFriendlyMonsterGivingPotion: 2,
-            percentChanceOfMonsterRevealingLocations: 1,
+            percentChanceOfMonsterRevealingLocations: 50,
             bonusExpForKillCount: .1,
             bonusExpAwardedForEveryXKills: 100,
             monsterGoldDie: 200,
@@ -25,7 +25,7 @@ function Telengard() {
             stairsdown: {mult:this.config.stairsdownExperienceMultiplier, exp: function(level) {return this.mult * level;}}
         };
         this.startingPosition = new Position(2,2,0);
-        this.startingViewRadius = 2;
+        this.startingViewRadius = 3;
         this.currentPosition = this.startingPosition;
         this.viewRadius = this.startingViewRadius; //Should this property be on the player? -> Probably.
         this.keyboard = new Keyboard(this);
@@ -240,22 +240,41 @@ function Telengard() {
         acceptedText:function(){return ""}}
     };
 
+// _.select arrayOne, (item) ->
+//     !_.findWhere(arrayTwo, {id: item.id})
+
     this.getLocationInfo = function() {
         var rooms = this.getRoomsWithAnyFeatureOnLevel(this.currentPosition.z);
         console.warn(rooms);
-        var room = GetRandomItemFromArray(rooms);
-        console.warn(room);
-        return {
-            room: room,
-            giftType: "locationInfo",
-            offer: "He offers you information about the dungeon level.",
-            accept:function(player){
-                console.warn('firing accept func.')
-                player.roomInfoKnown.push(this.room.getPosition());
-            },
-            acceptedText:function() {
-                console.warn('firing acceptedText func.')
-                return " He tells you to head to " + this.room.x + ", " + this.room.y + "."
+        var playerVisitedOrKnownRooms = this.player.visited.concat(this.player.roomInfoKnown);
+        var roomsNotKnownOrVisited = _.filter(rooms, function(item) {return !_.findWhere(playerVisitedOrKnownRooms, {x:item.x, y:item.y, z:item.z})});
+        console.warn("Rooms not known or visited: " + roomsNotKnownOrVisited.length);
+        if (roomsNotKnownOrVisited.length > 0)
+        {
+            var room = GetRandomItemFromArray(roomsNotKnownOrVisited);
+            console.warn(room);
+            return {
+                room: room,
+                giftType: "locationInfo",
+                offer: "He offers you information about the dungeon level.",
+                accept:function(player){
+                    player.roomInfoKnown.push(this.room);
+                },
+                acceptedText:function() {
+                    return " He tells you to head to " + this.room.x + ", " + this.room.y + "."
+                }
+            }
+        }
+        else {
+            return {
+                giftType: "locationInfo",
+                offer: "He starts to offer you information, but ends up learning from you instead!",
+                accept:function(player){
+                    player.awardExperienceAndLevelUp((this.currentPosition.z + 1) * 200)
+                },
+                acceptedText:function() {
+                    return " He says teaching is the best way to learn."
+                }
             }
         }
     };
@@ -495,6 +514,7 @@ function Telengard() {
         var inn = GetRoom(this.currentPosition).inn();
         if (inn == null || this.busy) return;
         this.player.rest();
+        this.player.recordStatsForLevel(this.currentPosition.z);
         this.statsDisplay();
         this.console("You feel refreshed. Your hit points and magic are restored!");
     };
@@ -611,7 +631,7 @@ function Telengard() {
                 var room = new Room(w, h, level);
                 if (room[check]())
                 {
-                    rooms.push(room);
+                    rooms.push(room.getPosition());
                 }
             }
         }

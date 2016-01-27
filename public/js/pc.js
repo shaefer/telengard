@@ -29,6 +29,13 @@ function PlayerCharacter(startingPos) {
 	this.visited = [startingPos];
     this.roomInfoKnown = [startingPos]; //For rooms we detected from a distance or were informed of.
 
+    this.dungeonStats = {
+        dungeonLevel0: {
+            level: 1,
+            percentOfFeaturesDiscovered: 0
+        }
+    };
+
 	this.lookingForTrouble = false;
 
 	this.weapon = GetWeapon("Dagger", 0); //1-4 damage.
@@ -229,6 +236,26 @@ function PlayerCharacter(startingPos) {
         this.debuffs = [];
     };
 
+    this.recordStatsForLevel = function(level) {
+        console.warn("Recording new dungeon stats for level: " + level);
+        var newPercent = this.determinePercentOfFeaturesDiscovered(level);
+        var newDungeonStats = {level: level + 1, percentOfFeaturesDiscovered:newPercent};
+        this.dungeonStats["dungeonLevel" + level] = newDungeonStats;
+        console.warn(newDungeonStats);
+    };
+    
+    this.determinePercentOfFeaturesDiscovered = function(level) {
+          var playerVisitedOrKnownRooms = new Set(this.visited.concat(this.roomInfoKnown));
+          console.warn(playerVisitedOrKnownRooms);
+          console.warn(playerVisitedOrKnownRooms.values());
+          console.warn(Array.from(playerVisitedOrKnownRooms));
+          var knownRoomsOnLevel = Array.from(playerVisitedOrKnownRooms).filter(function(item){return item.z == level});
+          var rooms = GetRoomsWithAnyFeatureOnLevel(level);
+          //var matchingRooms = _.filter(rooms, function(item) {return _.findWhere(playerVisitedOrKnownRooms, {x:item.x, y:item.y, z:item.z})});
+          console.warn("calculation: " + knownRoomsOnLevel.length + " over " + rooms.length);
+          return Math.round(knownRoomsOnLevel.length/rooms.length * 100);
+    };
+
     this.toDisplay = function() {
     	//return prettyPrint(this);
     	var display = "";
@@ -240,6 +267,11 @@ function PlayerCharacter(startingPos) {
     	display += "<div>Steps: " + this.steps + "</div>";
     	display += "<div>Kills: " + this.kills.length + "</div>";
     	display += "<div>Rooms visited: " + this.visited.length + "</div>";
+        
+        for(prop in this.dungeonStats) {
+            var val = this.dungeonStats[prop];
+            display += "<div>Dungeon Level " + val.level + ": " + val.percentOfFeaturesDiscovered + "% discovered</div>";
+        }
 
     	display += "<div>Items: [" + this.items.join(", ") + "]</div>";
     	display += "<div>Buffs: [" + this.buffs.join(", ") + "]</div>";

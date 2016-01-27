@@ -51,6 +51,27 @@ function FindRoomsWith(check) {
     FindRoomsWithOnLevel(0, check);
 }
 
+function GetRoomsWithAnyFeatureOnLevel(level) {
+    return GetRoomsWithOnLevel(level, "hasAnyFeature");
+};
+
+function GetRoomsWithOnLevel(level, check) {
+    var dungeonLevel = new DungeonLevel(level);
+    var width = dungeonLevel.width;
+    var height = dungeonLevel.height;
+    var rooms = [];
+    for (var w = 0;w<width;w++) {
+        for (var h = 0;h<height;h++) {
+            var room = new Room(w, h, level);
+            if (room[check]())
+            {
+                rooms.push(room.getPosition());
+            }
+        }
+    }
+    return rooms;
+};
+
 
 
 function toTimestamp(d) {
