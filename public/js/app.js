@@ -7,7 +7,7 @@ function Telengard() {
             percentChanceOfFindingTreasure: 4,
             percentChanceOfFriendlyMonsterUpgradingWeapon: 1,
             percentChanceOfFriendlyMonsterGivingPotion: 2,
-            percentChanceOfMonsterRevealingLocations: 50,
+            percentChanceOfMonsterRevealingLocations: 5,
             bonusExpForKillCount: .1,
             bonusExpAwardedForEveryXKills: 100,
             monsterGoldDie: 200,
