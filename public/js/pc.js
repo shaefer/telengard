@@ -245,7 +245,7 @@ function PlayerCharacter(startingPos) {
     };
     
     this.determinePercentOfFeaturesDiscovered = function(level) {
-          var playerVisitedOrKnownRooms = new Set(this.visited.concat(this.roomInfoKnown));
+          var playerVisitedOrKnownRooms = new Set(this.roomInfoKnown);
           console.warn(playerVisitedOrKnownRooms);
           console.warn(playerVisitedOrKnownRooms.values());
           console.warn(Array.from(playerVisitedOrKnownRooms));

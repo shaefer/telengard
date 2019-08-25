@@ -709,7 +709,16 @@ function Telengard() {
         var westRoom = new Room(pos.x - 1, pos.y, pos.z);
         westRoom.dir = "west";
 
-        var adjacentRooms = [northRoom, southRoom, eastRoom, westRoom];
+        console.warn("NORTH ROOM IS ON GRID: " + (northRoom.y >= 0), northRoom.y);
+        console.warn("EAST ROOM IS ON GRID: " + (eastRoom.x <= level.width - 1), eastRoom.x, level.width)
+        console.warn("WEST ROOM IS ON GRID: " + (westRoom.x >= 0), westRoom.x);
+        console.warn("SOUTH ROOM IS ON GRID: " + (southRoom.y <= level.height -1), southRoom.y, level.height)
+        
+        var adjacentRooms = [];
+        if (northRoom.y >= 0) adjacentRooms.push(northRoom);
+        if (eastRoom.x <= level.width - 1) adjacentRooms.push(eastRoom);
+        if (westRoom.x >= 0) adjacentRooms.push(westRoom);
+        if (southRoom.y <= level.height - 1) adjacentRooms.push(southRoom);
         for(var i = 0;i<adjacentRooms.length;i++) {
             var room = adjacentRooms[i];
             var knownRoom = this.player.hasRoomInfo(room.getPosition());
