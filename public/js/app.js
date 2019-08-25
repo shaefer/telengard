@@ -1,13 +1,13 @@
 function Telengard() {
     this.init = function() {
         this.config = {
-            percentChanceOfCombat:20,
+            percentChanceOfCombat:10,
             percentChanceOfCombatIncrease: 20,
             percentChanceOfFriendlyMonsterGivingGold: 2,
-            percentChanceOfFindingTreasure: 4,
+            percentChanceOfFindingTreasure: 2,
             percentChanceOfFriendlyMonsterUpgradingWeapon: 1,
             percentChanceOfFriendlyMonsterGivingPotion: 2,
-            percentChanceOfMonsterRevealingLocations: 5,
+            percentChanceOfMonsterRevealingLocations: 3,
             bonusExpForKillCount: .1,
             bonusExpAwardedForEveryXKills: 100,
             monsterGoldDie: 200,
@@ -101,7 +101,11 @@ function Telengard() {
     };
 
     this.drinkPotion = function() {
-        var item = Items[2]();
+        if (this.player.items.length == 0) {
+            this.console("You don't have any potions to imbibe!");
+            return;
+        }
+        var item = this.player.items.pop();
         var descriptions = item.use(this.player);
         var message = "You use the <class='item'>" + item.name + "<span>. ";
         for(var i = 0;i<descriptions.length;i++)
