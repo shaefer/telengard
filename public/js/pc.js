@@ -34,7 +34,7 @@ function PlayerCharacter(startingPos) {
             level: 1,
             percentOfFeaturesDiscovered: 0
         }
-    };
+	};
 
 	this.lookingForTrouble = false;
 
@@ -237,8 +237,11 @@ function PlayerCharacter(startingPos) {
     };
 
     this.recordStatsForLevel = function(level) {
-        console.warn("Recording new dungeon stats for level: " + level);
-        var newPercent = this.determinePercentOfFeaturesDiscovered(level);
+		console.warn("Recording new dungeon stats for level: " + level);
+		var currentPercent = this.dungeonStats["dungeonLevel" + level];
+		console.warn("Current Percent: " + currentPercent);
+		var newPercent = this.determinePercentOfFeaturesDiscovered(level);
+		console.warn("Percent Change: " + newPercent - currentPercent);
         var newDungeonStats = {level: level + 1, percentOfFeaturesDiscovered:newPercent};
         this.dungeonStats["dungeonLevel" + level] = newDungeonStats;
         console.warn(newDungeonStats);
@@ -256,8 +259,9 @@ function PlayerCharacter(startingPos) {
           return Math.round(knownRoomsOnLevel.length/rooms.length * 100);
     };
 
-    this.toDisplay = function() {
-    	//return prettyPrint(this);
+    this.toDisplay = function(game) {
+		//return prettyPrint(this);
+		console.warn("RENDERING STATS LEVEL: " + game.currentPosition);
     	var display = "";
     	display += "<div>Level: " + this.level + "</div>";
     	display += "<div>Class: " + this.role + "</div>";
@@ -270,8 +274,15 @@ function PlayerCharacter(startingPos) {
         
         for(prop in this.dungeonStats) {
             var val = this.dungeonStats[prop];
-            display += "<div>Dungeon Level " + val.level + ": " + val.percentOfFeaturesDiscovered + "% discovered</div>";
+            display += "<div>Dungeon Level " + (val.level - 1) + ": " + val.percentOfFeaturesDiscovered + "% discovered</div>";
         }
+
+		var currentDungeonFloor = game.currentPosition.z;
+		var dungeonInfo = game.getDungeonLevelInfo(currentDungeonFloor);
+		display += "<div>Dungeon Floor " + currentDungeonFloor + " info:</div>";
+		display += "<div style='margin-left:10px'>Inns: " + dungeonInfo.inns + "</div>";
+		display += "<div style='margin-left:10px'>Stairs Down: " + dungeonInfo.stairsDown + "</div>";
+		display += "<div style='margin-left:10px'>Stairs Up: " + dungeonInfo.stairsUp + "</div>";
 
     	display += "<div>Items: [" + this.items.join(", ") + "]</div>";
     	display += "<div>Buffs: [" + this.buffs.join(", ") + "]</div>";
