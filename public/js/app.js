@@ -35,10 +35,22 @@ function Telengard() {
         this.player = new PlayerCharacter(this.startingPosition);
         this.currentMonster = null;
         this.debugMode = true;
+
+        this.dungeonLevelInfo = [{inns: GetRoomsWithOnLevel(0, "hasInn").length, stairsDown: GetRoomsWithOnLevel(0, "hasStairsDown").length, stairsUp: GetRoomsWithOnLevel(0, "hasStairsUp").length}] 
         if (Object.keys(Monsters).length == 0)
             BuildAllMonsters();
     };
 
+    this.getDungeonLevelInfo = function (level) {
+        var levelInfo = this.dungeonLevelInfo[level]
+        if (levelInfo) {
+            return levelInfo;
+        } else {
+            var dungeonInfo = {inns: GetRoomsWithOnLevel(level, "hasInn").length, stairsDown: GetRoomsWithOnLevel(level, "hasStairsDown").length, stairsUp: GetRoomsWithOnLevel(level, "hasStairsUp").length};
+            this.dungeonLevelInfo[level] = dungeonInfo;
+            return dungeonInfo;s
+        }
+    }   
     this.setPosition = function (pos) {
         this.currentPosition = pos;
         this.render(this.currentPosition, new DungeonLevel(this.currentPosition.z), this.viewRadius);
@@ -618,7 +630,8 @@ function Telengard() {
         return monster;
     };
     this.statsDisplay = function() {
-        $('.col3').empty().append(this.player.toDisplay())
+        console.warn("RERENDER PLAYER STATS")
+        $('.col3').empty().append(this.player.toDisplay(this))
     };
 
     this.getRoomsWithAnyFeatureOnLevel = function(level) {
@@ -713,7 +726,7 @@ function Telengard() {
         console.warn("EAST ROOM IS ON GRID: " + (eastRoom.x <= level.width - 1), eastRoom.x, level.width)
         console.warn("WEST ROOM IS ON GRID: " + (westRoom.x >= 0), westRoom.x);
         console.warn("SOUTH ROOM IS ON GRID: " + (southRoom.y <= level.height -1), southRoom.y, level.height)
-        
+
         var adjacentRooms = [];
         if (northRoom.y >= 0) adjacentRooms.push(northRoom);
         if (eastRoom.x <= level.width - 1) adjacentRooms.push(eastRoom);

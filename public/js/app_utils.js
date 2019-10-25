@@ -6,6 +6,10 @@ function GetIdCharPair(rand, index) {
     return Number(rand.toString().substring(index, index + 2));
 }
 
+function GetIdCharTriple(rand, index) {
+    return Number(rand.toString().substring(index, index + 3));
+}
+
 Number.prototype.inRange = function(from, to) {
     return this >= from && this <= to;
 }
@@ -24,31 +28,6 @@ function isFunction(object) {
 
 function isNumber(object) {
     return typeof(object) === 'number'
-}
-
-function FindRoomsWithOnLevel(level, check) {
-    var dungeonLevel = new DungeonLevel(level);
-    var width = dungeonLevel.width;
-    var height = dungeonLevel.height;
-    var counter = 0;
-    var rooms = [];
-    for (var w = 0;w<width;w++) {
-        for (var h = 0;h<height;h++) {
-            var room = new Room(w, h, level);
-            if (room[check]())
-            {
-                console.warn(room.toString());
-                counter++;
-                rooms.push(room);
-            }
-        }
-    }
-    console.warn(counter + " rooms with " + check + " on level " + level);
-    return rooms;
-}
-
-function FindRoomsWith(check) {
-    FindRoomsWithOnLevel(0, check);
 }
 
 function GetRoomsWithAnyFeatureOnLevel(level) {
@@ -71,7 +50,6 @@ function GetRoomsWithOnLevel(level, check) {
     }
     return rooms;
 };
-
 
 
 function toTimestamp(d) {

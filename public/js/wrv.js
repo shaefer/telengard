@@ -38,9 +38,9 @@ Wall.prototype.hasWall = function () {
 function DungeonLevel(z) {
     if (!isNumber(z)) throw "cannot create dungeon from a non-number"
     Math.seedrandom(z);
-    this.id = Math.random().toString().substring(2);
+    this.id = Math.random().toString().substring(2); //random number is always between 0 and 1 so 0.someting means we strip off the 0.
     this.depth = z;
-    var firstChar = Number(this.id.toString().substring(0, 1));
+    var firstChar = Number(this.id.toString().substring(0, 1)); //currently we don't have any dungeon level setting except size which we aren't really using.
     if (firstChar >= 0 && firstChar <=9) {
         this.width = 50;
         this.height = 50;
@@ -62,22 +62,29 @@ function Room(x,y,z) {
     this.y = y;
     this.z = z;
     Math.seedrandom(x.toString() + y.toString() + z.toString());
-    this.id = Math.random().toString().substring(2);
-    this.onMap = function() {
+    this.id = Math.random().toString().substring(2); //strip 0. off the random num. This leaves 16 random digits! This means 8 pairs. If we use the pairs cleverly we should make any pair of 2 together...so 0,1 and 1,2 are both different pairs even though the 1 is reused it should only matter if our expected percentile roll checks match. This means we could control when there is forced overlap of feature triggers. If the first pair expects a roll of 78 then we make sure the expected roll for the 2nd pair is not 80 something.
+    //First 2 digits are the inn, 2nd two are the stairs down, 4-6 are deepinn. We should be able to pull a just single extra to use instead of burned 3 more.
+    this.onMap = function() { 
         var dungeonLevel = new DungeonLevel(this.z);
         return this.x >= 0 && this.y >= 0 && this.x <= dungeonLevel.width - 1 && this.y <= dungeonLevel.height - 1;
     }
     this.hasInn = function() {
-        var innChar = GetIdCharPair(this.id, 0);
-        return innChar == 78 && z <= 5 
+        if (z <= 5) { 
+            var innChar = GetIdCharPair(this.id, 0); //0-1
+            return innChar == 78; //basically 1% chance of inn if the floor is level 1-5.
+        } else {
+            var deepInnChar = GetIdCharTriple(this.id, 4); //used 4-6
+            console.warn("Chance of Inn on low level: " + deepInnChar + " id: " + this.id)
+            return deepInnChar >= 101 && deepInnChar <= 150; // 0.5% chance 50/1000 
+        }
     };
     this.inn = function() {
         if (!this.hasInn()) return null;
         return new Inn(this.id);
     };
     this.hasStairsDown = function() {
-        var stairs = GetIdCharPair(this.id, 2);
-        return stairs == 77;
+        var stairs = GetIdCharPair(this.id, 2); //2-3
+        return stairs == 77; //TODO: Make sure we can't end up with both inn and stairs. This is a problem if we use different pairs for different things.
     };
     this.hasStairsUp = function() {
         if (this.z == 0) return false;

@@ -3,7 +3,7 @@ var Calculation = {
 		return 50 + player.prowess + player.luck;
 	},
 	toHitPlayerBase:function(player) {
-		return 50 - player.agility - player.luck;
+		return Math.max(0, 50 - player.agility - player.luck);
 	},
 	toHitPlayer:function(player, monster) {
 		return Calculation.toHitPlayerBase(player) + monster.prowess;
