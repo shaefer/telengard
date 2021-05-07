@@ -7,7 +7,7 @@
     "bower": "*",
     "settings": "0.0.2",
     "moment": "1.7.0",
-    "underscore": "1.3.3",
+    "underscore": "1.12.1",
     "node-uuid": "1.4.0",
     "request": "2.22.0",
     "connect-flash": "0.1.1",
