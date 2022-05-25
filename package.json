@@ -15,7 +15,7 @@
     "handlebars": "~2.0.0-alpha.2"
   },
   "devDependencies": {
-    "grunt": "~0.4.2",
+    "grunt": "~1.5.3",
     "grunt-contrib-less": "~0.10.0"
   },
   "scripts": {
