@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "private": true,
   "dependencies": {
-    "express": "3.x",
+    "express": "4.x",
     "bower": "*",
     "settings": "0.0.2",
     "moment": "1.7.0",
