@@ -1,7 +1,7 @@
 function Telengard() {
     this.init = function() {
         this.config = {
-            percentChanceOfCombat:10,
+            percentChanceOfCombat:5,
             percentChanceOfCombatIncrease: 20,
             percentChanceOfFriendlyMonsterGivingGold: 2,
             percentChanceOfFindingTreasure: 2,
@@ -34,7 +34,7 @@ function Telengard() {
         this.validOptions = [];
         this.player = new PlayerCharacter(this.startingPosition);
         this.currentMonster = null;
-        this.debugMode = true;
+        this.debugMode = false;
 
         this.dungeonLevelInfo = [{inns: GetRoomsWithOnLevel(0, "hasInn").length, stairsDown: GetRoomsWithOnLevel(0, "hasStairsDown").length, stairsUp: GetRoomsWithOnLevel(0, "hasStairsUp").length}] 
         if (Object.keys(Monsters).length == 0)
@@ -218,8 +218,18 @@ function Telengard() {
         var thingMonsterAdmires = ThingsMonstersLike[DiceUtils.roll(1,ThingsMonstersLike.length,-1).total];
         if (giftType == "gold")
             this.currentGift = this.getGoldGift(monster);
-        else if (giftType == "upgradeWeapon")
-            this.currentGift = this.getUpgradeWeaponGift(this.player.weapon.name);
+        else if (giftType == "upgradeWeapon") {
+            if (this.player.weapon.level > this.currentPosition.z) {
+                //TODO: Add a list of advice that monsters give instead. Smile when you feel like it.
+                this.currentGift = {
+                    offer: "It was going to upgrade your weapon, but it cannot improve it anymore. Take this piece of advice instead: 'Do not talk to strangers'",
+                    accept:function(player){},
+                    acceptedText:function(player){return "You go about your business."}
+                }
+            } else {
+                this.currentGift = this.getUpgradeWeaponGift(this.player.weapon.name);
+            }
+        }
         else if (giftType == "potion")
             this.currentGift = this.getPotionGift();
         else if (giftType == "locationInfo")
@@ -623,15 +633,15 @@ function Telengard() {
     };
 
     this.getMonster = function() {
-        console.warn('getMonster')
+        //console.warn('getMonster')
         var monster = GetMonster(this.currentPosition);
         var foundMonsterPhrase = GetMonsterFoundPhrase(monster.name);
         this.console(foundMonsterPhrase);
         return monster;
     };
     this.statsDisplay = function() {
-        console.warn("RERENDER PLAYER STATS")
-        $('.col3').empty().append(this.player.toDisplay(this))
+        //console.warn("RERENDER PLAYER STATS")
+        $('.playerDisplay').empty().append(this.player.toDisplay(this))
     };
 
     this.getRoomsWithAnyFeatureOnLevel = function(level) {

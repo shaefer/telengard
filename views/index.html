@@ -7,35 +7,20 @@
 	<meta name="keywords" content="Telengard keywords" />
 	<meta name="robots" content="index, follow" />
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet" type="text/css" href="css/screen.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/threecol.css" media="screen" />
 	<link rel="stylesheet" href="css/grid.css">
 </head>
 <body>
 
 <div id="header"></div>
-<div class="colmask threecol">
-	<div class="colmid">
-		<div class="colleft">
-			<div class="col1">
-				<!-- Column 1 start -->
-				<div class="level"></div>
-				
-				<!-- Column 1 end -->
-			</div>
-			<div class="col2">
-				<!-- Column 2 start -->
-				<div class="textContainer">
-					
-				</div>
-				<!-- Column 2 end -->
-			</div>
-			<div class="col3">
-				<!-- Column 3 start -->
-				
-				<!-- Column 3 end -->
-			</div>
-		</div>
+<div class="row">
+	<div class="column left" style="background-color:#aaa;">
+		<div class="textContainer"></div>
 	</div>
+	<div class="column middle" style="background-color:#bbb;">
+		<div class="level"></div>
+	</div>
+	<div class="column right playerDisplay" style="background-color:#ccc;"></div>
 </div>
 <div id="footer"></div>
 <script src="/jquery/dist/jquery.min.js"></script>

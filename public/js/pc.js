@@ -288,6 +288,8 @@ function PlayerCharacter(startingPos) {
     	display += "<div>Buffs: [" + this.buffs.join(", ") + "]</div>";
     	display += "<div>Debuffs: [" + this.debuffs.join(", ") + "]</div>";
 
+		display += "<div>Adventurer Bonus: " + this.adventurerExperienceBonusMultiplier() + "</div>";
+
     	display += "<div>Hp: " + this.hp + "/" + this.maxHp + "</div>";
     	display += "<div>Str: " + this.strength + "</div>";
     	display += "<div>Int: " + this.intelligence + "</div>";

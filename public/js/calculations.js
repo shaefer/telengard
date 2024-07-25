@@ -47,13 +47,13 @@ var Calculation = {
 		var levelDiffMultiplier = 1;
 		//+1 = 50%, +2 = 75%, +3 = 115%, +4 = 150%,  
 		if (differenceInLevels > 0)
-			levelDiffMultiplier = Math.pow(1.25, differenceInLevels)
+			levelDiffMultiplier = Math.pow(2, differenceInLevels)
 		console.debug("damageMultiplier: " + damageMultiplier + " prowessMultiplier: " + prowessMultiplier + " monsterLevel: " + monster.level + " levelDiffMultiplier: " + levelDiffMultiplier + " specialAttackMultiplier: " + specialAttackMultiplier);
-		var combatExp = damageMultiplier * prowessMultiplier * monster.level * levelDiffMultiplier * specialAttackMultiplier;
+		var combatExp = damageMultiplier * prowessMultiplier * (monster.level + 2) * levelDiffMultiplier * specialAttackMultiplier;
 		var spellExp = 1 * monster.level;
 		var hpExp = monster.maxHp / 3 * monster.level;
 		var adventurerBonus = player.adventurerExperienceBonusMultiplier(); //TODO: Set a max on this?
-		console.debug(adventurerBonus);
+		console.log("Adventurer Bonus: " + adventurerBonus);
 		return Math.round((combatExp + spellExp + hpExp) * adventurerBonus);
 	},
 	experienceForDiscovery:function(player, discoveryType, level) {
@@ -89,7 +89,8 @@ var DieLevel = function(pow) {
 				RollFuncBuilder(1,7,5), RollFuncBuilder(1,6,6), RollFuncBuilder(1,5,7), RollFuncBuilder(1,4,8), RollFuncBuilder(1,13,7), RollFuncBuilder(1,11,9),
 				RollFuncBuilder(1,6,14)
 				];
-	return level[pow];
+	const safePow = pow >= level.length ? level.length - 1 : pow;
+	return level[safePow];
 };
 
 var DamageLevel = function(pow) {
@@ -98,7 +99,8 @@ var DamageLevel = function(pow) {
 				 RollFuncBuilder(1,6,2), RollFuncBuilder(1,10,0), RollFuncBuilder(1,9,1), RollFuncBuilder(1,8,2), RollFuncBuilder(1,7,3), RollFuncBuilder(1,12,0),
 				 RollFuncBuilder(1,11,1), RollFuncBuilder(1,10,2), RollFuncBuilder(1,9,3), RollFuncBuilder(1,8,4)
 				];
-	return level[pow];
+	const safePow = pow >= level.length ? level.length - 1 : pow;
+	return level[safePow];
 };
 
 //avg dmg wide range

@@ -80,7 +80,8 @@ var BaseWeaponDamage = function(pow) {
     var level = [RollFuncBuilder(1,4), RollFuncBuilder(1,5), RollFuncBuilder(1,6), RollFuncBuilder(1,7), RollFuncBuilder(1,8), RollFuncBuilder(1,9),
                  RollFuncBuilder(1,10), RollFuncBuilder(1,11), RollFuncBuilder(1,12)
                 ];
-    return level[pow];
+	const safePow = pow >= level.length ? level.length - 1 : pow;
+    return level[safePow];
 };
 
 var BonusCritDamage = function(pow) {
@@ -88,7 +89,8 @@ var BonusCritDamage = function(pow) {
     var level = [RollFuncBuilder(1,1), RollFuncBuilder(1,2), RollFuncBuilder(1,3), RollFuncBuilder(1,4), RollFuncBuilder(1,5), RollFuncBuilder(1,6), RollFuncBuilder(1,7), RollFuncBuilder(1,8), RollFuncBuilder(1,9),
                  RollFuncBuilder(1,10), RollFuncBuilder(1,11), RollFuncBuilder(1,12)
                 ];
-    return level[pow];
+	const safePow = pow >= level.length ? level.length - 1 : pow;
+    return level[safePow];
 };
 
 //TODO: Create named mappings for features of weapon that affect crit percent and crit bonus damage (baseDamage is the type of weapon itself)
