@@ -1,0 +1,2 @@
+Had to learn how to do blur animation with css
+Had to review how to center various things specifically a centered image with percentage-based size so it would be responsive. 

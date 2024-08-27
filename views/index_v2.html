@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+<head>
+	<title>Telengard</title>
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	<meta name="description" content="Telengard description" />
+	<meta name="keywords" content="Telengard keywords" />
+	<meta name="robots" content="index, follow" />
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/v2/cssReset.css">
+	<link rel="stylesheet" href="css/v2/simplegrid_v2.css">
+    <link rel="stylesheet" href="css/v2/title.css">
+</head>
+<body>
+
+<div id="header">
+    <div id="titleScreen" class="centeredContainer">
+        <img class="titleimg" src="images/v2/dungeontitlescreen.png"/>
+    </div>
+    <div id="buttonScreen" class="centeredContainerAbsolute">
+        <div class="titleButtons">
+            <div class="titleButtonsGroup">
+                <button id="startButton" onclick="startButtonPress()">START</button>
+                <button id="optionsButton" onclick="optionButtonPress()">OPTIONS</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="mainArea">
+
+</div>
+
+<div id="footer"></div>
+<script src="/jquery/dist/jquery.min.js"></script>
+<script src="/underscore/underscore.js"></script>
+<script src="/seedrandom/seedrandom.min.js"></script>
+<script src="js/inheritance.js"></script>
+<script src="js/app_utils.js"></script>
+
+<script src="js/v2/engine/gameState.js"></script>
+<script src="js/v2/dungeon/vertex.js"></script>
+<script src="js/v2/dungeon/wall.js"></script>
+<script src="js/v2/dungeon/room.js"></script>
+<script src="js/v2/dungeon/level.js"></script>
+<script src="js/v2/engine/tablePainter.js"></script>
+<script src="js/v2/engine/playerActionListener.js"></script>
+<script src="js/v2/engine/gameloop.js"></script>
+<script src="js/v2/engine/init.js"></script>
+
+<script>
+    /** Used in simplegrid_v2.css */
+    window.CSS.registerProperty({
+        name: "--squaresPerRow",
+        inherits: false,
+        initialValue: dungeonViewSize,
+    });
+    window.CSS.registerProperty({
+        name: "--squareSize",
+        inherits: false,
+        initialValue: "50px",
+    });
+
+    const northRoom = new DungeonRoom(3, 3, 0); //south wall should match
+    const southRoom = new DungeonRoom(3, 4, 0); //north wall should match
+
+    console.log(northRoom.southWall.id);
+    console.log(northRoom.southWall.vertex1, northRoom.southWall.vertex2)
+    console.log(southRoom.northWall.id);
+    console.log(southRoom.northWall.vertex1, southRoom.northWall.vertex2);
+    
+</script>
+</body>
+</html>

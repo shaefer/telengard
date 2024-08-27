@@ -1,0 +1,76 @@
+/**
+index_v2.html
+ --squaresPerRow
+ --squareSize
+*/
+
+
+.square {
+    border: 1px solid transparent;
+    height: var(--squareSize);
+    width: var(--squareSize);
+    float:left;
+    line-height: var(--squareSize); /* trick for vertical alignment this matches height */
+    text-align: center;
+    border-collapse: separate;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: small;
+}
+
+.level {
+
+    border: 1px solid blue;
+    --numSquares: calc(var(--squaresPerRow) * 2px);
+    width: calc(var(--numSquares) + calc(var(--squareSize))*var(--squaresPerRow));
+    height: calc(var(--numSquares) + calc(var(--squareSize))*var(--squaresPerRow));
+}
+
+
+.responsiveTableGrid {
+    position : absolute;
+    width : 100%;
+    height : 100%;
+    background-color : green;
+    text-align: center;
+}
+
+.responsiveTableGrid:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.tableGridContainer {
+    border: 5px solid yellow;
+    height : 75%;
+    width : 75%;
+    background-color : transparent;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.tableGridContainer table {
+    border: 5px solid red;
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.westWall {
+    border-left: 2px solid black;
+}
+.eastWall {
+    border-right: 2px solid black;
+}
+.southWall {
+    border-bottom: 2px solid black;
+}
+.northWall {
+    border-top: 2px solid black;
+}
+
+.oob {
+    background-image: url('images/v2/stoneborder.png');
+}

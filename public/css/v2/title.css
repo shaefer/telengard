@@ -1,0 +1,96 @@
+#titleScreen {
+    opacity: 1;
+    transition: opacity 2s;
+    
+}
+
+#titleScreen.fadeOut {
+    opacity: 0;
+}
+
+#titleScreen.blur {
+    animation: image_blur 2s; 
+    animation-fill-mode: forwards;
+}
+
+@keyframes image_blur {
+    0% { -webkit-filter: blur(0px);}
+    50% { -webkit-filter: blur(5px);}
+    100% { -webkit-filter: blur(10px);}
+}
+
+.centeredContainer {
+    position : absolute;
+    width : 100%;
+    height : 100%;
+    background-color : #123456;
+    text-align: center;
+
+
+}
+
+.centeredContainer:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.titleimg {
+    height : 85%;
+    width : 85%;
+    background-color : #FFFFFF;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.centeredContainerAbsolute {
+    position : absolute;
+    width : 100%;
+    height : 100%;
+    background-color : transparent;
+    text-align: center;
+}
+
+.centeredContainerAbsolute:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.titleButtons {
+    height : 75%;
+    width : 75%;
+    background-color : transparent;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+:root {
+    --buttonCount: 2;
+    --buttonWidth: 10em;
+  }
+
+.titleButtonsGroup {
+    position: absolute;
+    top: 75%;
+    left: calc(50% - var(--buttonWidth)/2);
+}
+
+.titleButtons button {
+    width: var(--buttonWidth); 
+    height: 2em;
+    color: green;
+    cursor: pointer;
+    border-radius: 2em;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+    font-variant: small-caps;
+    display:block;
+}
+
+.titleButtons button:hover {
+    background-color: aqua;
+}
