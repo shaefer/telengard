@@ -5,7 +5,7 @@ function updateGameAndDisplay(newPosition) {
     displayPlayer(newPosition);
     gameState.position = newPosition;
 }
-
+//TODO: Handle swiping: https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 //TODO: if processing or its too soon to process a nothing happening. If the last action was less than 10 seconds ago then we don't have a "no-action" event occur. 
 function nextTickOrAction(action) {
     if (!processing) {

@@ -67,10 +67,10 @@ function drawDungeonAroundSquare(position) {
     table.style.maxWidth = smallerDimension+"px";
 
 
-    for(let i = 0;i<dungeonViewSize-1;i++) {
+    for(let i = 0;i<=dungeonViewSize-1;i++) {
         const row = table.insertRow(-1);
         row.id = "row" + (position.y+i - ((dungeonViewSize - 1)/2));
-        for(let j = 0;j<dungeonViewSize-1;j++) {
+        for(let j = 0;j<=dungeonViewSize-1;j++) {
             //find top left box and then this just works
             //top left box == current square - (dungeonViewSize - 1) / 2 for both x and y.
             const thisRoom = new DungeonRoom(
@@ -87,15 +87,17 @@ function displayPlayer(position) {
     console.log("displaying player at: " + position.x + "-" + position.y + "-" + position.z);
     const num = ''+position.x+'-'+position.y+'-'+position.z;
     const squareId = 'square'+num;
+    const square = document.getElementById(squareId);
     var oImg = document.createElement("img");
         oImg.setAttribute('src', 'images/barbarian.png'); //164 x 300
-        oImg.setAttribute('width', "22px");
+        oImg.setAttribute('width', parseInt(square.style.width, 10) * 164 / 300) + 'px'; //size has to be variable since the whole grid is responsive.
 
-    document.getElementById(squareId).appendChild(oImg);
+    square.appendChild(oImg);
 }
 
 let debouncedTableAdjust = _.debounce(function adjustTableGrid() {
     drawDungeonAroundSquare(gameState.position);
+    displayPlayer(gameState.position);
 }, 500);
 
 
