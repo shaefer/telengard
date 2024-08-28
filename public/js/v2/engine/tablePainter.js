@@ -126,6 +126,25 @@ function drawOptions(position, options) {
     square.appendChild(oImg);
 }
 
+function displayLog(txt) {
+    const position = gameState.position;
+    const num = ''+position.x+'-'+position.y+'-'+position.z;
+    const squareId = 'square'+num;
+    const square = document.getElementById(squareId);
+
+    var oImg = document.createElement("div");
+        oImg.style.position = 'absolute';
+        oImg.style.bottom = '-25%';
+        oImg.style.left = '0';
+        oImg.style.padding = '5px';
+        oImg.style.backgroundColor = 'white';
+        oImg.style.color = 'black';
+        oImg.setAttribute('width', parseInt(square.style.width, 10) * 2 + 'px'); //size has to be variable since the whole grid is responsive.
+        oImg.appendChild(document.createTextNode(txt));
+
+    square.appendChild(oImg);
+}
+
 function displayPlayer(position) {
     console.log("displaying player at: " + position.x + "-" + position.y + "-" + position.z);
     const num = ''+position.x+'-'+position.y+'-'+position.z;

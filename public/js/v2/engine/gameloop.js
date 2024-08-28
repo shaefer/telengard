@@ -59,7 +59,7 @@ function handlePossibleCombat(luck = 0) {
         gameState.options = ["[F]ight, [R]un, [N]egotiate"];
         const enemyChoice = Math.floor(Math.random() * 4);
         const enemy = Monsters[enemyChoice];
-        gameState.enemy = enemy;
+        gameState.enemy = Object.assign({}, enemy);
         drawEnemy(gameState.position, enemy);
         drawOptions(gameState.position, gameState.options);
     }
@@ -68,10 +68,28 @@ function handlePossibleCombat(luck = 0) {
 function handleCombatEventActions(action) {
     if (action == 'f' && gameState.currentEvent == 'in combat') {
         console.log('in combat and receiving the action "f"');
-        gameState.currentEvent = null;
-        gameState.options = null;
-        updateGameAndDisplay(gameState.position);
+        const dmg = Math.floor(Math.random() * gameState.str + 1);
+        
+        const newHp = gameState.enemy.hp - dmg;
+        if (newHp <= 0) {
+            displayLog("You swing viciously at the " + gameState.enemy.name + ", dealing " + dmg + " hp of damage.");
+            displayLog("Your blow carves through your foe. It is defeated!");
+            setTimeout(handleCombatWin, 3000);
+        } else {
+            //TODO: This won't go away until you press more buttons. We need to create a better console for combat messages.
+            displayLog("You swing viciously at the " + gameState.enemy.name + ", dealing " + dmg + " hp of damage.");
+
+            gameState.enemy.hp = newHp;
+        }
     }
+}
+
+
+
+function handleCombatWin() {
+    gameState.currentEvent = null;
+    gameState.options = null;
+    updateGameAndDisplay(gameState.position);
 }
 
 function handleRandomEvent() {
