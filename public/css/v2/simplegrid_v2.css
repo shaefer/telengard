@@ -38,13 +38,23 @@ index_v2.html
     content: '';
     display: inline-block;
     height: 100%;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .tableGridContainer {
     border: 5px solid transparent;
     height : 75%;
     width : 75%;
+    background-color : transparent;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+#log {
+    border: 5px solid black;
+    height : 25%;
+    width : calc(75% - 10px);
     background-color : transparent;
     display: inline-block;
     vertical-align: middle;

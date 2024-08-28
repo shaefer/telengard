@@ -1,9 +1,8 @@
-
-
 function updateGameAndDisplay(newPosition) {
     drawDungeonAroundSquare(newPosition);
     drawRoomObjects(newPosition);
     displayPlayer(newPosition);
+    displayLog();
     gameState.position = newPosition;
 }
 
@@ -72,13 +71,14 @@ function handleCombatEventActions(action) {
         
         const newHp = gameState.enemy.hp - dmg;
         if (newHp <= 0) {
-            displayLog("You swing viciously at the " + gameState.enemy.name + ", dealing " + dmg + " hp of damage.");
-            displayLog("Your blow carves through your foe. It is defeated!");
-            setTimeout(handleCombatWin, 3000);
+            gameState.log.push("You swing viciously at the " + gameState.enemy.name + ", dealing " + dmg + " hp of damage.");
+            gameState.log.push("Your blow carves through your foe. It is defeated!");
+            displayLog(); //TODO: Log by event so that they are grouped and then fade if that event ended a certain period of time ago.
+            setTimeout(handleCombatWin, 500);
         } else {
             //TODO: This won't go away until you press more buttons. We need to create a better console for combat messages.
-            displayLog("You swing viciously at the " + gameState.enemy.name + ", dealing " + dmg + " hp of damage.");
-
+            gameState.log.push("You swing viciously at the " + gameState.enemy.name + ", dealing " + dmg + " hp of damage.");
+            displayLog();
             gameState.enemy.hp = newHp;
         }
     }
@@ -105,7 +105,7 @@ function handleRandomEvent() {
 
 //TODO: Handle swiping: https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 //TODO: if processing or its too soon to process a nothing happening. If the last action was less than 10 seconds ago then we don't have a "no-action" event occur. 
-function nextTickOrAction(action) {
+const gameloop = _.debounce(function nextTickOrAction(action) {
     if (!processing) {
         processing = action;
         if (!action) {
@@ -127,11 +127,11 @@ function nextTickOrAction(action) {
         //processing everything can take as long as we like before setting up the next tick 
         processing = false;
         lastActionCompleted = new Date();
-        //setTimeout(function() {nextTickOrAction(false)}, 10000); //TODO: maybe before running the gameloop we do a bit in this function to display the countdown to the next Tick. https://www.w3schools.com/howto/howto_js_countdown.asp
+        //https://www.w3schools.com/howto/howto_js_countdown.asp
     } else {
         console.log('tick skipped as we are still processing an action.');
     }
-}
+}, 100);
 
 function startGame() {
     //TODO: Determine the proper starting square based on options/config.
@@ -140,8 +140,8 @@ function startGame() {
     gameState.gender = (gender) ? 'm' : 'f';
     updateGameAndDisplay(startPosition);
     //start game loop
-    setInterval(function() {nextTickOrAction(false)}, tickSeconds * 1000);
-    nextTickOrAction("Entering the Dungeon");
+    setInterval(function() {gameloop(false)}, tickSeconds * 1000);
+    gameloop("Entering the Dungeon");
     listenForInput(); //from playerActionListener.js
 }
 

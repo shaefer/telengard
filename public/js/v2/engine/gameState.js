@@ -12,7 +12,8 @@ let gameState = {
     hp: 20,
     str: 18,
     ac: 10,
-    exp: 0
+    exp: 0,
+    log: []
     //rooms visited
 };
 const dungeonViewSize = 5; /** Odd numbers only */

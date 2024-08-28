@@ -24,23 +24,18 @@ const paintWallsForRow = (dungeonRoom, row, squareSize) => {
 </div> */}
 
 function createBaseTable() {
-    const responsiveTableGrid = document.createElement('div');
-    responsiveTableGrid.classList.add('responsiveTableGrid');
-    const tableGridContainer = document.createElement('div');
-    tableGridContainer.classList.add('tableGridContainer');
+    const tableGridContainer = document.getElementById('tableGridContainer');
+    tableGridContainer.textContent = ''; //erases table content
     const gridTable = document.createElement('table');
     gridTable.id = 'gridTable';
-    responsiveTableGrid.appendChild(tableGridContainer);
+    const log = document.createElement('log');
+    log.id = 'log'
     tableGridContainer.appendChild(gridTable);
-    document.getElementById('mainArea').appendChild(responsiveTableGrid);
+    tableGridContainer.appendChild(log);
     return {tableGridContainer, gridTable};
 }
 
 function drawDungeonAroundSquare(position) {
-    
-    const dungeonLevel = document.getElementById('mainArea');
-    dungeonLevel.textContent = '';
-
     const {tableGridContainer:tableContainer, gridTable:table} = createBaseTable();
 
     const width = tableContainer.offsetWidth;
@@ -126,23 +121,11 @@ function drawOptions(position, options) {
     square.appendChild(oImg);
 }
 
-function displayLog(txt) {
-    const position = gameState.position;
-    const num = ''+position.x+'-'+position.y+'-'+position.z;
-    const squareId = 'square'+num;
-    const square = document.getElementById(squareId);
-
-    var oImg = document.createElement("div");
-        oImg.style.position = 'absolute';
-        oImg.style.bottom = '-25%';
-        oImg.style.left = '0';
-        oImg.style.padding = '5px';
-        oImg.style.backgroundColor = 'white';
-        oImg.style.color = 'black';
-        oImg.setAttribute('width', parseInt(square.style.width, 10) * 2 + 'px'); //size has to be variable since the whole grid is responsive.
-        oImg.appendChild(document.createTextNode(txt));
-
-    square.appendChild(oImg);
+function displayLog() {
+    const log = document.getElementById('log');
+    console.log("display content: " + gameState.log.join(","))
+    log.textContent = ''
+    log.appendChild(document.createTextNode(gameState.log.join(",")));
 }
 
 function displayPlayer(position) {
