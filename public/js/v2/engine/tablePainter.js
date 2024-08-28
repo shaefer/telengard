@@ -93,6 +93,55 @@ function drawRoomObjects(position) {
     square.appendChild(oImg);
 }
 
+function drawRollingDice(position) {
+    const num = ''+position.x+'-'+position.y+'-'+position.z;
+    const squareId = 'square'+num;
+    const square = document.getElementById(squareId);
+
+    var oImg = document.createElement("img");
+        oImg.id = 'diceRoller';
+        oImg.setAttribute('src', 'images/v2/d20-dice-roll-1.gif'); 
+        oImg.style.position = 'absolute';
+        oImg.style.top = '-50%';
+        oImg.style.left = '-50%';
+        oImg.setAttribute('width', (square.style.width + 'px')); //size has to be variable since the whole grid is responsive.
+
+    square.appendChild(oImg);
+}
+
+function drawEnemy(position, enemy) {
+    const num = ''+position.x+'-'+position.y+'-'+position.z;
+    const squareId = 'square'+num;
+    const square = document.getElementById(squareId);
+
+    var oImg = document.createElement("img");
+        oImg.setAttribute('src', enemy.imgSrc); 
+        oImg.style.position = 'absolute';
+        oImg.style.top = '-50%';
+        oImg.style.left = '-50%';
+        oImg.setAttribute('width', (square.style.width + 'px')); //size has to be variable since the whole grid is responsive.
+
+    square.appendChild(oImg);
+}
+
+function drawOptions(position, options) {
+    const num = ''+position.x+'-'+position.y+'-'+position.z;
+    const squareId = 'square'+num;
+    const square = document.getElementById(squareId);
+
+    var oImg = document.createElement("div");
+        oImg.style.position = 'absolute';
+        oImg.style.bottom = '0';
+        oImg.style.left = '0';
+        oImg.style.padding = '5px';
+        oImg.style.backgroundColor = 'white';
+        oImg.style.color = 'black';
+        oImg.setAttribute('width', '100%'); //size has to be variable since the whole grid is responsive.
+        oImg.appendChild(document.createTextNode(options));
+
+    square.appendChild(oImg);
+}
+
 function displayPlayer(position) {
     console.log("displaying player at: " + position.x + "-" + position.y + "-" + position.z);
     const num = ''+position.x+'-'+position.y+'-'+position.z;
@@ -104,14 +153,3 @@ function displayPlayer(position) {
 
     square.appendChild(oImg);
 }
-
-let debouncedTableAdjust = _.debounce(function adjustTableGrid() {
-    drawDungeonAroundSquare(gameState.position);
-    displayPlayer(gameState.position);
-}, 500);
-
-
-//adjustTableGrid();
-
-//onload
-window.addEventListener("resize", debouncedTableAdjust);

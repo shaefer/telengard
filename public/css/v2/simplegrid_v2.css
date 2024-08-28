@@ -53,22 +53,23 @@ index_v2.html
 
 .tableGridContainer table {
     border: 5px solid black;
+    background: repeat url('/images/dungeon_floor_light.png');
     width: 100%;
     margin: 0 auto;
     border-collapse: collapse;
 }
 
 .westWall {
-    border-left: 2px solid black;
+    border-left: 4px solid lightgray;
 }
 .eastWall {
-    border-right: 2px solid black;
+    border-right: 4px solid lightgray;
 }
 .southWall {
-    border-bottom: 2px solid black;
+    border-bottom: 4px solid lightgray;
 }
 .northWall {
-    border-top: 2px solid black;
+    border-top: 4px solid lightgray;
 }
 
 .oob {
