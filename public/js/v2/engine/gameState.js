@@ -6,7 +6,9 @@ let gameConfig = {
 }
 let gameState = {
     position: {x:3,y:3,z:0},
-    currentEvent: null
+    currentEvent: null,
+    class: 'barbarian',
+    gender: 'm'
     //rooms visited
 };
 const dungeonViewSize = 5; /** Odd numbers only */

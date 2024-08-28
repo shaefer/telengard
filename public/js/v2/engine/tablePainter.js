@@ -84,23 +84,7 @@ function drawRoomObjects(position) {
         else if (room.throne)
             oImg.setAttribute('src', 'images/v2/throne2.png')
         else if (room.fountain)
-            oImg.setAttribute('src', 'images/opengameart/mermaid_pool_animation.gif');
-        oImg.style.position = 'absolute';
-        oImg.style.top = '-50%';
-        oImg.style.left = '-50%';
-        oImg.setAttribute('width', (square.style.width + 'px')); //size has to be variable since the whole grid is responsive.
-
-    square.appendChild(oImg);
-}
-
-function drawRollingDice(position) {
-    const num = ''+position.x+'-'+position.y+'-'+position.z;
-    const squareId = 'square'+num;
-    const square = document.getElementById(squareId);
-
-    var oImg = document.createElement("img");
-        oImg.id = 'diceRoller';
-        oImg.setAttribute('src', 'images/v2/d20-dice-roll-1.gif'); 
+            oImg.setAttribute('src', 'images/v2/fountain.png');
         oImg.style.position = 'absolute';
         oImg.style.top = '-50%';
         oImg.style.left = '-50%';
@@ -148,8 +132,11 @@ function displayPlayer(position) {
     const squareId = 'square'+num;
     const square = document.getElementById(squareId);
     var oImg = document.createElement("img");
-        oImg.setAttribute('src', 'images/barbarian.png'); //164 x 300
-        oImg.setAttribute('width', parseInt(square.style.width, 10) * 164 / 300) + 'px'; //size has to be variable since the whole grid is responsive.
+    if (gameState.gender == 'm')
+        oImg.setAttribute('src', 'images/v2/characters/barbarian_m.png'); //164 x 300
+    if (gameState.gender == 'f')
+        oImg.setAttribute('src', 'images/v2/characters/barbarian_f.png')
+        oImg.setAttribute('width', (parseInt(square.style.width, 10) * 164 / 300) * 1.33) + 'px'; //size has to be variable since the whole grid is responsive.
 
     square.appendChild(oImg);
 }
