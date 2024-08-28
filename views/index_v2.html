@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="css/v2/cssReset.css">
 	<link rel="stylesheet" href="css/v2/simplegrid_v2.css">
     <link rel="stylesheet" href="css/v2/title.css">
+    <link rel="stylesheet" href="css/v2/mapItems.css">
+
 </head>
 <body>
 
@@ -37,12 +39,14 @@
 <script src="js/inheritance.js"></script>
 <script src="js/app_utils.js"></script>
 
+<script src="js/v2/engine/gameUtils.js"></script>
 <script src="js/v2/engine/gameState.js"></script>
 <script src="js/v2/dungeon/vertex.js"></script>
 <script src="js/v2/dungeon/wall.js"></script>
 <script src="js/v2/dungeon/room.js"></script>
 <script src="js/v2/dungeon/level.js"></script>
 <script src="js/v2/engine/tablePainter.js"></script>
+<script src="js/v2/engine/roomPainter.js"></script>
 <script src="js/v2/engine/playerActionListener.js"></script>
 <script src="js/v2/engine/gameloop.js"></script>
 <script src="js/v2/engine/init.js"></script>
@@ -59,15 +63,9 @@
         inherits: false,
         initialValue: "50px",
     });
-
-    const northRoom = new DungeonRoom(3, 3, 0); //south wall should match
-    const southRoom = new DungeonRoom(3, 4, 0); //north wall should match
-
-    console.log(northRoom.southWall.id);
-    console.log(northRoom.southWall.vertex1, northRoom.southWall.vertex2)
-    console.log(southRoom.northWall.id);
-    console.log(southRoom.northWall.vertex1, southRoom.northWall.vertex2);
     
+    console.log(buildDungeonLevelStats(0));
+
 </script>
 </body>
 </html>

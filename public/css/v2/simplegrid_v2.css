@@ -30,7 +30,7 @@ index_v2.html
     position : absolute;
     width : 100%;
     height : 100%;
-    background-color : green;
+    background-color : transparent;
     text-align: center;
 }
 
@@ -42,7 +42,7 @@ index_v2.html
 }
 
 .tableGridContainer {
-    border: 5px solid yellow;
+    border: 5px solid transparent;
     height : 75%;
     width : 75%;
     background-color : transparent;
@@ -52,7 +52,7 @@ index_v2.html
 }
 
 .tableGridContainer table {
-    border: 5px solid red;
+    border: 5px solid black;
     width: 100%;
     margin: 0 auto;
     border-collapse: collapse;

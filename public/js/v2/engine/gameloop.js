@@ -2,6 +2,7 @@
 
 function updateGameAndDisplay(newPosition) {
     drawDungeonAroundSquare(newPosition);
+    drawRoomObjects(newPosition);
     displayPlayer(newPosition);
     gameState.position = newPosition;
 }
@@ -12,7 +13,12 @@ function nextTickOrAction(action) {
         processing = action;
         console.log('Something happens');
         if (!action) {
-            console.log('nothing was done so time continues on regardless.')
+            const now = new Date();
+            const secondsSinceLastAction = (now - lastActionCompleted)/1000; 
+            console.log('nothing was done so time continues on regardless. It has been ' + secondsSinceLastAction + ' seconds since the last action.');
+            if (secondsSinceLastAction > (tickSeconds - 0.5)) {
+                console.log("Random event might happen due to inactivity");
+            }
         } else {
             console.log('processing action: ' + action);
             if (action == 'ArrowRight') {
@@ -56,6 +62,7 @@ function nextTickOrAction(action) {
 
         //processing everything can take as long as we like before setting up the next tick 
         processing = false;
+        lastActionCompleted = new Date();
         //setTimeout(function() {nextTickOrAction(false)}, 10000); //TODO: maybe before running the gameloop we do a bit in this function to display the countdown to the next Tick. https://www.w3schools.com/howto/howto_js_countdown.asp
     } else {
         console.log('tick skipped as we are still processing an action.');
@@ -64,10 +71,10 @@ function nextTickOrAction(action) {
 
 function startGame() {
     //TODO: Determine the proper starting square based on options/config.
-    drawDungeonAroundSquare({x:3,y:3,z:0});
-    displayPlayer({x:3,y:3,z:0});
+    const startPosition = {x:3,y:3,z:0};
+    updateGameAndDisplay(startPosition);
     //start game loop
-    setInterval(function() {nextTickOrAction(false)}, 10000);
+    setInterval(function() {nextTickOrAction(false)}, tickSeconds * 1000);
     nextTickOrAction("Entering the Dungeon");
     listenForInput(); //from playerActionListener.js
 }

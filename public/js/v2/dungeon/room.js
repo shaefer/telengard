@@ -10,7 +10,7 @@ function DungeonRoom(x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
-    const rnd = new Math.seedrandom(x.toString() + y.toString() + z.toString());
+    const rnd = new Math.seedrandom("theoden"+x.toString() + y.toString() + z.toString());
     this.id = rnd().toString().substring(2); //random number is always between 0 and 1 so 0.someting means we strip off the "0."
     this.nwVertex = new Vertex(this.x, this.y, this.z);
     this.neVertex = new Vertex(this.x + 1, this.y, this.z);
@@ -34,11 +34,33 @@ function DungeonRoom(x, y, z) {
     this.westWall = new Wall(this.nwVertex, this.swVertex);
     if (this.nwVertex.x == 0) this.westWall.wallExists = true; //west wall borders beginning of dungeon.
 
-    if (x < 0 || y < 0 || x > DungeonLevelMaxWidth - 1 || y > DungeonLevelMaxHeight - 1) {
-        this.oob = true;
-    } else {
-        this.oob = false;
-    }
+    this.oob = (x < 0 || y < 0 || x > DungeonLevelMaxWidth - 1 || y > DungeonLevelMaxHeight - 1);
+
+    const mutuallyExclusiveFeatures = GetIdCharPair(this.id, 2);
+    this.featureId = mutuallyExclusiveFeatures;
+    this.inn = mutuallyExclusiveFeatures <= 1; //@15x15 there are 225 rooms @5% you will have 11.25 inns. 17 with the base seed. at 3% we go down to 9. 
+    this.throne = mutuallyExclusiveFeatures > 1 && mutuallyExclusiveFeatures <= 2 //1%
+    this.fountain = mutuallyExclusiveFeatures > 2 && mutuallyExclusiveFeatures <= 3 //2%
+
+//Wall Objects
+    //doors & one-way doors & fancy door/puzzle door
+
+//Z Objects
+    //stairs down/up or elevator or pit (z level connector)
+
+//Room Objects
+    //inn
+    //throne
+    //fountain
+    //teleporter
+    //button puzzle
+    
+    //coffin/tomb
+
+    //for mutually exclusive rare items we can pull 2 digits and get 1-100 but handle multiple objects.
+    //for everything else we can pull a single digit and have 10% increment likelihood to find it.
+    //Is everything mutually exclusive...do we really want more than 1 item per location?
+    //maybe not just items but also features of the room....cold, or stone or magic
 }
 
 //nsew, none, ns, ew, ne, nw, se, sw, nse, nsw, ews, ewn, e, w, s, n 15 options

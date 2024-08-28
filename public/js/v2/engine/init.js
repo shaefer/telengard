@@ -4,7 +4,9 @@
     //stats
 
 function playAudio(url) {
-    new Audio(url).play();
+    if (!gameConfig.mute) {
+        new Audio(url).play();
+    }
 }
 
 function setupStartScreenEffects() {

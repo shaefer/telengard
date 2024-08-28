@@ -6,23 +6,9 @@ const paintWallsForRow = (dungeonRoom, row, squareSize) => {
     //console.log(square);
     square.style.width = squareSize + "px";
     square.style.height = squareSize + "px";
+    square.style.position = 'relative'; //setup for other images to get positioned relative to this square.
 
-    if (dungeonRoom.oob) {
-        square.classList.add('oob');
-        return;
-    }
-    if (dungeonRoom.westWall.wallExists) {
-        square.classList.add('westWall');
-    }
-    if (dungeonRoom.eastWall.wallExists) {
-        square.classList.add('eastWall');
-    }
-    if (dungeonRoom.southWall.wallExists) {
-        square.classList.add('southWall');
-    }
-    if (dungeonRoom.northWall.wallExists) {
-        square.classList.add('northWall');
-    }
+    paintRoom(dungeonRoom, square);
 }
 
 {/* <div class="responsiveTableGrid">
@@ -77,10 +63,34 @@ function drawDungeonAroundSquare(position) {
                 j + position.x - ((dungeonViewSize - 1)/2), 
                 i + position.y - ((dungeonViewSize - 1)/2), 
                 position.z);
+
+            if (thisRoom.x == position.x && thisRoom.y == position.y && thisRoom.z == position.z) {
+                thisRoom.current = true;
+            }
             //console.log(thisRoom);
             paintWallsForRow(thisRoom, row, squareSize);
         }
     }
+}
+
+function drawRoomObjects(position) {
+    const num = ''+position.x+'-'+position.y+'-'+position.z;
+    const squareId = 'square'+num;
+    const square = document.getElementById(squareId);
+    const room = new DungeonRoom(position.x, position.y, position.z);
+    var oImg = document.createElement("img");
+        if (room.inn)
+            oImg.setAttribute('src', 'images/v2/inn.png'); 
+        else if (room.throne)
+            oImg.setAttribute('src', 'images/v2/throne2.png')
+        else if (room.fountain)
+            oImg.setAttribute('src', 'images/opengameart/mermaid_pool_animation.gif');
+        oImg.style.position = 'absolute';
+        oImg.style.top = '-50%';
+        oImg.style.left = '-50%';
+        oImg.setAttribute('width', (square.style.width + 'px')); //size has to be variable since the whole grid is responsive.
+
+    square.appendChild(oImg);
 }
 
 function displayPlayer(position) {

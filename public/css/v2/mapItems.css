@@ -1,0 +1,18 @@
+.inn {
+    background: url(/images/v2/inn.png);
+    background-size: 25%;
+    background-repeat: no-repeat;
+
+} 
+
+.fountain {
+    background: url(/images/opengameart/mermaid_pool_animation.gif);
+    background-size: 25%;
+    background-repeat: no-repeat;
+}
+
+.throne {
+    background: url(/images/v2/throne2.png);
+    background-size: 25%;
+    background-repeat: no-repeat;
+}
