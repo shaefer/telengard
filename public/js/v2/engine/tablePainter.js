@@ -25,13 +25,15 @@ const paintWallsForRow = (dungeonRoom, row, squareSize) => {
 
 function createBaseTable() {
     const tableGridContainer = document.getElementById('tableGridContainer');
-    tableGridContainer.textContent = ''; //erases table content
+    //tableGridContainer.textContent = ''; //erases table content
+    const origTable = document.getElementById('gridTable');
+    if (origTable)
+        tableGridContainer.removeChild(origTable);
     const gridTable = document.createElement('table');
     gridTable.id = 'gridTable';
-    const log = document.createElement('log');
-    log.id = 'log'
-    tableGridContainer.appendChild(gridTable);
-    tableGridContainer.appendChild(log);
+
+    tableGridContainer.insertBefore(gridTable, tableGridContainer.childNodes[1]);
+
     return {tableGridContainer, gridTable};
 }
 
@@ -123,9 +125,12 @@ function drawOptions(position, options) {
 
 function displayLog() {
     const log = document.getElementById('log');
-    console.log("display content: " + gameState.log.join(","))
-    log.textContent = ''
-    log.appendChild(document.createTextNode(gameState.log.join(",")));
+    const last3Logs = gameState.log.slice(gameState.log.length - 3);
+    log.appendChild(document.createTextNode(last3Logs));
+    setTimeout(function() {
+        console.log('erase the log')
+        log.textContent = '';
+    }, 2000);
 }
 
 function displayPlayer(position) {

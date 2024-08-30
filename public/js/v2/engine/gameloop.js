@@ -2,7 +2,7 @@ function updateGameAndDisplay(newPosition) {
     drawDungeonAroundSquare(newPosition);
     drawRoomObjects(newPosition);
     displayPlayer(newPosition);
-    displayLog();
+    //displayLog();
     gameState.position = newPosition;
 }
 
@@ -131,7 +131,7 @@ const gameloop = _.debounce(function nextTickOrAction(action) {
     } else {
         console.log('tick skipped as we are still processing an action.');
     }
-}, 100);
+}, 75);
 
 function startGame() {
     //TODO: Determine the proper starting square based on options/config.
