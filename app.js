@@ -49,5 +49,6 @@ redirector = function(req, res, path, error) {
 
 // Routes
 app.get('/', function (req, res) {
-    res.render('index_v2.html');
+    //res.render('index_v2.html');
+    res.render('index.html');
 });
