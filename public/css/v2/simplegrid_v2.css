@@ -54,11 +54,60 @@ index_v2.html
 #log {
     border: 5px solid black;
     height : 25%;
-    width : calc(75% - 10px);
+    width : calc(100% - 10px);
     background-color : transparent;
     display: inline-block;
     vertical-align: middle;
     position: relative;
+    text-align: left;
+    overflow: scroll;
+}
+
+.logDate {
+    font-style: italic;
+}
+
+.logType {
+    font-variant: small-caps;
+}
+
+.logEmphasis {
+    font-weight: bold;
+}
+
+.logEnemyDamage, .logPlayerGood {
+    padding: 0 0.5em;
+    border-radius: 1em;
+    background-color: green;
+    color: white;
+}
+
+.logDamageToPlayer {
+    padding: 0 0.5em;
+    border-radius: 1em;
+    background-color: red;
+    color: white;
+}
+
+.logOption {
+    padding: 0 0.5em;
+    border-radius: 1em;
+    background-color: blue;
+    color: white;
+}
+
+.logExperience {
+    padding: 0 0.5em;
+    border-radius: 1em;
+    background-color: purple;
+    color: white;
+}
+
+.logEnemy {
+    padding: 0 0.5em;
+    border-radius: 1em;
+    background-color: orange;
+    color: black;
 }
 
 .tableGridContainer table {

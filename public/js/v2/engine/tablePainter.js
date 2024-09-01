@@ -105,7 +105,8 @@ function drawEnemy(position, enemy) {
     square.appendChild(oImg);
 }
 
-function drawOptions(position, options) {
+function drawOptions(position, options = gameState.options) {
+    if (!options) return;
     const num = ''+position.x+'-'+position.y+'-'+position.z;
     const squareId = 'square'+num;
     const square = document.getElementById(squareId);
@@ -118,19 +119,27 @@ function drawOptions(position, options) {
         oImg.style.backgroundColor = 'white';
         oImg.style.color = 'black';
         oImg.setAttribute('width', '100%'); //size has to be variable since the whole grid is responsive.
-        oImg.appendChild(document.createTextNode(options));
+        const span = document.createElement('span');
+        span.innerHTML = options;
+        oImg.appendChild(span);
 
     square.appendChild(oImg);
 }
 
 function displayLog() {
-    const log = document.getElementById('log');
-    const last3Logs = gameState.log.slice(gameState.log.length - 3);
-    log.appendChild(document.createTextNode(last3Logs));
-    setTimeout(function() {
-        console.log('erase the log')
-        log.textContent = '';
-    }, 2000);
+    console.log("displaying logs");
+    const logContainer = document.getElementById('log');
+    logContainer.textContent = '';
+    //const last10Logs = gameState.log.reverse().slice(0, 10); 
+    console.log(gameState.log)
+    gameState.log.slice().reverse().forEach(x => {
+        const div = document.createElement('div');
+        const formattedDate = x.time.toLocaleString('en-US', { timeZoneName: 'short' });
+        const span = document.createElement('span');
+        span.innerHTML = (x.message + " [<span class='logType'>" + x.type + "</span>](<span class='logDate'>" +formattedDate+"</span>)");
+        div.appendChild(span);
+        logContainer.appendChild(div);
+    })
 }
 
 function displayPlayer(position) {
