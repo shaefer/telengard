@@ -23,6 +23,12 @@ function handleFeatures(newPosition) {
             drawOptions(newPosition);
             displayPlayerStats();
         }
+        if (newRoom.fountain) {
+            gameState.currentEvent = 'fountain';
+            gameState.options = "[<span class='logOption'>D</span>]rink from the fountain. [<span class='logOption'>I</span>]gnore."
+            drawOptions(newPosition);
+            displayPlayerStats();
+        }
         return false;
     } else {
         return true;
@@ -122,7 +128,7 @@ function handleDeath() {
 function handleDyingStruggle(action) {
     if (action == 'd' && gameState.currentEvent == 'dying') {
         GameLog('You see a light, but you refuse to give up!', 'DYING');
-        handleDying();
+        handleRecovery();
     } else if (action == 'a' && gameState.currentEvent == 'dying') {
         GameLog("You've struggled enough in this world and head toward the glowing light.", "DYING");
         handleDeath();
@@ -139,6 +145,43 @@ function handleAscent() {
     const newPosition = {x:gameState.position.x, y:gameState.position.y, z:gameState.position.z - 1};
     endEvent();
     updateGameAndDisplay(newPosition);
+}
+
+function handleDrink() {
+    GameLog("You take a drink from the mysterious fountain.", "FOUNTAIN");
+    displayLog();
+    setTimeout(function() {
+        const fountainEffect = Math.floor(Math.random() * 4 + 1);
+        if (fountainEffect == 1 && gameState.hp < gameState.maxHp) {
+            const healHp = Math.min(Math.floor(Math.random() * 20 + 1), gameState.maxHp - gameState.hp); //make sure it can't heal more than you're damaged.
+            gameState.hp += healHp;
+            GameLog("Your wounds heal. You recover <span class='logPlayerGood'>" + healHp + " hp.</span>", "FOUNTAIN");
+        } else if (fountainEffect == 2) {
+            const dmg = Math.floor(Math.random() * (40 * (gameState.position.z+1)) + 1);
+            const newHp = gameState.hp - dmg;
+            gameState.hp = Math.max(newHp, 0);
+            GameLog("The water is poison. You lose <span class='logDamageToPlayer'>" + dmg + " hp.</span>", "FOUNTAIN");
+            if (newHp <= 0) {
+                playerDying();
+                return;
+            }
+        } else if (fountainEffect == 3) {
+            const str = Math.floor(Math.random() * 4 + 1);
+            gameState.str += str;
+            setTimeout(function() {
+                gameState.str -= str;
+                GameLog("You <span class='logEmphasis'>strength</span> returns to normal.", "FOUNTAIN");
+                displayLog();
+            }, 120000);
+            GameLog("The magic in the water makes you stronger. You gain <span class='logPlayerGood'>" + str + " str points.</span>", "FOUNTAIN");
+        } else {
+            //4
+            GameLog("Nothing happens. It is just water.", "FOUNTAIN");
+        }
+        displayLog();
+        endEvent();
+        updateGameAndDisplay(gameState.position);
+    }, 1000);
 }
 
 function handleStairsDown(action) {
@@ -165,7 +208,19 @@ function handleStairsUp(action) {
     }
 }
 
-function handleDying() {
+function handleFountain(action) {
+    if (action == 'd' && gameState.currentEvent == 'fountain') {
+        GameLog("You <span class='logEmphasis'>drink</span> from the fountain.", 'FOUNTAIN');
+        displayLog();
+        handleDrink();
+    } else if (action == 'i' && gameState.currentEvent == 'fountain') {
+        GameLog("You ignore the <span class='logEmphasis'>fountain</span> and continue adventuring.", "FOUNTAIN");
+        endEvent();
+        updateGameAndDisplay(gameState.position);
+    }
+}
+
+function handleRecovery() {
     const recover = Math.floor(Math.random() * 100 + 1);
     console.log(recover + " was the recovery roll");
     if (recover >= 50) {
@@ -179,6 +234,16 @@ function handleDying() {
     } else {
         handleDeath();
     }
+}
+
+function playerDying() {
+    console.log('character dying')
+    //turn off any options and change current event to dying.
+    gameState.options = ["[<span class='logEmphasis logOption'>A</span>]ccept your fate, [<span class='logEmphasis logOption'>D</span>]on't go into the light."];
+    gameState.currentEvent = "dying";
+    GameLog("<span class='logEmphasis logPlayerDamage'>YOU ARE DYING!</span>", "DYING");
+    displayLog();
+    updateGameAndDisplay(gameState.position);
 }
 
 function handleEnemyFightBack() {
@@ -198,13 +263,7 @@ function handleEnemyFightBack() {
    gameState.hp = Math.max(newHp, 0);
    displayPlayerStats();
    if (newHp <= 0) {
-        console.log('character dying')
-            //turn off any options and change current event to dying.
-        gameState.options = ["[<span class='logEmphasis logOption'>A</span>]ccept your fate, [<span class='logEmphasis logOption'>D</span>]on't go into the light."];
-        gameState.currentEvent = "dying";
-        GameLog("You were struck a fatal blow! <span class='logEmphasis logPlayerDamage'>YOU ARE DYING!</span>", "DYING");
-        displayLog();
-        updateGameAndDisplay(gameState.position);
+        playerDying();
    } else {
         GameLog("The battle continues. What do you want to do?", "COMBAT");
         displayLog();
@@ -219,10 +278,10 @@ function handleCombatEventActions(action) {
         const dmg = Math.floor(Math.random() * gameState.str + 1);
         const isCrit = (Math.floor(Math.random() * 20 + 1)) == 20;
         const critBonus = (isCrit) ? Math.floor(Math.random() * gameState.str + 1) : 0;
-        const newHp = gameState.enemy.hp - dmg + critBonus;
+        const newHp = gameState.enemy.hp - (dmg + critBonus);
         if (newHp <= 0) {
             if (isCrit) {
-                GameLog("Your <span class='logEmphasis'>critical hit</span> deals <span class='logEnemyDamage'>" + dmg + "</span> damage, obliterating your enemy.", "COMBAT");
+                GameLog("Your <span class='logEmphasis'>critical hit</span> deals <span class='logEnemyDamage'>" + dmg + " + " + critBonus + "</span> damage, obliterating your enemy.", "COMBAT");
             } else {
                 GameLog("Your blow deals <span class='logEnemyDamage'>" + dmg + "</span> damage, carving through your foe.", "COMBAT");
             }
@@ -234,7 +293,7 @@ function handleCombatEventActions(action) {
         } else {
             //TODO: This won't go away until you press more buttons. We need to create a better console for combat messages.
             if (isCrit) {
-                GameLog("You land a <span class='logEmphasis'>critical</span> blow on the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + "</span> hp of damage.", "COMBAT");
+                GameLog("You land a <span class='logEmphasis'>critical</span> blow on the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + " + " + critBonus + "</span> hp of damage.", "COMBAT");
             } else {
                 GameLog("You swing viciously at the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + "</span> hp of damage.", "COMBAT");
             }
@@ -322,6 +381,8 @@ const gameloop = _.debounce(function nextTickOrAction(action) {
                     handleStairsDown(action);
                 } else if (gameState.currentEvent == 'stairs up') {
                     handleStairsUp(action);
+                } else if (gameState.currentEvent == 'fountain') {
+                    handleFountain(action);
                 }
 
                 //TODO: Location Actions for Throne, Fountain and Inn
