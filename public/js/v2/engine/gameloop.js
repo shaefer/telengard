@@ -217,10 +217,15 @@ function handleCombatEventActions(action) {
         gameState.currentEvent = 'combat attack'
         console.log('in combat and receiving the action "f"');
         const dmg = Math.floor(Math.random() * gameState.str + 1);
-        
-        const newHp = gameState.enemy.hp - dmg;
+        const isCrit = (Math.floor(Math.random() * 20 + 1)) == 20;
+        const critBonus = (isCrit) ? Math.floor(Math.random() * gameState.str + 1) : 0;
+        const newHp = gameState.enemy.hp - dmg + critBonus;
         if (newHp <= 0) {
-            GameLog("Your blow deals <span class='logEnemyDamage'>" + dmg + "</span> damage, carving through your foe.", "COMBAT");
+            if (isCrit) {
+                GameLog("Your <span class='logEmphasis'>critical hit</span> deals <span class='logEnemyDamage'>" + dmg + "</span> damage, obliterating your enemy.", "COMBAT");
+            } else {
+                GameLog("Your blow deals <span class='logEnemyDamage'>" + dmg + "</span> damage, carving through your foe.", "COMBAT");
+            }
             displayLog(); //TODO: Log by event so that they are grouped and then fade if that event ended a certain period of time ago.
             gameState.options = null;
             gameState.currentEvent = 'combat resolution';
@@ -228,7 +233,11 @@ function handleCombatEventActions(action) {
             setTimeout(handleCombatWin, 1000);
         } else {
             //TODO: This won't go away until you press more buttons. We need to create a better console for combat messages.
-            GameLog("You swing viciously at the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + "</span> hp of damage.", "COMBAT");
+            if (isCrit) {
+                GameLog("You land a <span class='logEmphasis'>critical</span> blow on the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + "</span> hp of damage.", "COMBAT");
+            } else {
+                GameLog("You swing viciously at the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + "</span> hp of damage.", "COMBAT");
+            }
             displayLog();
             gameState.enemy.hp = newHp;
             setTimeout(handleEnemyFightBack, 1000);
