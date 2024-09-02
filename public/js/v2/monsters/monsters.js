@@ -5,8 +5,10 @@ const monsterAttack = (monster) => {
     const levelDiff = Math.max(monster.level - gameState.level, 0);
     const percentToHit = 25 + (levelDiff * 5);
     const rnd = Math.floor(Math.random() * 100 + 1);
+    console.log("monster attack roll: " + rnd);
     if (rnd <= percentToHit) {
         if (rnd <= 5) {
+            console.log('critical hit')
             //critical hit!
             const critMultiplier = Math.floor(Math.random() * 2 + 1)/2;
             const dmg = monsterDamage(monster) * (1+critMultiplier);

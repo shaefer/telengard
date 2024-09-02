@@ -14,11 +14,16 @@ const initialGameState = {
     maxHp: 20,
     hp: 20,
     str: 18, //current dmg calculation is 1-str dmg.
+    luck: 1, //luck stat help with recovery or secrets
+    dex: 10, //dex help with running
+    cha: 10, //cha helps with negotiation. 
     ac: 10,
     exp: 0,
     log: []
     //rooms visited
 }
+
+//IDEA: Hunter power to search for specific monster and increase chance of encounter....would work well with traps. 
 
 let gameState = Object.assign({}, initialGameState);
 const dungeonViewSize = 5; /** Odd numbers only */

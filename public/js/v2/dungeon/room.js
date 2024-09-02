@@ -6,7 +6,7 @@
  * @param {*} y 
  * @param {*} z 
  */
-function DungeonRoom(x, y, z) {
+function DungeonRoom(x, y, z, startingRoom = true) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -36,11 +36,24 @@ function DungeonRoom(x, y, z) {
 
     this.oob = (x < 0 || y < 0 || x > DungeonLevelMaxWidth - 1 || y > DungeonLevelMaxHeight - 1);
 
+    let lowerRoom = false;
+    if (startingRoom)
+        lowerRoom = new DungeonRoom(x, y, z+1, false); //prevent recursion of having each room check the room below it forever...
+
+
     const mutuallyExclusiveFeatures = GetIdCharPair(this.id, 2);
     this.featureId = mutuallyExclusiveFeatures;
-    this.inn = mutuallyExclusiveFeatures <= 1; //@15x15 there are 225 rooms @5% you will have 11.25 inns. 17 with the base seed. at 3% we go down to 9. 
-    this.throne = mutuallyExclusiveFeatures > 1 && mutuallyExclusiveFeatures <= 2 //1%
-    this.fountain = mutuallyExclusiveFeatures > 2 && mutuallyExclusiveFeatures <= 3 //2%
+    this.inn = mutuallyExclusiveFeatures <= 1 && !lowerRoom.stairsUp; //@15x15 there are 225 rooms @5% you will have 11.25 inns. 17 with the base seed. at 3% we go down to 9. 
+    this.throne = mutuallyExclusiveFeatures > 1 && mutuallyExclusiveFeatures <= 2 && !lowerRoom.stairsUp//1%
+    this.fountain = mutuallyExclusiveFeatures > 2 && mutuallyExclusiveFeatures <= 3 && !lowerRoom.stairsUp//1%
+    this.stairsDown = (mutuallyExclusiveFeatures > 3 && mutuallyExclusiveFeatures <= 4) || lowerRoom.stairsUp //1%
+    this.stairsUp = mutuallyExclusiveFeatures > 4 && mutuallyExclusiveFeatures <= 5 && z != 0 && !lowerRoom.stairsUp//1%
+
+    this.hasFeature = this.inn || this.throne || this.fountain || this.stairsDown || this.stairsUp;
+    //TODO: Stairs down likely should be a special rnd number shared between this room and the room below seed of this room + lower room.
+    //check the room below to see if there are stairs up.
+
+
 
 //Wall Objects
     //doors & one-way doors & fancy door/puzzle door

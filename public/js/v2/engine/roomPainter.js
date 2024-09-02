@@ -25,4 +25,6 @@ function paintRoom(dungeonRoom, square) {
     if (dungeonRoom.throne) square.classList.add('throne');
     if (dungeonRoom.fountain) square.classList.add('fountain');
     if (dungeonRoom.current) square.classList.add('current');
+    if (dungeonRoom.stairsDown) square.classList.add('stairsDown');
+    if (dungeonRoom.stairsUp) square.classList.add('stairsUp');
 }

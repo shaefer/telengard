@@ -7,6 +7,28 @@ function updateGameAndDisplay(newPosition) {
     gameState.position = newPosition;
 }
 
+function handleFeatures(newPosition) {
+    const newRoom = new DungeonRoom(newPosition.x, newPosition.y, newPosition.z);
+    if (newRoom.hasFeature) {
+        console.log("Stepped right and newRoom hasFeature")
+        if (newRoom.stairsDown) {
+            gameState.currentEvent = 'stairs down';
+            gameState.options = "[<span class='logOption'>G</span>]o down. [<span class='logOption'>I</span>]gnore."
+            drawOptions(newPosition);
+            displayPlayerStats();
+        }
+        if (newRoom.stairsUp) {
+            gameState.currentEvent = 'stairs up';
+            gameState.options = "[<span class='logOption'>G</span>]o up. [<span class='logOption'>I</span>]gnore."
+            drawOptions(newPosition);
+            displayPlayerStats();
+        }
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function handleStandardActions(action) {
     console.log('processing action: ' + action);
     if (action == 'Entering the Dungeon') {
@@ -17,7 +39,7 @@ function handleStandardActions(action) {
         const currentRoom = new DungeonRoom(gameState.position.x, gameState.position.y, gameState.position.z);
         if (!currentRoom.eastWall.wallExists) {
             updateGameAndDisplay(newPosition);
-            return true;
+            return handleFeatures(newPosition);
         } else {
             console.log("Can't walk through walls.");
             return false;
@@ -29,7 +51,7 @@ function handleStandardActions(action) {
         const currentRoom = new DungeonRoom(gameState.position.x, gameState.position.y, gameState.position.z);
         if (!currentRoom.westWall.wallExists) {
             updateGameAndDisplay(newPosition);
-            return true;
+            return handleFeatures(newPosition);
         } else {
             console.log("Can't walk through walls.");
             return false;
@@ -40,7 +62,7 @@ function handleStandardActions(action) {
         const currentRoom = new DungeonRoom(gameState.position.x, gameState.position.y, gameState.position.z);
         if (!currentRoom.northWall.wallExists) {
             updateGameAndDisplay(newPosition);
-            return true;
+            return handleFeatures(newPosition);
         } else {
             console.log("Can't walk through walls.");
             return false;
@@ -51,7 +73,7 @@ function handleStandardActions(action) {
         const currentRoom = new DungeonRoom(gameState.position.x, gameState.position.y, gameState.position.z);
         if (!currentRoom.southWall.wallExists) {
             updateGameAndDisplay(newPosition);
-            return true;
+            return handleFeatures(newPosition);
         } else {
             console.log("Can't walk through walls.");
             return false;
@@ -107,11 +129,49 @@ function handleDyingStruggle(action) {
     }
 }
 
+function handleDescent() {
+    const newPosition = {x:gameState.position.x, y:gameState.position.y, z:gameState.position.z + 1};
+    endEvent();
+    updateGameAndDisplay(newPosition);
+}
+
+function handleAscent() {
+    const newPosition = {x:gameState.position.x, y:gameState.position.y, z:gameState.position.z - 1};
+    endEvent();
+    updateGameAndDisplay(newPosition);
+}
+
+function handleStairsDown(action) {
+    if (action == 'g' && gameState.currentEvent == 'stairs down') {
+        GameLog('You head down to the next level of the dungeon', 'STAIRS DOWN');
+        displayLog();
+        handleDescent();
+    } else if (action == 'i' && gameState.currentEvent == 'stairs down') {
+        GameLog("You ignore the stairs and continue adventuring.", "STAIRS DOWN");
+        endEvent();
+        updateGameAndDisplay(gameState.position);
+    }
+}
+
+function handleStairsUp(action) {
+    if (action == 'g' && gameState.currentEvent == 'stairs up') {
+        GameLog('You head up to a higher level of the dungeon', 'STAIRS UP');
+        displayLog();
+        handleAscent();
+    } else if (action == 'i' && gameState.currentEvent == 'stairs up') {
+        GameLog("You ignore the stairs and continue adventuring.", "STAIRS UP");
+        endEvent();
+        updateGameAndDisplay(gameState.position);
+    }
+}
+
 function handleDying() {
     const recover = Math.floor(Math.random() * 100 + 1);
     console.log(recover + " was the recovery roll");
     if (recover >= 50) {
         const hpGain = Math.floor(Math.random() * 5 + 5);
+        gameState.hp += hpGain;
+        displayPlayerStats();
         GameLog("You have miraculously recovered. You regain <span class='logPlayerGood'>" + hpGain + "</span> hp.", "DYING");
         displayLog();
         endEvent();
@@ -132,9 +192,11 @@ function handleEnemyFightBack() {
     }
 
    const dmg = monsterAttack(gameState.enemy);
+   console.log('monsterAttack returned dmg: ' + dmg);
    const newHp = gameState.hp - dmg;
    console.log('hp fell to: ' + newHp);
    gameState.hp = Math.max(newHp, 0);
+   displayPlayerStats();
    if (newHp <= 0) {
         console.log('character dying')
             //turn off any options and change current event to dying.
@@ -143,7 +205,6 @@ function handleEnemyFightBack() {
         GameLog("You were struck a fatal blow! <span class='logEmphasis logPlayerDamage'>YOU ARE DYING!</span>", "DYING");
         displayLog();
         updateGameAndDisplay(gameState.position);
-        //setTimeout(handleDying, 2000);
    } else {
         GameLog("The battle continues. What do you want to do?", "COMBAT");
         displayLog();
@@ -164,13 +225,13 @@ function handleCombatEventActions(action) {
             gameState.options = null;
             gameState.currentEvent = 'combat resolution';
 
-            setTimeout(handleCombatWin, 2000);
+            setTimeout(handleCombatWin, 1000);
         } else {
             //TODO: This won't go away until you press more buttons. We need to create a better console for combat messages.
             GameLog("You swing viciously at the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + "</span> hp of damage.", "COMBAT");
             displayLog();
             gameState.enemy.hp = newHp;
-            setTimeout(handleEnemyFightBack, 2000);
+            setTimeout(handleEnemyFightBack, 1000);
         }
     }
 }
@@ -182,15 +243,18 @@ function endEvent() {
 
 
 function handleLevelUp(expGain) {
-    const currentExp = gameState.exp;
+    const currentExp = gameState.exp - 0;
+    const newTotalExp = gameState.exp + expGain;
     gameState.exp += expGain;
     const expNeeded = experienceForNextLevel(gameState.level);
-    if (currentExp < expNeeded && gameState.exp > expNeeded) {
+    console.log(currentExp, newTotalExp, expNeeded, gameState.exp);
+    if (currentExp < expNeeded && newTotalExp > expNeeded) {
         console.log('Player Level Up!');
-        GameLog("<span class='logEmphasis'>You gained a level!</span> You are level <span class='logPlayerGood'>2</span>", "COMBAT RESOLUTION");
+        GameLog("<span class='logEmphasis'>You gained a level!</span> You are level <span class='logPlayerLevelUp'>2</span>", "COMBAT RESOLUTION");
         displayLog();
         gameState.level += 1;
         const hpGain = Math.round(Math.random() * 10 + 11);
+        GameLog("You gained <span class='logPlayerLevelUp'>" + hpGain + "</span> hit points!", "COMBAT RESOLUTION");
         gameState.maxHp += hpGain;
         gameState.hp = gameState.maxHp;
     } else {
@@ -245,6 +309,10 @@ const gameloop = _.debounce(function nextTickOrAction(action) {
                     console.log('resolving combat');
                 } else if (gameState.currentEvent == 'combat attack') {
                     console.log('resolving attack');
+                } else if (gameState.currentEvent == 'stairs down') {
+                    handleStairsDown(action);
+                } else if (gameState.currentEvent == 'stairs up') {
+                    handleStairsUp(action);
                 }
 
                 //TODO: Location Actions for Throne, Fountain and Inn

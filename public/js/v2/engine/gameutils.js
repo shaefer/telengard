@@ -11,6 +11,8 @@ function buildDungeonLevelStats(z) {
     let innCount = 0;
     let fountainCount = 0;
     let throneCount = 0;
+    let stairsDownCount = 0;
+    let stairsUpCount = 0;
 
     const dungeonLevel = new DungeonLevel(z);
     for(let i = 0;i<=dungeonLevel.floorWidth-1;i++) {
@@ -20,7 +22,9 @@ function buildDungeonLevelStats(z) {
             if (thisRoom.inn) innCount++;
             if (thisRoom.fountain) fountainCount++;
             if (thisRoom.throne) throneCount++;
+            if (thisRoom.stairsDown) stairsDownCount++;
+            if (thisRoom.stairsUp) stairsUpCount++;
         }
     }
-    return {dungeonRooms, innCount, fountainCount, throneCount};
+    return {dungeonRooms, innCount, fountainCount, throneCount, stairsDownCount, stairsUpCount};
 }

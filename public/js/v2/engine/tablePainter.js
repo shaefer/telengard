@@ -82,6 +82,10 @@ function drawRoomObjects(position) {
             oImg.setAttribute('src', 'images/v2/throne2.png')
         else if (room.fountain)
             oImg.setAttribute('src', 'images/v2/fountain.png');
+        else if (room.stairsDown)
+            oImg.setAttribute('src', 'images/v2/stairsdown.png');
+        else if (room.stairsUp)
+            oImg.setAttribute('src', 'images/v2/stairsup.png');
         oImg.style.position = 'absolute';
         oImg.style.top = '-50%';
         oImg.style.left = '-50%';
@@ -106,24 +110,30 @@ function drawEnemy(position, enemy) {
 }
 
 function drawOptions(position, options = gameState.options) {
-    if (!options) return;
     const num = ''+position.x+'-'+position.y+'-'+position.z;
     const squareId = 'square'+num;
     const square = document.getElementById(squareId);
+    const playerOptions = document.getElementById('playerOptions');
+    if (playerOptions) {
+        playerOptions.parentNode.removeChild(playerOptions);
+    }
 
-    var oImg = document.createElement("div");
-        oImg.style.position = 'absolute';
-        oImg.style.bottom = '0';
-        oImg.style.left = '0';
-        oImg.style.padding = '5px';
-        oImg.style.backgroundColor = 'white';
-        oImg.style.color = 'black';
-        oImg.setAttribute('width', '100%'); //size has to be variable since the whole grid is responsive.
-        const span = document.createElement('span');
-        span.innerHTML = options;
-        oImg.appendChild(span);
+    if (options) {
+        var oImg = document.createElement("div");
+            oImg.id = 'playerOptions'
+            oImg.style.position = 'absolute';
+            oImg.style.bottom = '0';
+            oImg.style.left = '0';
+            oImg.style.padding = '5px';
+            oImg.style.backgroundColor = 'white';
+            oImg.style.color = 'black';
+            oImg.setAttribute('width', '100%'); //size has to be variable since the whole grid is responsive.
+            const span = document.createElement('span');
+            span.innerHTML = options || '';
+            oImg.appendChild(span);
 
-    square.appendChild(oImg);
+        square.appendChild(oImg);
+    }
 }
 
 function displayLog() {
@@ -142,6 +152,27 @@ function displayLog() {
     })
 }
 
+function displayPlayerStats() {
+    const playerInfo = document.getElementById('playerInfo');
+    playerInfo.textContent = '';
+
+    const levelAndClassDiv = document.createElement('div');
+    levelAndClassDiv.innerHTML = '<span>Level: </span><span>' + gameState.level + "</span> <span>" + gameState.class + "</span>"; 
+    playerInfo.appendChild(levelAndClassDiv);
+
+    const hpDiv = document.createElement('div');
+    hpDiv.innerHTML = '<span>HP: </span><span>' + gameState.hp + "/" + gameState.maxHp + "</span>";
+    playerInfo.appendChild(hpDiv);
+
+    const expDiv = document.createElement('div');
+    expDiv.innerHTML = '<span>EXP: </span><span>' + gameState.exp + "/" + experienceForNextLevel(gameState.level) + "</span>";
+    playerInfo.appendChild(expDiv);
+
+    const eventDiv = document.createElement('div');
+    eventDiv.innerHTML = '<span>EVENT: </span><span>' + gameState.currentEvent + "</span>";
+    playerInfo.appendChild(eventDiv);
+}
+
 function displayPlayer(position) {
     console.log("displaying player at: " + position.x + "-" + position.y + "-" + position.z);
     const num = ''+position.x+'-'+position.y+'-'+position.z;
@@ -155,4 +186,8 @@ function displayPlayer(position) {
         oImg.setAttribute('width', (parseInt(square.style.width, 10) * 164 / 300) * 1.33) + 'px'; //size has to be variable since the whole grid is responsive.
 
     square.appendChild(oImg);
+
+    displayPlayerStats();
+
+
 }

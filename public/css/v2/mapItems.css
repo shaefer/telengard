@@ -17,6 +17,18 @@
     background-repeat: no-repeat;
 }
 
+.stairsDown {
+    background: url(/images/v2/stairsdown.png);
+    background-size: 25%;
+    background-repeat: no-repeat;
+}
+
+.stairsUp {
+    background: url(/images/v2/stairsup.png);
+    background-size: 25%;
+    background-repeat: no-repeat;
+}
+
 #diceRoller {
 
 }
