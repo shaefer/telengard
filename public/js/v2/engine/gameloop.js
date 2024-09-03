@@ -232,6 +232,7 @@ function startGame() {
     const gender = Math.random() < 0.5;
     gameState.gender = (gender) ? 'm' : 'f';
     updateGameAndDisplay(startPosition);
+
     //start game loop
     setInterval(function() {gameloop(false)}, tickSeconds * 1000);
     gameloop("Entering the Dungeon");

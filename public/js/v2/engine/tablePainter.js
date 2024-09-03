@@ -152,33 +152,36 @@ function displayLog() {
     })
 }
 
+function statDisplay(label, data) {
+    const floorDiv = document.createElement('div');
+    floorDiv.innerHTML = "<span>"+label+": </span><span>" + data + "</span>";
+    return floorDiv;
+}
+
 function displayPlayerStats() {
     const playerInfo = document.getElementById('playerInfo');
     playerInfo.textContent = '';
 
-    const levelAndClassDiv = document.createElement('div');
-    levelAndClassDiv.innerHTML = '<span>Level: </span><span>' + gameState.level + "</span> <span>" + gameState.class + "</span>"; 
-    playerInfo.appendChild(levelAndClassDiv);
+    playerInfo.appendChild(statDisplay("LEVEL", gameState.level + " " + gameState.class));
 
-    const hpDiv = document.createElement('div');
-    hpDiv.innerHTML = '<span>HP: </span><span>' + gameState.hp + "/" + gameState.maxHp + "</span>";
-    playerInfo.appendChild(hpDiv);
+    playerInfo.appendChild(statDisplay("HP", gameState.hp + "/" + gameState.maxHp));
 
-    const expDiv = document.createElement('div');
-    expDiv.innerHTML = '<span>EXP: </span><span>' + gameState.exp + "/" + experienceForNextLevel(gameState.level) + "</span>";
-    playerInfo.appendChild(expDiv);
+    playerInfo.appendChild(statDisplay("EXP", gameState.exp + "/" + experienceForNextLevel(gameState.level)));
 
-    const fireResistDiv = document.createElement('div');
-    fireResistDiv.innerHTML = '<span>FIRE RESIST: </span><span>' + gameState.fireResist + "</span>";
-    playerInfo.appendChild(fireResistDiv);
+    playerInfo.appendChild(statDisplay("FIRE RESIST", gameState.fireResist));
 
-    const floorDiv = document.createElement('div');
-    floorDiv.innerHTML = '<span>FLOOR: </span><span>' + gameState.position.z + "</span>";
-    playerInfo.appendChild(floorDiv);
+    playerInfo.appendChild(statDisplay("FLOOR", gameState.position.z));
 
-    const eventDiv = document.createElement('div');
-    eventDiv.innerHTML = '<span>EVENT: </span><span>' + gameState.currentEvent + "</span>";
-    playerInfo.appendChild(eventDiv);
+    if (gameState.dungeonKnowledge[0]) {
+        playerInfo.appendChild(statDisplay("STAIRS DOWN", gameState.dungeonStats[0].stairsDownCount));
+        playerInfo.appendChild(statDisplay("STAIRS UP", gameState.dungeonStats[0].stairsUpCount));
+        playerInfo.appendChild(statDisplay("INNS", gameState.dungeonStats[0].innCount));
+        playerInfo.appendChild(statDisplay("FOUNTAINS", gameState.dungeonStats[0].fountainCount));
+        playerInfo.appendChild(statDisplay("THRONES", gameState.dungeonStats[0].throneCount));
+    }
+
+
+    playerInfo.appendChild(statDisplay("EVENT", gameState.currentEvent || ''));
 }
 
 function displayPlayer(position) {
