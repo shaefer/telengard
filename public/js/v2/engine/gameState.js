@@ -2,7 +2,9 @@ let processing = false;
 let lastActionCompleted;
 let tickSeconds = 10;
 let gameConfig = {
-    mute: true
+    mute: false,
+    onlyDragons: true,
+    percentChanceOfDragonFire: 40
 }
 
 const initialGameState = {
@@ -20,6 +22,7 @@ const initialGameState = {
     cha: 10, //cha helps with negotiation. 
     ac: 10,
     exp: 0,
+    fireResist: 1,
     log: []
     //rooms visited
 }

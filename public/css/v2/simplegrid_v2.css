@@ -136,6 +136,17 @@ index_v2.html
     background-color: white;
 }
 
+.tableGridContainer .specialEvent {
+    position: absolute;
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    border: none;
+    background-color: transparent;
+}
+
 .westWall {
     border-left: 4px solid lightgray;
 }

@@ -168,6 +168,14 @@ function displayPlayerStats() {
     expDiv.innerHTML = '<span>EXP: </span><span>' + gameState.exp + "/" + experienceForNextLevel(gameState.level) + "</span>";
     playerInfo.appendChild(expDiv);
 
+    const fireResistDiv = document.createElement('div');
+    fireResistDiv.innerHTML = '<span>FIRE RESIST: </span><span>' + gameState.fireResist + "</span>";
+    playerInfo.appendChild(fireResistDiv);
+
+    const floorDiv = document.createElement('div');
+    floorDiv.innerHTML = '<span>FLOOR: </span><span>' + gameState.position.z + "</span>";
+    playerInfo.appendChild(floorDiv);
+
     const eventDiv = document.createElement('div');
     eventDiv.innerHTML = '<span>EVENT: </span><span>' + gameState.currentEvent + "</span>";
     playerInfo.appendChild(eventDiv);
@@ -188,6 +196,19 @@ function displayPlayer(position) {
     square.appendChild(oImg);
 
     displayPlayerStats();
+}
 
+function drawSpecialEventAndFade(eventImg, eventTime) {
+    const specialEventDiv = document.getElementById('specialEvent');
+    specialEventDiv.textContent = '';
+    specialEventDiv.classList.add("specialEvent")
 
+    const oImg = document.createElement("img");
+    oImg.setAttribute('src', eventImg);
+    oImg.setAttribute('width', '75%');
+
+    specialEventDiv.appendChild(oImg);
+    setTimeout(function() {
+        specialEventDiv.textContent = '';
+    }, eventTime);
 }

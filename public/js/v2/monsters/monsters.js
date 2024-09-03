@@ -30,6 +30,16 @@ const monsterAttack = (monster) => {
     }
 }
 
+const dragonFire = (monster) => {
+    const levelDiff = Math.max(monster.level - gameState.level, 0);
+    const dmgRolled = Math.max(monsterDamage(monster),3); //min 3 damage
+    const dmg = Math.round(dmgRolled * (1.5+(levelDiff*.1))); // 150%+10% bonus damage per level diff.
+    const dmgMinusFireResist = dmg - gameState.fireResist;
+    GameLog("You burn for <span class='logDamageToPlayer'>" + dmgMinusFireResist + "</span> damage. (<span class='logDamageToPlayer'>"+dmg+"</span> - <span class='logPlayerGood'>"+gameState.fireResist+" fire resist</span>)", "COMBAT");
+    displayLog();
+    return dmg;
+}
+
 const monsterExp = (monster) => {
     //TODO: If monster has above average hp give more exp. 
     return monster.level * monster.power;
@@ -40,9 +50,12 @@ const monsterDamage = (monster) => {
     const damage = Math.floor(Math.random() * maxDamage + 1);
     return damage;
 }
+
 const Monsters = [
-    {name: 'Troll', imgSrc: monsterImgFolder + 'troll.png', size: 1.5, baseHp: 6, power: '3'},
-    {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_blue.png', size: 1.5, baseHp: 8, power: '4'},
-    {name: 'Zombie', imgSrc: monsterImgFolder + 'zombie.png', size: 0.75, baseHp: 4, power: '1'},
-    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon-1.png', size:1.25, baseHp: 10, power:'5'}
+    {name: 'Troll', imgSrc: monsterImgFolder + 'troll.png', size: 1.5, baseHp: 6, power: 3},
+    {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_blue.png', size: 1.5, baseHp: 8, power: 4},
+    {name: 'Zombie', imgSrc: monsterImgFolder + 'zombie.png', size: 0.75, baseHp: 4, power: 1},
+    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon-1.png', size:1.25, baseHp: 10, power:5, specialAttackImg: monsterImgFolder + 'dragonfire.png'},
+    {name: 'Lizardfolk', imgSrc: monsterImgFolder + 'lizardfolk.png', size:1, baseHp: 10, power: 2},
+    {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2}
 ];
