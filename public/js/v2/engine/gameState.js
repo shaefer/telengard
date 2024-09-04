@@ -2,7 +2,7 @@ let processing = false;
 let lastActionCompleted;
 let tickSeconds = 10;
 let gameConfig = {
-    mute: true,
+    mute: false,
     onlyDragons: false,
     percentChanceOfDragonFire: 40,
     showFeatures: false
