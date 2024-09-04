@@ -3,7 +3,7 @@ const handleFountain = _.debounce(function handleFountain(action) {
         GameLog("You <span class='logEmphasis'>drink</span> from the fountain.", 'FOUNTAIN');
         displayLog();
         handleDrink();
-    } else if (action == 'i' && gameState.currentEvent == 'fountain') {
+    } else if ((action == 'i' || isDirection(action)) && gameState.currentEvent == 'fountain') {
         GameLog("You ignore the <span class='logEmphasis'>fountain</span> and continue adventuring.", "FOUNTAIN");
         endEvent();
         updateGameAndDisplay(gameState.position);

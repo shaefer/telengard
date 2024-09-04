@@ -3,7 +3,7 @@ const handleStairsDown = _.debounce(function handleStairsDown(action) {
         GameLog('You head down to the next level of the dungeon', 'STAIRS DOWN');
         displayLog();
         handleDescent();
-    } else if (action == 'i' && gameState.currentEvent == 'stairs down') {
+    } else if ((action == 'i' || isDirection(action)) && gameState.currentEvent == 'stairs down') {
         GameLog("You ignore the stairs and continue adventuring.", "STAIRS DOWN");
         endEvent();
         updateGameAndDisplay(gameState.position);
@@ -15,7 +15,7 @@ const handleStairsUp = _.debounce(function handleStairsUp(action) {
         GameLog('You head up to a higher level of the dungeon', 'STAIRS UP');
         displayLog();
         handleAscent();
-    } else if (action == 'i' && gameState.currentEvent == 'stairs up') {
+    } else if ((action == 'i' || isDirection(action)) && gameState.currentEvent == 'stairs up') {
         GameLog("You ignore the stairs and continue adventuring.", "STAIRS UP");
         endEvent();
         updateGameAndDisplay(gameState.position);

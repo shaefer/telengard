@@ -28,7 +28,21 @@ const handleCombatEventActions = _.debounce(function handleCombatEventActions(ac
             gameState.enemy.hp = newHp;
             setTimeout(handleEnemyFightBack, 500);
         }
+    } else if (action == 'r' && gameState.currentEvent == 'in combat') {
+        const run = Math.floor(Math.random() * 4 + 1);
+        if (run == 1) {
+            GameLog("You attempt to run, but the "+gameState.enemy.name+" blocks your path!", "COMBAT");
+            displayLog();
+            setTimeout(handleEnemyFightBack, 500);
+        } else {
+            GameLog("You dodge into the shadows and escape the battle.", "COMBAT");
+            displayLog();
+            gameState.enemy = null;
+            endEvent();
+            updateGameAndDisplay(gameState.position);
+        }
     }
+
 }, 100);
 
 function handleDamage(dmg) {

@@ -141,6 +141,9 @@ function playerDying() {
 
 
 
+function isDirection(action) {
+    return action == 'ArrowUp' || action == 'ArrowDown' || action == 'ArrowRight' || action == 'ArrowLeft';
+}
 
 
 function endEvent() {
@@ -232,6 +235,8 @@ function startGame() {
     const gender = Math.random() < 0.5;
     gameState.gender = (gender) ? 'm' : 'f';
     updateGameAndDisplay(startPosition);
+
+    discoverNearestInn(startPosition);
 
     //start game loop
     setInterval(function() {gameloop(false)}, tickSeconds * 1000);

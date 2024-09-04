@@ -141,7 +141,7 @@ function displayLog() {
     const logContainer = document.getElementById('log');
     logContainer.textContent = '';
     //const last10Logs = gameState.log.reverse().slice(0, 10); 
-    console.log(gameState.log)
+    //console.log(gameState.log)
     gameState.log.slice().reverse().forEach(x => {
         const div = document.createElement('div');
         const formattedDate = x.time.toLocaleString('en-US', { timeZoneName: 'short' });

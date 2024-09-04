@@ -5,12 +5,16 @@ const handleInn = _.debounce(function handleInn(action) {
         GameLog('You enter the inn to relax.', 'INN');
         displayLog();
         handleRestAtInn();
-    } else if (action == 'i' && gameState.currentEvent == 'inn') {
+    } else if ((action == 'i' ||  isDirection(action)) && gameState.currentEvent == 'inn') {
         GameLog("You ignore the inn and continue adventuring.", "INN");
         endEvent();
         updateGameAndDisplay(gameState.position);
     }
 }, 100);
+
+function isDirection(action) {
+    return action == 'ArrowUp' || action == 'ArrowDown' || action == 'ArrowRight' || action == 'ArrowLeft';
+}
 
 function handleRestAtInn() {
     GameLog("You rest at the inn. You restore all your hit points.", "INN");

@@ -2,8 +2,8 @@ let processing = false;
 let lastActionCompleted;
 let tickSeconds = 10;
 let gameConfig = {
-    mute: false,
-    onlyDragons: true,
+    mute: true,
+    onlyDragons: false,
     percentChanceOfDragonFire: 40
 }
 
@@ -24,7 +24,8 @@ const initialGameState = {
     exp: 0,
     fireResist: 1,
     log: [],
-    dungeonStats:[buildDungeonLevelStats(0)]
+    dungeonStats:[buildDungeonLevelStats(0)],
+    dungeonKnowledge:[]
     //rooms visited
 }
 
