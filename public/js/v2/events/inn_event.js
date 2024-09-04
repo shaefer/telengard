@@ -12,10 +12,6 @@ const handleInn = _.debounce(function handleInn(action) {
     }
 }, 100);
 
-function isDirection(action) {
-    return action == 'ArrowUp' || action == 'ArrowDown' || action == 'ArrowRight' || action == 'ArrowLeft';
-}
-
 function handleRestAtInn() {
     GameLog("You rest at the inn. You restore all your hit points.", "INN");
     const missingHp = gameState.maxHp - gameState.hp;

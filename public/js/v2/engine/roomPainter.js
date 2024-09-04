@@ -19,12 +19,14 @@ function paintRoom(dungeonRoom, square) {
     square.classList.add('id' + dungeonRoom.id);
     square.classList.add('fid' + dungeonRoom.featureId);
 
-    if (dungeonRoom.inn) {
-        square.classList.add('inn');
+    if (gameConfig.showFeatures) {
+        if (dungeonRoom.inn) {
+            square.classList.add('inn');
+        }
+        if (dungeonRoom.throne) square.classList.add('throne');
+        if (dungeonRoom.fountain) square.classList.add('fountain');
+        if (dungeonRoom.current) square.classList.add('current');
+        if (dungeonRoom.stairsDown) square.classList.add('stairsDown');
+        if (dungeonRoom.stairsUp) square.classList.add('stairsUp');
     }
-    if (dungeonRoom.throne) square.classList.add('throne');
-    if (dungeonRoom.fountain) square.classList.add('fountain');
-    if (dungeonRoom.current) square.classList.add('current');
-    if (dungeonRoom.stairsDown) square.classList.add('stairsDown');
-    if (dungeonRoom.stairsUp) square.classList.add('stairsUp');
 }

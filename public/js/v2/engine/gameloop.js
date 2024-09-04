@@ -102,7 +102,7 @@ const handlePossibleEvent = _.debounce(function handlePossibleEvent(luck = 0) {
     console.log(rnd);
     if (rnd > (90 + luck)) {
         gameState.currentEvent = 'in combat';
-        gameState.options = ["[<span class='logOption'>F</span>]ight, [<span class='logOption'>R</span>]un, [<span class='logOption'>N</span>]egotiate"];
+        gameState.options = ["[<span class='logOption'>F</span>]ight, [<span class='logOption'>R</span>]un"];
         const enemyChoice = Math.floor(Math.random() * Monsters.length);
         console.log(Monsters.length + " monsters: chose monster: " + enemyChoice);
         const enemyBase = (gameConfig.onlyDragons) ? Monsters[3] : Monsters[enemyChoice];
@@ -231,7 +231,7 @@ const gameloop = _.debounce(function nextTickOrAction(action) {
 
 function startGame() {
     //TODO: Determine the proper starting square based on options/config.
-    const startPosition = {x:3,y:3,z:0};
+    const startPosition = {x:4,y:4,z:0};
     const gender = Math.random() < 0.5;
     gameState.gender = (gender) ? 'm' : 'f';
     updateGameAndDisplay(startPosition);

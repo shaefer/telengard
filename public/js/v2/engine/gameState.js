@@ -4,7 +4,8 @@ let tickSeconds = 10;
 let gameConfig = {
     mute: true,
     onlyDragons: false,
-    percentChanceOfDragonFire: 40
+    percentChanceOfDragonFire: 40,
+    showFeatures: false
 }
 
 const initialGameState = {
