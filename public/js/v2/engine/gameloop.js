@@ -153,16 +153,18 @@ function endEvent() {
 
 
 function handleLevelUp(expGain) {
-    const currentExp = gameState.exp - 0;
-    const newTotalExp = gameState.exp + expGain;
-    gameState.exp += expGain;
     const expNeeded = experienceForNextLevel(gameState.level);
+    const currentExp = gameState.exp - 0;
+    const newTotalExp = currentExp + expGain;
+    
     console.log(currentExp, newTotalExp, expNeeded, gameState.exp);
     if (currentExp < expNeeded && newTotalExp > expNeeded) {
-        console.log('Player Level Up!');
-        GameLog("<span class='logEmphasis'>You gained a level!</span> You are level <span class='logPlayerLevelUp'>2</span>", "COMBAT RESOLUTION");
-        displayLog();
+        gameState.exp += expGain;
         gameState.level += 1;
+        console.log('Player Level Up!');
+        GameLog("<span class='logEmphasis'>You gained a level!</span> You are level <span class='logPlayerLevelUp'>"+gameState.level+"</span>", "COMBAT RESOLUTION");
+        displayLog();
+        
         const hpGain = Math.round(Math.random() * 10 + 11);
         GameLog("You gained <span class='logPlayerLevelUp'>" + hpGain + "</span> hit points!", "COMBAT RESOLUTION");
         gameState.maxHp += hpGain;
