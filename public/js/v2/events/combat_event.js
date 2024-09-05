@@ -2,9 +2,9 @@ const handleCombatEventActions = _.debounce(function handleCombatEventActions(ac
     if (action == 'f' && gameState.currentEvent == 'in combat') {
         gameState.currentEvent = 'combat attack'
         console.log('in combat and receiving the action "f"');
-        const dmg = Math.floor(Math.random() * gameState.str + 1);
+        const dmg = Math.floor(Math.random() * (gameState.str + gameState.strBonus) + 1);
         const isCrit = (Math.floor(Math.random() * 20 + 1)) == 20;
-        const critBonus = (isCrit) ? Math.floor(Math.random() * gameState.str + 1) : 0;
+        const critBonus = (isCrit) ? Math.floor(Math.random() * (gameState.str + gameState.strBonus) + 1) : 0;
         const newHp = gameState.enemy.hp - (dmg + critBonus);
         if (newHp <= 0) {
             if (isCrit) {

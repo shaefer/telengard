@@ -17,6 +17,7 @@ const initialGameState = {
     maxHp: 20,
     hp: 20,
     baseStr: 18,
+    strBonus: 0,
     str: 18, //current dmg calculation is 1-str dmg.
     luck: 1, //luck stat help with recovery or secrets
     dex: 10, //dex help with running

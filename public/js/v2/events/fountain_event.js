@@ -30,10 +30,10 @@ function handleDrink() {
             }
         } else if (fountainEffect == 3) {
             const str = Math.floor(Math.random() * 4 + 1);
-            gameState.str += str;
+            gameState.strBonus += str;
             setTimeout(function() {
                 gameState.str -= str;
-                GameLog("You <span class='logEmphasis'>strength</span> returns to normal.", "FOUNTAIN");
+                GameLog("You <span class='logEmphasis'>strength</span> wanes.", "FOUNTAIN");
                 displayLog();
             }, 120000);
             GameLog("The magic in the water makes you stronger. You gain <span class='logPlayerGood'>" + str + " str points.</span>", "FOUNTAIN");
