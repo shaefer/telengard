@@ -1,3 +1,6 @@
+//Demand Tribute
+//Fight it
+//Ignore it
 const handleCower = _.debounce(function handleCower(action) {
     if (action == 'd' && gameState.currentEvent == 'cower') {
         GameLog("You demand tribute! It pays you <span class='logGold'>" + Math.floor(Math.random() * 100 + 1) + "</span> gold.", 'COWER');

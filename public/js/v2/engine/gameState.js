@@ -69,7 +69,3 @@ function buildDungeonLevelStats(z) {
     }
     return {dungeonRooms, innCount, fountainCount, throneCount, stairsDownCount, stairsUpCount};
 }
-
-function bossDefeated(enemy) {
-    return gameState.bossesDefeated.includes(enemy.boss);
-}

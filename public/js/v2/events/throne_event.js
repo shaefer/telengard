@@ -33,6 +33,7 @@ function handleSitOnThrone() {
         //increased vision.
         //only certain monsters for a period of time
         //Curse - you must kill X creatures in Y time or take Z damage.
+        //knowledge of a certain dungeon location
     //A musical chime fills the air
         //Given a quest
         //Fairy gives a magic item.

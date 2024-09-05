@@ -32,7 +32,7 @@ function handleDrink() {
             const str = Math.floor(Math.random() * 4 + 1);
             gameState.strBonus += str;
             setTimeout(function() {
-                gameState.str -= str;
+                gameState.strBonus -= str;
                 GameLog("You <span class='logEmphasis'>strength</span> wanes.", "FOUNTAIN");
                 displayLog();
             }, 120000);

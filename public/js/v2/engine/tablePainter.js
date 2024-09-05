@@ -177,6 +177,9 @@ function displayPlayerStats() {
 
     playerInfo.appendChild(statDisplay("FIRE RESIST", gameState.fireResist));
 
+    const bonusStr = (gameState.strBonus) ? "(" + (gameState.strBonus + gameState.str) + ")" : "";
+    playerInfo.appendChild(statDisplay("STR", gameState.str + " " + bonusStr));
+
     playerInfo.appendChild(statDisplay("FLOOR", gameState.position.z));
 
     if (gameState.dungeonKnowledge[0]) {

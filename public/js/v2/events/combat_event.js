@@ -18,7 +18,6 @@ const handleCombatEventActions = _.debounce(function handleCombatEventActions(ac
 
             setTimeout(handleCombatWin, 500);
         } else {
-            //TODO: This won't go away until you press more buttons. We need to create a better console for combat messages.
             if (isCrit) {
                 GameLog("You land a <span class='logEmphasis'>critical</span> blow on the " + gameState.enemy.name + ", dealing <span class='logEnemyDamage'>" + dmg + " + " + critBonus + "</span> hp of damage.", "COMBAT");
             } else {
@@ -92,6 +91,7 @@ function handleEnemyFightBack() {
 function handleCombatWin() {
     if(gameState.enemy.isBoss) {
         console.log("BOSS DEFEATED: " + gameState.enemy.name);
+        //TODO: We don't want to have enemies cower forever so we likely need to record boss defeat and what dungeon level.
         gameState.bossesDefeated.push(gameState.enemy.name);
     }
     const exp = monsterExp(gameState.enemy);
