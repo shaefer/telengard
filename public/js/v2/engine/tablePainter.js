@@ -66,6 +66,9 @@ function drawDungeonAroundSquare(position) {
             }
             //console.log(thisRoom);
             paintWallsForRow(thisRoom, row, squareSize);
+            // if (RoomKey(thisRoom.x,thisRoom.y,thisRoom.z) in gameState.roomsVisited) {
+            //     drawRoomObjects({x:thisRoom.x, y:thisRoom.y, z:thisRoom.z});
+            // }
         }
     }
 }

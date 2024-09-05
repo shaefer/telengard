@@ -9,7 +9,7 @@ let gameConfig = {
 }
 
 const initialGameState = {
-    position: {x:3,y:3,z:0},
+    position: {x:4,y:4,z:0},
     currentEvent: null,
     class: 'barbarian',
     gender: 'm',
@@ -28,8 +28,8 @@ const initialGameState = {
     dungeonStats:[buildDungeonLevelStats(0)],
     dungeonKnowledge:[],
     bossesDefeated: [],
-    lastThroneEvent: new Date() - (60000 * 5) //5 min ago
-    //rooms visited
+    lastThroneEvent: new Date() - (60000 * 5), //5 min ago
+    roomsVisited: {} //each index will be a list of that dungeon level's rooms
 }
 
 //IDEA: Hunter power to search for specific monster and increase chance of encounter....would work well with traps. 

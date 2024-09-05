@@ -19,10 +19,8 @@ function paintRoom(dungeonRoom, square) {
     square.classList.add('id' + dungeonRoom.id);
     square.classList.add('fid' + dungeonRoom.featureId);
 
-    if (gameConfig.showFeatures) {
-        if (dungeonRoom.inn) {
-            square.classList.add('inn');
-        }
+    if (gameConfig.showFeatures || dungeonRoom.roomKey in gameState.roomsVisited) {
+        if (dungeonRoom.inn) square.classList.add('inn');
         if (dungeonRoom.throne) square.classList.add('throne');
         if (dungeonRoom.fountain) square.classList.add('fountain');
         if (dungeonRoom.current) square.classList.add('current');

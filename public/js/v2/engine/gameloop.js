@@ -12,6 +12,7 @@ function updateGameAndDisplay(newPosition) {
 
 function handleFeatures(newPosition) {
     const newRoom = new DungeonRoom(newPosition.x, newPosition.y, newPosition.z);
+    gameState.roomsVisited[newRoom.roomKey] = newRoom;
     if (newRoom.hasFeature) {
         console.log("Stepped right and newRoom hasFeature")
         if (newRoom.stairsDown) {
@@ -180,7 +181,7 @@ function handleLevelUp(expGain) {
     const newTotalExp = currentExp + expGain;
     
     console.log(currentExp, newTotalExp, expNeeded, gameState.exp);
-    if (currentExp < expNeeded && newTotalExp > expNeeded) {
+    if (currentExp < expNeeded && newTotalExp >= expNeeded) {
         gameState.exp += expGain;
         gameState.level += 1;
         console.log('Player Level Up!');

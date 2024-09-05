@@ -1,3 +1,7 @@
+function RoomKey(x,y,z) {
+    return x + "-" + y + "-" + z;
+}
+
 /**
  * DungeonRooms are derived from their xyz coordinates.
  * There are 16 digits to use to derive state. 
@@ -10,6 +14,7 @@ function DungeonRoom(x, y, z, startingRoom = true) {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.roomKey = RoomKey(x,y,z);
     const rnd = new Math.seedrandom("theoden"+x.toString() + y.toString() + z.toString());
     this.id = rnd().toString().substring(2); //random number is always between 0 and 1 so 0.someting means we strip off the "0."
     this.nwVertex = new Vertex(this.x, this.y, this.z);
