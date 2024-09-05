@@ -8,6 +8,7 @@ function updateGameAndDisplay(newPosition) {
         drawEnemy(newPosition, gameState.enemy);
     }
     gameState.position = newPosition;
+    displayPlayerStats(); //the floor display can't change until the new position is updated.
 }
 
 function handleFeatures(newPosition) {
