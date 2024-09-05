@@ -38,6 +38,12 @@ function handleFeatures(newPosition) {
             drawOptions(newPosition);
             displayPlayerStats();
         }
+        if (newRoom.throne) {
+            gameState.currentEvent = 'throne';
+            gameState.options = "[<span class='logOption'>S</span>]it on the throne. [<span class='logOption'>I</span>]gnore."
+            drawOptions(newPosition);
+            displayPlayerStats();
+        }
         return false;
     } else {
         return true;
@@ -97,17 +103,26 @@ const handleStandardActions = _.debounce(function handleStandardActions(action) 
     return true;
 }, 100);
 
-const handlePossibleEvent = _.debounce(function handlePossibleEvent(luck = 0) {
-    const rnd = Math.floor(Math.random() * 100 + 1);
-    console.log(rnd);
-    if (rnd > (90 + luck)) {
-        gameState.currentEvent = 'in combat';
+function initiateCombat(monsters, logFunc, levelRangeMod = 0) {
+    gameState.currentEvent = 'in combat';
         gameState.options = ["[<span class='logOption'>F</span>]ight, [<span class='logOption'>R</span>]un"];
-        const enemyChoice = Math.floor(Math.random() * Monsters.length);
-        console.log(Monsters.length + " monsters: chose monster: " + enemyChoice);
-        const enemyBase = (gameConfig.onlyDragons) ? Monsters[3] : Monsters[enemyChoice];
+        const enemyChoice = Math.floor(Math.random() * monsters.length);
+        console.log(monsters.length + " monsters: chose monster: " + enemyChoice);
+        let enemyBase = (gameConfig.onlyDragons) ? monsters[3] : monsters[enemyChoice];
+        
         const enemy = Object.assign({}, enemyBase);
-        enemy.level = gameState.position.z + Math.floor(Math.random() * 4 + 1); //level + 1-4 (dungeons start at level 0)
+        enemy.level = gameState.position.z + levelRangeMod + Math.floor(Math.random() * 4 + 1); //level + 1-4 (dungeons start at level 0)
+        
+        if (gameState.bossesDefeated.includes(enemyBase.boss)) {
+            gameState.options = ["[<span class='logOption'>D</span>]emand tribute, [<span class='logOption'>I</span>]gnore it."];
+            gameState.currentEvent = 'cower';
+            drawEnemy(gameState.position, enemy);
+            drawOptions(gameState.position);
+            GameLog("The level " + enemy.level + " " + enemy.name + " bows before you!", "COWER");
+            displayLog();
+            
+        }
+
         let enemyTotalHp = enemy.baseHp;
         //for each level past the first roll hp based on base.
         for (let i = 1;i<enemy.level;i++) {
@@ -116,10 +131,17 @@ const handlePossibleEvent = _.debounce(function handlePossibleEvent(luck = 0) {
         }
         enemy.hp = enemyTotalHp;
         gameState.enemy = enemy;
-        GameLog("You have encountered a <span class='logEnemy'>level " + enemy.level + " " + enemy.name + "</span>", "COMBAT");
+        GameLog(logFunc(gameState.enemy), "COMBAT");
         displayLog();
         drawEnemy(gameState.position, enemy);
         drawOptions(gameState.position);
+}
+
+const handlePossibleEvent = _.debounce(function handlePossibleEvent(luck = 0) {
+    const rnd = Math.floor(Math.random() * 100 + 1);
+    console.log(rnd);
+    if (rnd > (90 + luck)) {
+        initiateCombat(Monsters, (enemy) => "You have encountered a <span class='logEnemy'>level " + enemy.level + " " + enemy.name + "</span>", 0);
     }
 }, 75);
 
@@ -170,6 +192,7 @@ function handleLevelUp(expGain) {
         gameState.maxHp += hpGain;
         gameState.hp = gameState.maxHp;
     } else {
+        gameState.exp += expGain;
         console.log("Did not level up, current exp: " + gameState.exp);
     }
     
@@ -216,6 +239,10 @@ const gameloop = _.debounce(function nextTickOrAction(action) {
                     handleFountain(action);
                 }  else if (gameState.currentEvent == 'inn') {
                     handleInn(action);
+                } else if (gameState.currentEvent == 'throne') {
+                    handleThrone(action);
+                }  else if (gameState.currentEvent == 'cower') {
+                    handleCower(action);
                 }
 
                 //TODO: Location Actions for Throne, Fountain and Inn

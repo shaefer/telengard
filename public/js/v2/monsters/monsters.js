@@ -42,7 +42,7 @@ const dragonFire = (monster) => {
 
 const monsterExp = (monster) => {
     //TODO: If monster has above average hp give more exp. 
-    return monster.level * monster.power;
+    return monster.level * monster.power * (monster.xpBonusMultiplier||1);
 }
 
 const monsterDamage = (monster) => {
@@ -51,11 +51,19 @@ const monsterDamage = (monster) => {
     return damage;
 }
 
-const Monsters = [
-    {name: 'Troll', imgSrc: monsterImgFolder + 'troll.png', size: 1.5, baseHp: 6, power: 3},
-    {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_blue.png', size: 1.5, baseHp: 8, power: 4},
-    {name: 'Zombie', imgSrc: monsterImgFolder + 'zombie.png', size: 0.75, baseHp: 4, power: 1},
-    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon-1.png', size:1.25, baseHp: 10, power:5, specialAttackImg: monsterImgFolder + 'dragonfire.png'},
-    {name: 'Lizardfolk', imgSrc: monsterImgFolder + 'lizardfolk.png', size:1, baseHp: 10, power: 2},
-    {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2}
+const BossMonsters = [
+    {name: 'Dracolich', imgSrc: monsterImgFolder + 'dracolich.png', size: 2, baseHp: 10, power: 6, xpBonusMultiplier: 2, isBoss: true},
+    {name: 'Troll King', imgSrc: monsterImgFolder + 'troll_king.png', size: 2, baseHp: 8, power: 4, xpBonusMultiplier: 2, isBoss:true},
+    {name: 'Mecha-Dragon King', imgSrc: monsterImgFolder + 'dragonking.png', size: 2, baseHp: 10, power: 5, xpBonusMultiplier: 2, isBoss:true},
+    {name: 'Skeleton Captain', imgSrc: monsterImgFolder + 'skeleton_captain.png', size: 1, baseHp: 6, power: 4, xpBonusMultiplier: 2, isBoss: true}
 ];
+
+const Monsters = [
+    {name: 'Troll', imgSrc: monsterImgFolder + 'troll.png', size: 1.1, baseHp: 6, power: 3, boss:BossMonsters[1].name},
+    {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_blue.png', size: 1.25, baseHp: 8, power: 4, boss:BossMonsters[1].name},
+    {name: 'Zombie', imgSrc: monsterImgFolder + 'zombie.png', size: 0.75, baseHp: 4, power: 1},
+    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon-1.png', size:1.25, baseHp: 10, power:5, specialAttackImg: monsterImgFolder + 'dragonfire.png', boss: BossMonsters[0].name},
+    {name: 'Lizardfolk', imgSrc: monsterImgFolder + 'lizardfolk.png', size:0.6, baseHp: 10, power: 2, boss:BossMonsters[2].name},
+    {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2, boss:BossMonsters[3].name}
+];
+

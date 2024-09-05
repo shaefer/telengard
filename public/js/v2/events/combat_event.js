@@ -90,6 +90,10 @@ function handleEnemyFightBack() {
 }
 
 function handleCombatWin() {
+    if(gameState.enemy.isBoss) {
+        console.log("BOSS DEFEATED: " + gameState.enemy.name);
+        gameState.bossesDefeated.push(gameState.enemy.name);
+    }
     const exp = monsterExp(gameState.enemy);
     GameLog("You have defeated the " + gameState.enemy.name + ". You gain <span class='logExperience'>" + exp + "</span> experience.", "COMBAT VICTORY");
     displayLog();
@@ -103,6 +107,6 @@ function handleCombatWin() {
 }
 
 function handleSpecialAttackEvent(eventImg, specialEventTime) {
-    playAudio('audio/v2/dragon-roar-high-intensity-36564.mp3');
+    playDragonFire();
     drawSpecialEventAndFade(eventImg, specialEventTime);
 }

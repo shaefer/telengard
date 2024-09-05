@@ -104,7 +104,11 @@ function drawEnemy(position, enemy) {
         oImg.style.position = 'absolute';
         oImg.style.top = '-50%';
         oImg.style.left = '-50%';
-        oImg.setAttribute('width', (square.style.width + 'px')); //size has to be variable since the whole grid is responsive.
+        const size = new Number(square.offsetWidth) * enemy.size;
+        console.log("MONSTER SIZE: " + size);
+        console.log(square.offsetWidth, enemy.size)
+
+        oImg.setAttribute('width', (size + 'px')); //size has to be variable since the whole grid is responsive.
 
     square.appendChild(oImg);
 }

@@ -3,18 +3,12 @@
     //options
     //stats
 
-function playAudio(url) {
-    if (!gameConfig.mute) {
-        new Audio(url).play();
-    }
-}
-
 function setupStartScreenEffects() {
     document.getElementById('startButton')
 }
 
 function startButtonPress() {
-    playAudio('audio/v2/sword.mp3');
+    playSwordSound();
     const titleScreen = document.getElementById('titleScreen');
         //titleScreen.style.display="none";
         titleScreen.classList.toggle('fadeOut');
@@ -24,7 +18,7 @@ function startButtonPress() {
 }
 
 function optionButtonPress() {
-    playAudio('audio/v2/sword.mp3');
+    playSwordSound();
     document.getElementById('buttonScreen').style.display="none";
     const titleScreen = document.getElementById('titleScreen');
         //titleScreen.style.display="none";

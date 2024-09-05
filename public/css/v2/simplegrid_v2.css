@@ -111,6 +111,14 @@ index_v2.html
     font-weight: bold;
 }
 
+.logGold {
+    padding: 0 0.5em;
+    border-radius: 1em;
+    background-color: gold;
+    color: black;
+    font-weight: bold;
+}
+
 .logPlayerLevelUp {
     padding: 0 0.5em;
     background-color: lightgreen;

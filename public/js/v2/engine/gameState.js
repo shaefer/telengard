@@ -26,7 +26,9 @@ const initialGameState = {
     fireResist: 1,
     log: [],
     dungeonStats:[buildDungeonLevelStats(0)],
-    dungeonKnowledge:[]
+    dungeonKnowledge:[],
+    bossesDefeated: [],
+    lastThroneEvent: new Date() - (60000 * 5) //5 min ago
     //rooms visited
 }
 
@@ -65,4 +67,8 @@ function buildDungeonLevelStats(z) {
         }
     }
     return {dungeonRooms, innCount, fountainCount, throneCount, stairsDownCount, stairsUpCount};
+}
+
+function bossDefeated(enemy) {
+    return gameState.bossesDefeated.includes(enemy.boss);
 }
