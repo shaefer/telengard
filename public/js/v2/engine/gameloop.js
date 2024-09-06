@@ -118,6 +118,18 @@ function initiateCombat(monsters, logFunc, levelRangeMod = 0) {
         console.log(monsters.length + " monsters: chose monster: " + enemyChoice);
         let enemyBase = (gameConfig.onlyDragons) ? monsters[3] : monsters[enemyChoice];
         
+        if (gameState.skills.find(x => x.name == 'Big Game Hunter') && gameState.bigGameHunter && gameState.bigGameHunterQuarry) {
+            const quarryRoll = Math.floor(Math.random() * 100 + 1);
+            if (quarryRoll <= gameConfig.chanceToFindQuarry) {
+                const quarry = monsters.find(x => x.name == gameState.bigGameHunterQuarry); //This handles boss monsters well because you won't get boss monsters on your hunter's list and thus can't specifically hunt them...when rolling a boss combat this will never find a match.
+                if (quarry) {
+                    GameLog("<span class='logEmphasis'>You have found your quarry!</span>", "COMBAT");
+                    displayLog();
+                    enemyBase = quarry;
+                }
+            } 
+        }
+
         const enemy = Object.assign({}, enemyBase);
         enemy.level = gameState.position.z + levelRangeMod + Math.floor(Math.random() * 4 + 1); //level + 1-4 (dungeons start at level 0)
         

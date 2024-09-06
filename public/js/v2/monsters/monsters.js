@@ -60,9 +60,9 @@ const BossMonsters = [
 
 const Monsters = [
     {name: 'Troll', imgSrc: monsterImgFolder + 'troll.png', size: 1.1, baseHp: 6, power: 3, boss:BossMonsters[1].name},
-    {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_blue.png', size: 1.25, baseHp: 8, power: 4, boss:BossMonsters[1].name},
+    {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_mountain.png', size: 1.25, baseHp: 8, power: 4, boss:BossMonsters[1].name},
     {name: 'Zombie', imgSrc: monsterImgFolder + 'zombie.png', size: 0.75, baseHp: 4, power: 1},
-    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon-1.png', size:1.25, baseHp: 10, power:5, specialAttackImg: monsterImgFolder + 'dragonfire.png', boss: BossMonsters[0].name},
+    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon.png', size:1.25, baseHp: 10, power:5, specialAttackImg: monsterImgFolder + 'dragonfire.png', boss: BossMonsters[0].name},
     {name: 'Lizardfolk', imgSrc: monsterImgFolder + 'lizardfolk.png', size:0.6, baseHp: 10, power: 2, boss:BossMonsters[2].name},
     {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2, boss:BossMonsters[3].name}
 ];

@@ -108,12 +108,13 @@ function drawEnemy(position, enemy) {
         oImg.setAttribute('src', enemy.imgSrc); 
         oImg.style.position = 'absolute';
         oImg.style.top = '-50%';
-        oImg.style.left = '-50%';
+        
         const size = new Number(square.offsetWidth) * enemy.size;
         console.log("MONSTER SIZE: " + size);
         console.log(square.offsetWidth, enemy.size)
+        oImg.style.left = '-'+(size/1.5 + 'px');
 
-        oImg.setAttribute('width', (size + 'px')); //size has to be variable since the whole grid is responsive.
+        oImg.style.width = (size + 'px'); //size has to be variable since the whole grid is responsive.
 
     square.appendChild(oImg);
 }
@@ -206,9 +207,9 @@ function displayPlayer(position) {
     const square = document.getElementById(squareId);
     var oImg = document.createElement("img");
     if (gameState.gender == 'm')
-        oImg.setAttribute('src', 'images/v2/characters/barbarian_m.png'); //164 x 300
+        oImg.setAttribute('src', 'images/v2/characters/barbarian_m_left.png'); //164 x 300
     if (gameState.gender == 'f')
-        oImg.setAttribute('src', 'images/v2/characters/barbarian_f.png')
+        oImg.setAttribute('src', 'images/v2/characters/barbarian_f_left.png')
         oImg.style.width = (parseInt(square.style.width, 10) * 164 / 300) * 1.33 + 'px'; //size has to be variable since the whole grid is responsive.
 
     square.appendChild(oImg);
@@ -253,15 +254,40 @@ function displayCharacterMenu(maintainVisibility = false) {
     if (gameState.skills.find(x => x.name == 'Stealth')) {
         const stealthDiv = document.createElement('div');
         //TODO: Add style for when the answer is true vs. false. 
-        stealthDiv.innerHTML = "[<span class='logOption'>S</span>]tealth active: " + gameState.stealth;
+        stealthDiv.innerHTML = "[<span class='logOption'>S</span>]tealth active: <span class='logEmphasis'>" + gameState.stealth + "</span>";
         characterOptions.appendChild(stealthDiv);
     }
 
     if (gameState.skills.find(x => x.name == 'Big Game Hunter')) {
         const hunterDiv = document.createElement('div');
-        hunterDiv.innerHTML = "[<span class='logOption'>H</span>]unt a creature: " + gameState.bigGameHunter;
-        //TODO: add selection from defeated monsters.
+        hunterDiv.id = 'hunterDiv';
+        const hunterOption = document.createElement('span');
+        hunterOption.innerHTML = "[<span class='logOption'>H</span>]unt a creature: " + gameState.bigGameHunter;
+        hunterDiv.appendChild(hunterOption);
+        const hunterSelect = document.createElement('select');
+        hunterSelect.name = 'bigGameHunterSelect';
+        hunterSelect.id = 'bigGameHunterSelect';
         characterOptions.appendChild(hunterDiv);
+        hunterDiv.appendChild(hunterSelect);
+        hunterSelect.onchange = () => {
+            console.log('setting quarry to: ' + hunterSelect.value);
+            gameState.bigGameHunterQuarry = hunterSelect.value;
+        }
+        //TODO: add selection from defeated monsters.
+        const enemiesToHunt = gameState.uniqueEnemiesDefeated;
+        const noOpt = document.createElement('option');
+        noOpt.value = 'none';
+        noOpt.text = 'Select an option';
+        hunterSelect.appendChild(noOpt);
+        enemiesToHunt.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e;
+            opt.text = e;
+            if (e == gameState.bigGameHunterQuarry) opt.selected = true;
+            hunterSelect.appendChild(opt);
+        });
+       
+        
     }
     
     

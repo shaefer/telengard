@@ -141,6 +141,9 @@ index_v2.html
     border-radius: 1em;
     border: 5px solid black;
     background-color: white;
+    z-index: 21;
+    text-align: left;
+    padding: 0 1em;
 }
 
 .tableGridContainer .specialEvent {
@@ -166,6 +169,14 @@ index_v2.html
     border: 5px solid black;
     background-color: white;
     display: none;
+    z-index: 20;
+    text-align: left;
+    padding: 0 3em;
+}
+
+#characterOptions select {
+    display: inline;
+    margin-left: 1em;
 }
 
 .windowTitle {
@@ -173,6 +184,7 @@ index_v2.html
     font-weight: bold;
     font-variant: small-caps;
     margin-bottom: 1em;
+    text-align: center;
 }
 
 .westWall {

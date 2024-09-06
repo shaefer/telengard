@@ -94,7 +94,11 @@ function handleCombatWin() {
         console.log("BOSS DEFEATED: " + gameState.enemy.name);
         //TODO: We don't want to have enemies cower forever so we likely need to record boss defeat and what dungeon level.
         gameState.bossesDefeated.push(gameState.enemy.name);
+    } else {
+        gameState.enemiesDefeated.push({name: gameState.enemy.name, level: gameState.enemy.level});
+        gameState.uniqueEnemiesDefeated.add(gameState.enemy.name);
     }
+
     const exp = monsterExp(gameState.enemy);
     GameLog("You have defeated the " + gameState.enemy.name + ". You gain <span class='logExperience'>" + exp + "</span> experience.", "COMBAT VICTORY");
     displayLog();

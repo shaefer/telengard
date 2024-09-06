@@ -6,7 +6,8 @@ let gameConfig = {
     onlyDragons: false,
     percentChanceOfDragonFire: 40,
     showFeatures: false,
-    startWithSkills: true
+    startWithSkills: false,
+    chanceToFindQuarry: 25,
 }
 
 const initialGameState = {
@@ -28,13 +29,16 @@ const initialGameState = {
     fireResist: 1,
     gold: 1000,
     beSafe: true,
-    stealth: true, //only matters if the character has the stealth skill
+    stealth: false, //only matters if the character has the stealth skill
     bigGameHunter: false, //only matters with the BigGameHunter skill
+    bigGameHunterQuarry: '',
     log: [],
     skills: [],
     characterOptionsOpen: false,
+    enemiesDefeated: [],
+    uniqueEnemiesDefeated: new Set(),
     dungeonStats:[buildDungeonLevelStats(0), buildDungeonLevelStats(1), buildDungeonLevelStats(2), buildDungeonLevelStats(3), buildDungeonLevelStats(4)],
-    dungeonKnowledge:[true, true, true, true , true, true],
+    dungeonKnowledge:[],
     bossesDefeated: [],
     lastThroneEvent: new Date() - (60000 * 5), //5 min ago
     roomsVisited: {} //each index will be a list of that dungeon level's rooms
