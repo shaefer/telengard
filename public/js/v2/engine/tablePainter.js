@@ -89,6 +89,8 @@ function drawRoomObjects(position) {
             oImg.setAttribute('src', 'images/v2/stairsdown.png');
         else if (room.stairsUp)
             oImg.setAttribute('src', 'images/v2/stairsup.png');
+        else if (room.huntersGuild)
+            oImg.setAttribute('src', 'images/v2/huntersguild.png');
         oImg.style.position = 'absolute';
         oImg.style.top = '-50%';
         oImg.style.left = '-50%';
@@ -129,12 +131,12 @@ function drawOptions(position, options = gameState.options) {
         var oImg = document.createElement("div");
             oImg.id = 'playerOptions'
             oImg.style.position = 'absolute';
-            oImg.style.bottom = '0';
-            oImg.style.left = '0';
+            oImg.style.bottom = '-25%';
+            oImg.style.left = '-50%';
             oImg.style.padding = '5px';
             oImg.style.backgroundColor = 'white';
             oImg.style.color = 'black';
-            oImg.setAttribute('width', '100%'); //size has to be variable since the whole grid is responsive.
+            oImg.style.width = '200%'; //size has to be variable since the whole grid is responsive.
             const span = document.createElement('span');
             span.innerHTML = options || '';
             oImg.appendChild(span);
@@ -182,12 +184,15 @@ function displayPlayerStats() {
 
     playerInfo.appendChild(statDisplay("FLOOR", gameState.position.z));
 
-    if (gameState.dungeonKnowledge[0]) {
-        playerInfo.appendChild(statDisplay("STAIRS DOWN", gameState.dungeonStats[0].stairsDownCount));
-        playerInfo.appendChild(statDisplay("STAIRS UP", gameState.dungeonStats[0].stairsUpCount));
-        playerInfo.appendChild(statDisplay("INNS", gameState.dungeonStats[0].innCount));
-        playerInfo.appendChild(statDisplay("FOUNTAINS", gameState.dungeonStats[0].fountainCount));
-        playerInfo.appendChild(statDisplay("THRONES", gameState.dungeonStats[0].throneCount));
+    playerInfo.appendChild(statDisplay("GOLD", gameState.gold));
+
+    if (gameState.dungeonKnowledge[gameState.position.z]) {
+        playerInfo.appendChild(statDisplay("STAIRS DOWN", gameState.dungeonStats[gameState.position.z].stairsDownCount));
+        playerInfo.appendChild(statDisplay("STAIRS UP", gameState.dungeonStats[gameState.position.z].stairsUpCount));
+        playerInfo.appendChild(statDisplay("INNS", gameState.dungeonStats[gameState.position.z].innCount));
+        playerInfo.appendChild(statDisplay("FOUNTAINS", gameState.dungeonStats[gameState.position.z].fountainCount));
+        playerInfo.appendChild(statDisplay("THRONES", gameState.dungeonStats[gameState.position.z].throneCount));
+        playerInfo.appendChild(statDisplay("HUNTERSGUILD", gameState.dungeonStats[gameState.position.z].huntersGuildCount));
     }
 
 
@@ -204,7 +209,7 @@ function displayPlayer(position) {
         oImg.setAttribute('src', 'images/v2/characters/barbarian_m.png'); //164 x 300
     if (gameState.gender == 'f')
         oImg.setAttribute('src', 'images/v2/characters/barbarian_f.png')
-        oImg.setAttribute('width', (parseInt(square.style.width, 10) * 164 / 300) * 1.33) + 'px'; //size has to be variable since the whole grid is responsive.
+        oImg.style.width = (parseInt(square.style.width, 10) * 164 / 300) * 1.33 + 'px'; //size has to be variable since the whole grid is responsive.
 
     square.appendChild(oImg);
 
@@ -224,4 +229,46 @@ function drawSpecialEventAndFade(eventImg, eventTime) {
     setTimeout(function() {
         specialEventDiv.textContent = '';
     }, eventTime);
+}
+
+function displayCharacterMenu(maintainVisibility = false) {
+    const characterOptions = document.getElementById('characterOptions');
+    characterOptions.textContent = '';
+
+    const labelDiv = document.createElement('div');
+    labelDiv.classList.add('windowTitle');
+    labelDiv.innerHTML = '<span>Character Options</span>';
+    characterOptions.appendChild(labelDiv);
+
+    const beSafeDiv = document.createElement('div');
+    if (gameState.beSafe) {
+        beSafeDiv.innerHTML = "[<span class='logOption'>B</span>]e Risky: You are currently being <span class='logPlayerGood'>safe</span>."
+    } else {
+        beSafeDiv.innerHTML = "[<span class='logOption'>B</span>]e Safe: You are currently being <span class='logPlayerBad'>risky</span>."
+    }
+    characterOptions.appendChild(beSafeDiv);
+
+    console.log(gameState.skills)
+    console.log(gameState.skills.find(x => x.name == 'Stealth'))
+    if (gameState.skills.find(x => x.name == 'Stealth')) {
+        const stealthDiv = document.createElement('div');
+        //TODO: Add style for when the answer is true vs. false. 
+        stealthDiv.innerHTML = "[<span class='logOption'>S</span>]tealth active: " + gameState.stealth;
+        characterOptions.appendChild(stealthDiv);
+    }
+
+    if (gameState.skills.find(x => x.name == 'Big Game Hunter')) {
+        const hunterDiv = document.createElement('div');
+        hunterDiv.innerHTML = "[<span class='logOption'>H</span>]unt a creature: " + gameState.bigGameHunter;
+        //TODO: add selection from defeated monsters.
+        characterOptions.appendChild(hunterDiv);
+    }
+    
+    
+    if (!maintainVisibility) characterOptions.style.display = 'inherit';
+}
+
+function hideCharacterMenu() {
+    const characterOptions = document.getElementById('characterOptions');
+    characterOptions.style.display = 'none';
 }

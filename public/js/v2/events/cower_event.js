@@ -3,7 +3,9 @@
 //Ignore it
 const handleCower = _.debounce(function handleCower(action) {
     if (action == 'd' && gameState.currentEvent == 'cower') {
-        GameLog("You demand tribute! It pays you <span class='logGold'>" + Math.floor(Math.random() * 100 + 1) + "</span> gold.", 'COWER');
+        const goldEarned = Math.floor(Math.random() * 100 + 1);
+        gameState.gold += goldEarned;
+        GameLog("You demand tribute! It pays you <span class='logGold'>" + goldEarned + "</span> gold.", 'COWER');
         displayLog();
         //TODO: Actually implement gold. Or give exp.
         gameState.enemy = null;

@@ -29,6 +29,12 @@
     background-repeat: no-repeat;
 }
 
+.huntersGuild {
+    background: url(/images/v2/huntersguild.png);
+    background-size: 25%;
+    background-repeat: no-repeat;
+}
+
 #diceRoller {
 
 }

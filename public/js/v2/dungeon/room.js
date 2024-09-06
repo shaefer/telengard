@@ -53,8 +53,9 @@ function DungeonRoom(x, y, z, startingRoom = true) {
     this.fountain = mutuallyExclusiveFeatures > 2 && mutuallyExclusiveFeatures <= 3 && !lowerRoom.stairsUp//1%
     this.stairsDown = (mutuallyExclusiveFeatures > 3 && mutuallyExclusiveFeatures <= 4) || lowerRoom.stairsUp //1%
     this.stairsUp = mutuallyExclusiveFeatures > 4 && mutuallyExclusiveFeatures <= 5 && z != 0 && !lowerRoom.stairsUp//1%
+    this.huntersGuild = mutuallyExclusiveFeatures > 5 && mutuallyExclusiveFeatures <= 6 && !lowerRoom.stairsUp
 
-    this.hasFeature = this.inn || this.throne || this.fountain || this.stairsDown || this.stairsUp;
+    this.hasFeature = this.inn || this.throne || this.fountain || this.stairsDown || this.stairsUp || this.huntersGuild;
     //TODO: Stairs down likely should be a special rnd number shared between this room and the room below seed of this room + lower room.
     //check the room below to see if there are stairs up.
 
@@ -72,6 +73,8 @@ function DungeonRoom(x, y, z, startingRoom = true) {
     //fountain
     //teleporter
     //button puzzle
+    //shrine
+    //elevator
     
     //coffin/tomb
 

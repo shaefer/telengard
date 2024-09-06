@@ -26,5 +26,6 @@ function paintRoom(dungeonRoom, square) {
         if (dungeonRoom.current) square.classList.add('current');
         if (dungeonRoom.stairsDown) square.classList.add('stairsDown');
         if (dungeonRoom.stairsUp) square.classList.add('stairsUp');
+        if (dungeonRoom.huntersGuild) square.classList.add('huntersGuild');
     }
 }

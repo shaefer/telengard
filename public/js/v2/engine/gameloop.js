@@ -46,6 +46,12 @@ function handleFeatures(newPosition) {
             drawOptions(newPosition);
             displayPlayerStats();
         }
+        if (newRoom.huntersGuild) {
+            gameState.currentEvent = 'huntersGuild';
+            gameState.options = "[<span class='logOption'>E</span>]nter the guild. [<span class='logOption'>I</span>]gnore."
+            drawOptions(newPosition);
+            displayPlayerStats();
+        }
         return false;
     } else {
         return true;
@@ -142,7 +148,10 @@ function initiateCombat(monsters, logFunc, levelRangeMod = 0) {
 const handlePossibleEvent = _.debounce(function handlePossibleEvent(luck = 0) {
     const rnd = Math.floor(Math.random() * 100 + 1);
     console.log(rnd);
-    if (rnd > (90 + luck)) {
+    let adjustedChance = 90 + luck;
+    if (!gameState.beSafe) adjustedChance - 20;
+    if (gameState.skills.find(x => x.name == 'Stealth') && gameState.stealth) adjustedChance = 95;
+    if (rnd > adjustedChance) {
         initiateCombat(Monsters, (enemy) => "You have encountered a <span class='logEnemy'>level " + enemy.level + " " + enemy.name + "</span>", 0);
     }
 }, 75);
@@ -170,6 +179,9 @@ function isDirection(action) {
 }
 
 
+/**
+ * Set currentEvent and options to null
+ */
 function endEvent() {
     gameState.currentEvent = null;
     gameState.options = null;
@@ -200,6 +212,31 @@ function handleLevelUp(expGain) {
     
 }
 
+const handleCharacterActions = _.debounce(function handleCharacterActions(action) {
+    if (action == 'Escape') {
+        gameState.characterOptionsOpen = !gameState.characterOptionsOpen;
+        if (gameState.characterOptionsOpen) {
+            console.log("Hit escape button and opening menu")
+            displayCharacterMenu();
+        } else {
+            console.log("Hit escape button and closing menu")
+            hideCharacterMenu();
+        }
+
+    } else if (action == 'b') {
+        gameState.beSafe = !gameState.beSafe; //could probably store the active state of things on the skills object
+        displayCharacterMenu(true)
+    } else if (action == 's') {
+        gameState.stealth = !gameState.stealth;
+        displayCharacterMenu(true)
+    }  else if (action == 'h') {
+        gameState.bigGameHunter = !gameState.bigGameHunter;
+        displayCharacterMenu(true)
+    } else if (action = 'e') {
+        //scan surrounding rooms for features. This is an active skill with a cooldown rather than a toggled option.
+    }
+}, 100);
+
 function handleRandomEvent() {
     if (gameState.currentEvent) return;
     const now = new Date();
@@ -216,12 +253,14 @@ function handleRandomEvent() {
 const gameloop = _.debounce(function nextTickOrAction(action) {
     if (!processing) {
         processing = action;
-        if (!action) {
+
+        if (!action && !gameState.characterOptionsOpen) {
             handleRandomEvent();
         } else {
+            handleCharacterActions(action);
             if (!gameState.currentEvent) {
                 const possibleEvent = handleStandardActions(action);
-                if (possibleEvent) handlePossibleEvent();
+                if (possibleEvent && !gameState.characterOptionsOpen && action != 'Escape') handlePossibleEvent();
             } else {
                 //event actions.
                 console.log("handling event actions: " + gameState.currentEvent);
@@ -245,6 +284,10 @@ const gameloop = _.debounce(function nextTickOrAction(action) {
                     handleThrone(action);
                 }  else if (gameState.currentEvent == 'cower') {
                     handleCower(action);
+                } else if (gameState.currentEvent == 'huntersGuild') {
+                    handleHuntersGuild(action);
+                } else if (gameState.currentEvent == 'huntersGuildTraining') {
+                    handleHuntersGuildTraining(action);
                 }
 
                 //TODO: Location Actions for Throne, Fountain and Inn
