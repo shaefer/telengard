@@ -2,9 +2,9 @@ function handleSitOnThrone() {
     console.log("THRONE DEBUG")
     console.log(gameState.lastThroneEvent)
     console.log(new Date() - 0)
-    console.log(new Date() - (60000 * 5))
+    console.log(new Date() - (gameConfig.tributeCooldown))
     const now = new Date();
-    if (now - gameState.lastThroneEvent < (60000 * 5)) {
+    if (now - gameState.lastThroneEvent < (gameConfig.tributeCooldown)) {
         GameLog("The throne seems devoid of magic.", "THRONE");
         displayLog();
         endEvent();

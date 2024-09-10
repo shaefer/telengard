@@ -11,7 +11,7 @@ const monsterAttack = (monster) => {
             console.log('critical hit')
             //critical hit!
             const critMultiplier = Math.floor(Math.random() * 2 + 1)/2;
-            const dmg = monsterDamage(monster) * (1+critMultiplier);
+            const dmg = Math.round(monsterDamage(monster) * (1+critMultiplier));
             GameLog("The" + monster.name + " lands a crushing blow for <span class='logDamageToPlayer'>" + dmg + "</span> damage! (critmult: " + critMultiplier+")", "COMBAT");
             displayLog();
             return dmg;
@@ -40,9 +40,13 @@ const dragonFire = (monster) => {
     return dmg;
 }
 
-const monsterExp = (monster) => {
+const monsterExp = (monster, playerLevel) => {
     //TODO: If monster has above average hp give more exp. 
-    return monster.level * monster.power * (monster.xpBonusMultiplier||1);
+    let levelAdjustMultiplier = 1;
+    if (playerLevel > monster.level) levelAdjustMultiplier = 0.5;
+    if (playerLevel < monster.level) levelAdjustMultiplier = 1.25;
+    if (playerLevel + 5 < monster.level) levelAdjustMultiplier = 2;
+    return Math.round(monster.level * monster.power * (monster.xpBonusMultiplier||1) * levelAdjustMultiplier);
 }
 
 const monsterDamage = (monster) => {
@@ -66,4 +70,26 @@ const Monsters = [
     {name: 'Lizardfolk', imgSrc: monsterImgFolder + 'lizardfolk.png', size:0.6, baseHp: 10, power: 2, boss:BossMonsters[2].name},
     {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2, boss:BossMonsters[3].name}
 ];
+
+const MoreMonsters = [
+    {name: 'Minotaur', imgSrc: monsterImgFolder + 'minotaur.png', size: 1.5, baseHp: 12, power: 5, xpBonusMultiplier: 1.2},
+    {name: 'Runic Minotaur', imgSrc: monsterImgFolder + 'minotaur_runic.png', size: 1.2, baseHp: 8, power: 7, xpBonusMultiplier: 1.2},
+    {name: 'Molten Minotaur', imgSrc: monsterImgFolder + 'minotaur_fire.png', size: 1.5, baseHp: 10, power: 6, xpBonusMultiplier: 1.2},
+    {name: 'Lightning Minotaur', imgSrc: monsterImgFolder + 'minotaur_lightning.png', size: 1.2, baseHp: 10, power: 4, xpBonusMultiplier: 1.2},
+];
+
+const MonstersForLevel = (z) => {
+    if (gameConfig.testMonsters) {
+        return MoreMonsters;
+    }
+    if (z == 1) {
+        return Monsters.filter(x => x.name != 'Red Dragon');
+    } else if (z > 1 && z <= 3) {
+        return Monsters;
+    } else if (z > 3 && z <= 5) {
+        return Monsters + MoreMonsters.filter(x => x.name == 'Minotaur');
+    } else {
+        return Monsters.filter(x => !['Zombie', 'Lizardfolk'].includes(x.name)) + MoreMonsters;
+    }
+}
 

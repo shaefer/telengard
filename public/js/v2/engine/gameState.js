@@ -8,6 +8,9 @@ let gameConfig = {
     showFeatures: false,
     startWithSkills: false,
     chanceToFindQuarry: 25,
+    bossesDefeated: [],    //example to test bosses defeated and tribute ['Troll King', 'Dracolich', 'Mecha-Dragon King'],
+    tributeCooldown: 60000 * 5,
+    testMonsters: false, //currently set this in monsters.js
 }
 
 const initialGameState = {
@@ -15,7 +18,7 @@ const initialGameState = {
     currentEvent: null,
     class: 'barbarian',
     gender: 'm',
-    level: 1,
+    level: 2,
     maxHp: 20,
     hp: 20,
     baseStr: 18,
@@ -25,7 +28,7 @@ const initialGameState = {
     dex: 10, //dex help with running
     cha: 10, //cha helps with negotiation. 
     ac: 10,
-    exp: 0,
+    exp: 249,
     fireResist: 1,
     gold: 1000,
     beSafe: true,
@@ -51,6 +54,10 @@ if (gameConfig.startWithSkills) {
     console.log('starting with skills')
     gameState.skills = [{name: 'Big Game Hunter'}, {name: 'Stealth'}];
     console.log(gameState);
+}
+if (gameConfig.bossesDefeated && gameConfig.bossesDefeated.length > 0) {
+    gameState.bossesDefeated = gameConfig.bossesDefeated.slice();
+    gameState.lastThroneEvent = new Date() - 0;
 }
 const dungeonViewSize = 5; /** Odd numbers only */
 

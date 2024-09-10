@@ -11,7 +11,7 @@ const handleCower = _.debounce(function handleCower(action) {
         gameState.enemy = null;
         endEvent();
         updateGameAndDisplay(gameState.position);
-    } else if ((action == 'i' || isDirection(action)) && gameState.currentEvent == 'cower') {
+    } else if ((action == 'i') && gameState.currentEvent == 'cower') { //removed action check so that tribute is not so easily accidentally ignored.
         GameLog("You ignore the creature and continue adventuring.", "COWER");
         gameState.enemy = null;
         endEvent();

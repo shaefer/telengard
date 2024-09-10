@@ -99,7 +99,7 @@ function handleCombatWin() {
         gameState.uniqueEnemiesDefeated.add(gameState.enemy.name);
     }
 
-    const exp = monsterExp(gameState.enemy);
+    const exp = monsterExp(gameState.enemy, gameState.level);
     GameLog("You have defeated the " + gameState.enemy.name + ". You gain <span class='logExperience'>" + exp + "</span> experience.", "COMBAT VICTORY");
     displayLog();
 

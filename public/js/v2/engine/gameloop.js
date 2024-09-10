@@ -133,7 +133,7 @@ function initiateCombat(monsters, logFunc, levelRangeMod = 0) {
         const enemy = Object.assign({}, enemyBase);
         enemy.level = gameState.position.z + levelRangeMod + Math.floor(Math.random() * 4 + 1); //level + 1-4 (dungeons start at level 0)
         
-        if (gameState.bossesDefeated.includes(enemyBase.boss)) {
+        if (gameState.bossesDefeated.includes(enemyBase.boss) && new Date() - gameState.lastThroneEvent < (gameConfig.tributeCooldown)) {
             gameState.options = ["[<span class='logOption'>D</span>]emand tribute, [<span class='logOption'>I</span>]gnore it."];
             gameState.currentEvent = 'cower';
             drawEnemy(gameState.position, enemy);
@@ -164,7 +164,8 @@ const handlePossibleEvent = _.debounce(function handlePossibleEvent(luck = 0) {
     if (!gameState.beSafe) adjustedChance - 20;
     if (gameState.skills.find(x => x.name == 'Stealth') && gameState.stealth) adjustedChance = 95;
     if (rnd > adjustedChance) {
-        initiateCombat(Monsters, (enemy) => "You have encountered a <span class='logEnemy'>level " + enemy.level + " " + enemy.name + "</span>", 0);
+        const potentialMonsters = MonstersForLevel(gameState.position.z);
+        initiateCombat(potentialMonsters, (enemy) => "You have encountered a <span class='logEnemy'>level " + enemy.level + " " + enemy.name + "</span>", 0);
     }
 }, 75);
 
@@ -210,13 +211,27 @@ function handleLevelUp(expGain) {
         gameState.exp += expGain;
         gameState.level += 1;
         console.log('Player Level Up!');
-        GameLog("<span class='logEmphasis'>You gained a level!</span> You are level <span class='logPlayerLevelUp'>"+gameState.level+"</span>", "COMBAT RESOLUTION");
+        GameLog("<span class='logEmphasis'>You gained a level!</span> You are <span class='logPlayerLevelUp'>level "+gameState.level+"</span>", "COMBAT RESOLUTION");
         displayLog();
         
         const hpGain = Math.round(Math.random() * 10 + 11);
-        GameLog("You gained <span class='logPlayerLevelUp'>" + hpGain + "</span> hit points!", "COMBAT RESOLUTION");
+        GameLog("You gained <span class='logPlayerLevelUp'>" + hpGain + " hit points</span>!", "COMBAT RESOLUTION");
+        displayLog();
         gameState.maxHp += hpGain;
         gameState.hp = gameState.maxHp;
+
+        const strGain = (gameState.level % 2 == 0) ? 1 : 2;
+        GameLog("You gained <span class='logPlayerLevelUp'>" + strGain + " Strength</span>!", "COMBAT RESOLUTION");
+        displayLog();
+        gameState.str += strGain;
+
+        const fireResistGain = (gameState.level % 3 == 0) ? 1 : 0;
+        if (fireResistGain > 0){
+            GameLog("You gained <span class='logPlayerLevelUp'>" + fireResistGain + " Fire Resist</span>!", "COMBAT RESOLUTION");
+            displayLog();
+            gameState.fireResist += fireResistGain;
+        }
+
     } else {
         gameState.exp += expGain;
         console.log("Did not level up, current exp: " + gameState.exp);
