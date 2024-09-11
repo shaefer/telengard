@@ -66,27 +66,35 @@ function handleEnemyFightBack() {
         special attack
         run away
     */
-    if (gameState.enemy.hp <= 2) {
+        const enemy = gameState.enemy;
+    if (enemy.hp <= 2) {
         //chance to run.
         console.log("Has a chance to run.");
     }
 
-    const attackType = Math.floor(Math.random() * 10 + 1);
-    //TODO use gameConfig.percentChangeOfDragonFire to adjust this attackType check.
-    if (attackType >= 7 && gameState.enemy.name == 'Red Dragon') {
+    const attackType = Math.floor(Math.random() * 100 + 1); //could be overridden by gameConfig.percentChanceSpecialAttack.
+    if (attackType <= enemy.specialAttackPercentChance && enemy.hasSpecialAttack) {
         //special attack.
-        GameLog("<span class='logDamageToPlayer'>The red dragon breathes fire!!!</span>", "COMBAT");
+        GameLog("<span class='logDamageToPlayer'>The "+enemy.name+" "+enemy.specialAttackText+"!!!</span>", "COMBAT");
         displayLog();
-        const specialAttackTime = 4000;
-        handleSpecialAttackEvent(gameState.enemy.specialAttackImg, specialAttackTime);
+
+
+        handleSpecialAttackEvent(enemy.specialAttackImg, enemy.specialAttackAudio, enemy.specialAttackLength);
         setTimeout(function() {
             const dmg = dragonFire(gameState.enemy);
             handleDamage(dmg);
-        }, specialAttackTime);
+        }, enemy.specialAttackLength);
     } else {
         const dmg = monsterAttack(gameState.enemy);
         handleDamage(dmg);
     }
+}
+
+function handleMonsterTreasure(enemy) {
+    const gold = Math.round(Math.floor(Math.random() * 10 + 1) * enemy.level * (enemy.goldMultiplier||1) * (1 + (.1 * gameState.luck)));
+    gameState.gold += gold;
+    GameLog("You find <span class='logGold'>" + gold + " gold</span> in the creatures belongings.", "COMBAT VICTORY");
+    displayLog();
 }
 
 function handleCombatWin() {
@@ -103,6 +111,8 @@ function handleCombatWin() {
     GameLog("You have defeated the " + gameState.enemy.name + ". You gain <span class='logExperience'>" + exp + "</span> experience.", "COMBAT VICTORY");
     displayLog();
 
+    handleMonsterTreasure(gameState.enemy);
+
     setTimeout(function () {
         handleLevelUp(exp);
         gameState.enemy = null;
@@ -111,7 +121,7 @@ function handleCombatWin() {
     }, 500);
 }
 
-function handleSpecialAttackEvent(eventImg, specialEventTime) {
-    playDragonFire();
+function handleSpecialAttackEvent(eventImg, eventAudio, specialEventTime) {
+    playAudio(eventAudio);
     drawSpecialEventAndFade(eventImg, specialEventTime);
 }

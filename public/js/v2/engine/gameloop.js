@@ -116,7 +116,8 @@ function initiateCombat(monsters, logFunc, levelRangeMod = 0) {
         gameState.options = ["[<span class='logOption'>F</span>]ight, [<span class='logOption'>R</span>]un"];
         const enemyChoice = Math.floor(Math.random() * monsters.length);
         console.log(monsters.length + " monsters: chose monster: " + enemyChoice);
-        let enemyBase = (gameConfig.onlyDragons) ? monsters[3] : monsters[enemyChoice];
+        console.log(monsters);
+        let enemyBase = (gameConfig.onlyDragons) ? Monsters.find(x => x.name == 'Red Dragon') : monsters[enemyChoice];
         
         if (gameState.skills.find(x => x.name == 'Big Game Hunter') && gameState.bigGameHunter && gameState.bigGameHunterQuarry) {
             const quarryRoll = Math.floor(Math.random() * 100 + 1);

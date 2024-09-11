@@ -232,32 +232,7 @@ function drawSpecialEventAndFade(eventImg, eventTime) {
     }, eventTime);
 }
 
-function displayCharacterMenu(maintainVisibility = false) {
-    const characterOptions = document.getElementById('characterOptions');
-    characterOptions.textContent = '';
-
-    const labelDiv = document.createElement('div');
-    labelDiv.classList.add('windowTitle');
-    labelDiv.innerHTML = '<span>Character Options</span>';
-    characterOptions.appendChild(labelDiv);
-
-    const beSafeDiv = document.createElement('div');
-    if (gameState.beSafe) {
-        beSafeDiv.innerHTML = "[<span class='logOption'>B</span>]e Risky: You are currently being <span class='logPlayerGood'>safe</span>."
-    } else {
-        beSafeDiv.innerHTML = "[<span class='logOption'>B</span>]e Safe: You are currently being <span class='logPlayerBad'>risky</span>."
-    }
-    characterOptions.appendChild(beSafeDiv);
-
-    console.log(gameState.skills)
-    console.log(gameState.skills.find(x => x.name == 'Stealth'))
-    if (gameState.skills.find(x => x.name == 'Stealth')) {
-        const stealthDiv = document.createElement('div');
-        //TODO: Add style for when the answer is true vs. false. 
-        stealthDiv.innerHTML = "[<span class='logOption'>S</span>]tealth active: <span class='logEmphasis'>" + gameState.stealth + "</span>";
-        characterOptions.appendChild(stealthDiv);
-    }
-
+function displayBigGameHunterSection(containerDiv) {
     if (gameState.skills.find(x => x.name == 'Big Game Hunter')) {
         const hunterDiv = document.createElement('div');
         hunterDiv.id = 'hunterDiv';
@@ -267,7 +242,7 @@ function displayCharacterMenu(maintainVisibility = false) {
         const hunterSelect = document.createElement('select');
         hunterSelect.name = 'bigGameHunterSelect';
         hunterSelect.id = 'bigGameHunterSelect';
-        characterOptions.appendChild(hunterDiv);
+        containerDiv.appendChild(hunterDiv);
         hunterDiv.appendChild(hunterSelect);
         hunterSelect.onchange = () => {
             console.log('setting quarry to: ' + hunterSelect.value);
@@ -289,7 +264,33 @@ function displayCharacterMenu(maintainVisibility = false) {
        
         
     }
-    
+}
+
+function displayCharacterMenu(maintainVisibility = false) {
+    const characterOptions = document.getElementById('characterOptions');
+    characterOptions.textContent = '';
+
+    const labelDiv = document.createElement('div');
+    labelDiv.classList.add('windowTitle');
+    labelDiv.innerHTML = '<span>Character Options</span>';
+    characterOptions.appendChild(labelDiv);
+
+    const beSafeDiv = document.createElement('div');
+    if (gameState.beSafe) {
+        beSafeDiv.innerHTML = "[<span class='logOption'>B</span>]e Risky: You are currently being <span class='logPlayerGood'>safe</span>."
+    } else {
+        beSafeDiv.innerHTML = "[<span class='logOption'>B</span>]e Safe: You are currently being <span class='logPlayerBad'>risky</span>."
+    }
+    characterOptions.appendChild(beSafeDiv);
+
+    if (gameState.skills.find(x => x.name == 'Stealth')) {
+        const stealthDiv = document.createElement('div');
+        //TODO: Add style for when the answer is true vs. false. 
+        stealthDiv.innerHTML = "[<span class='logOption'>S</span>]tealth active: <span class='logEmphasis'>" + gameState.stealth + "</span>";
+        characterOptions.appendChild(stealthDiv);
+    }
+
+    displayBigGameHunterSection(characterOptions);
     
     if (!maintainVisibility) characterOptions.style.display = 'inherit';
 }

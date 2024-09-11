@@ -62,13 +62,25 @@ const BossMonsters = [
     {name: 'Skeleton Captain', imgSrc: monsterImgFolder + 'skeleton_captain.png', size: 1, baseHp: 6, power: 4, xpBonusMultiplier: 2, isBoss: true}
 ];
 
+const fear_sa = () => {
+
+}
+
 const Monsters = [
     {name: 'Troll', imgSrc: monsterImgFolder + 'troll.png', size: 1.1, baseHp: 6, power: 3, boss:BossMonsters[1].name},
     {name: 'Mountain Troll', imgSrc: monsterImgFolder + 'troll_mountain.png', size: 1.25, baseHp: 8, power: 4, boss:BossMonsters[1].name},
     {name: 'Zombie', imgSrc: monsterImgFolder + 'zombie.png', size: 0.75, baseHp: 4, power: 1},
-    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon.png', size:1.25, baseHp: 10, power:5, specialAttackImg: monsterImgFolder + 'dragonfire.png', boss: BossMonsters[0].name},
+    {name: 'Red Dragon', imgSrc: monsterImgFolder + 'reddragon.png', size:1.25, baseHp: 10, power:5, 
+            hasSpecialAttack: true,
+            specialAttackText: "breathes fire",
+            specialAttackImg: monsterImgFolder + 'dragonfire.png',
+            specialAttackAudio:'audio/v2/dragon-roar-high-intensity-36564.mp3', boss: BossMonsters[0].name,
+            specialAttackLength: 4000,
+            specialAttackPercentChance: 40},
     {name: 'Lizardfolk', imgSrc: monsterImgFolder + 'lizardfolk.png', size:0.6, baseHp: 10, power: 2, boss:BossMonsters[2].name},
-    {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2, boss:BossMonsters[3].name}
+    {name: 'Skeleton', imgSrc: monsterImgFolder + 'skeleton.png', size: 1, baseHp: 6, power: 2, boss:BossMonsters[3].name},
+    {name: 'Spectre', imgSrc: monsterImgFolder + 'spectre.png', size: 1.2, baseHp: 10, power: 4},
+    {name: 'Dark Elf', imgSrc: monsterImgFolder + 'darkelf.png', size: 1, baseHp: 8, power: 4}
 ];
 
 const MoreMonsters = [
@@ -78,18 +90,19 @@ const MoreMonsters = [
     {name: 'Lightning Minotaur', imgSrc: monsterImgFolder + 'minotaur_lightning.png', size: 1.2, baseHp: 10, power: 4, xpBonusMultiplier: 1.2},
 ];
 
-const MonstersForLevel = (z) => {
+function MonstersForLevel(z) {
     if (gameConfig.testMonsters) {
         return MoreMonsters;
     }
-    if (z == 1) {
+    
+    if (z <= 1) { //first floor is 0
         return Monsters.filter(x => x.name != 'Red Dragon');
     } else if (z > 1 && z <= 3) {
         return Monsters;
     } else if (z > 3 && z <= 5) {
-        return Monsters + MoreMonsters.filter(x => x.name == 'Minotaur');
+        return Monsters.concat(MoreMonsters.filter(x => x.name == 'Minotaur'));
     } else {
-        return Monsters.filter(x => !['Zombie', 'Lizardfolk'].includes(x.name)) + MoreMonsters;
+        return Monsters.filter(x => !['Zombie', 'Lizardfolk'].includes(x.name)).concat(MoreMonsters);
     }
 }
 

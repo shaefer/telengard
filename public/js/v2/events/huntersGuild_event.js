@@ -19,9 +19,9 @@ const handleHuntersGuild = _.debounce(function handleHuntersGuild(action) {
 }, 100);
 
 const hunterSkills = [
-    {name: 'Critical Strike', cost: 500, option: "0", description: "This secret skill increases the chance of a critical hit by 5%"},
+    {name: 'Critical Strike', cost: 0, option: "0", description: "This secret skill increases the chance of a critical hit by 5%"},
     {name: 'Big Game Hunter', cost: 500, option: "1", description: "Increase the chance that when you encounter a creature it is the variety of creature that you specifiy when activating the skill"},
-    {name: 'Surveyor', cost: 500, option: "2", description: "When you use the Surveyor skill you check the 8 surrounding squares for locations of note. This skill is affected by Wisdom."},
+    //{name: 'Surveyor', cost: 500, option: "2", description: "When you use the Surveyor skill you check the 8 surrounding squares for locations of note. This skill is affected by Wisdom."},
     {name: 'Stealth', cost: 500, option: "3", description: "When you activate Stealth and move around the dungeon your chances of encounters is greatly lowered."}
 ];
 

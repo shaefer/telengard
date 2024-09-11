@@ -4,9 +4,9 @@ let tickSeconds = 10;
 let gameConfig = {
     mute: false,
     onlyDragons: false,
-    percentChanceOfDragonFire: 40,
+    percentChanceOfSpecialAttack: 99, //this globally sets all special attacks to a percent chance...most useful for testing.
     showFeatures: false,
-    startWithSkills: false,
+    startWithSkills: true, //currently hardcoded to add stealth and biggamehunter
     chanceToFindQuarry: 25,
     bossesDefeated: [],    //example to test bosses defeated and tribute ['Troll King', 'Dracolich', 'Mecha-Dragon King'],
     tributeCooldown: 60000 * 5,
@@ -18,7 +18,7 @@ const initialGameState = {
     currentEvent: null,
     class: 'barbarian',
     gender: 'm',
-    level: 2,
+    level: 1,
     maxHp: 20,
     hp: 20,
     baseStr: 18,
@@ -28,9 +28,9 @@ const initialGameState = {
     dex: 10, //dex help with running
     cha: 10, //cha helps with negotiation. 
     ac: 10,
-    exp: 249,
+    exp: 0,
     fireResist: 1,
-    gold: 1000,
+    gold: 0,
     beSafe: true,
     stealth: false, //only matters if the character has the stealth skill
     bigGameHunter: false, //only matters with the BigGameHunter skill
