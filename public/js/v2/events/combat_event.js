@@ -102,6 +102,7 @@ function handleCombatWin() {
         console.log("BOSS DEFEATED: " + gameState.enemy.name);
         //TODO: We don't want to have enemies cower forever so we likely need to record boss defeat and what dungeon level.
         gameState.bossesDefeated.push(gameState.enemy.name);
+        gameState.lastBossDefeated = gameState.enemy.name;
     } else {
         gameState.enemiesDefeated.push({name: gameState.enemy.name, level: gameState.enemy.level});
         gameState.uniqueEnemiesDefeated.add(gameState.enemy.name);

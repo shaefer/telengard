@@ -9,6 +9,7 @@ let gameConfig = {
     startWithSkills: true, //currently hardcoded to add stealth and biggamehunter
     chanceToFindQuarry: 25,
     bossesDefeated: [],    //example to test bosses defeated and tribute ['Troll King', 'Dracolich', 'Mecha-Dragon King'],
+    lastBossDefeated: '',
     tributeCooldown: 60000 * 5,
     testMonsters: false, //currently set this in monsters.js
 }
@@ -31,6 +32,7 @@ const initialGameState = {
     exp: 0,
     fireResist: 1,
     gold: 0,
+    strBonusExpiry: new Date() - (60000 * 5),
     beSafe: true,
     stealth: false, //only matters if the character has the stealth skill
     bigGameHunter: false, //only matters with the BigGameHunter skill
@@ -43,6 +45,7 @@ const initialGameState = {
     dungeonStats:[buildDungeonLevelStats(0), buildDungeonLevelStats(1), buildDungeonLevelStats(2), buildDungeonLevelStats(3), buildDungeonLevelStats(4)],
     dungeonKnowledge:[],
     bossesDefeated: [],
+    lastBossDefeated: '',
     lastThroneEvent: new Date() - (60000 * 5), //5 min ago
     roomsVisited: {} //each index will be a list of that dungeon level's rooms
 }
@@ -58,6 +61,9 @@ if (gameConfig.startWithSkills) {
 if (gameConfig.bossesDefeated && gameConfig.bossesDefeated.length > 0) {
     gameState.bossesDefeated = gameConfig.bossesDefeated.slice();
     gameState.lastThroneEvent = new Date() - 0;
+}
+if (gameConfig.lastBossDefeated) {
+    gameState.lastBossDefeated = gameConfig.lastBossDefeated;
 }
 const dungeonViewSize = 5; /** Odd numbers only */
 

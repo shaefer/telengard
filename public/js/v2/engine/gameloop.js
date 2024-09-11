@@ -134,7 +134,7 @@ function initiateCombat(monsters, logFunc, levelRangeMod = 0) {
         const enemy = Object.assign({}, enemyBase);
         enemy.level = gameState.position.z + levelRangeMod + Math.floor(Math.random() * 4 + 1); //level + 1-4 (dungeons start at level 0)
         
-        if (gameState.bossesDefeated.includes(enemyBase.boss) && new Date() - gameState.lastThroneEvent < (gameConfig.tributeCooldown)) {
+        if (gameState.lastBossDefeated == enemyBase.boss && new Date() - gameState.lastThroneEvent < (gameConfig.tributeCooldown)) {
             gameState.options = ["[<span class='logOption'>D</span>]emand tribute, [<span class='logOption'>I</span>]gnore it."];
             gameState.currentEvent = 'cower';
             drawEnemy(gameState.position, enemy);
@@ -276,12 +276,25 @@ function handleRandomEvent() {
     }
 }
 
+function checkForExpiringEffects() {
+    //Expire Str Bonus (from Fountain)
+    console.log(gameState.strBonusExpiry);
+    console.log(new Date() - 0);
+    console.log(gameState.strBonus);
+    if (gameState.strBonusExpiry < new Date() - 0 && gameState.strBonus > 0) {
+        gameState.strBonus = 0; //this is the additional trigger that will prevent this from firing more than once. 
+        GameLog("Your extraordinary <span class='logEmphasis'>strength</span> wanes.", "FOUNTAIN");
+        displayLog();
+    }
+}
+
 //TODO: Handle swiping: https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 //TODO: if processing or its too soon to process a nothing happening. If the last action was less than 10 seconds ago then we don't have a "no-action" event occur. 
 const gameloop = _.debounce(function nextTickOrAction(action) {
     if (!processing) {
         processing = action;
 
+        checkForExpiringEffects();
         if (!action && !gameState.characterOptionsOpen) {
             handleRandomEvent();
         } else {
