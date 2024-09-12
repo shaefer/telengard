@@ -2,7 +2,7 @@ let processing = false;
 let lastActionCompleted;
 let tickSeconds = 10;
 let gameConfig = {
-    mute: false,
+    mute: true,
     onlyDragons: false,
     percentChanceOfSpecialAttack: 99, //this globally sets all special attacks to a percent chance...most useful for testing.
     showFeatures: false,
