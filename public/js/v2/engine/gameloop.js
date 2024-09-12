@@ -276,11 +276,12 @@ function handleRandomEvent() {
     }
 }
 
+function checkForOngoingEffects() {
+    //handle poison here.
+}
+
 function checkForExpiringEffects() {
     //Expire Str Bonus (from Fountain)
-    console.log(gameState.strBonusExpiry);
-    console.log(new Date() - 0);
-    console.log(gameState.strBonus);
     if (gameState.strBonusExpiry < new Date() - 0 && gameState.strBonus > 0) {
         gameState.strBonus = 0; //this is the additional trigger that will prevent this from firing more than once. 
         GameLog("Your extraordinary <span class='logEmphasis'>strength</span> wanes.", "FOUNTAIN");
@@ -293,7 +294,7 @@ function checkForExpiringEffects() {
 const gameloop = _.debounce(function nextTickOrAction(action) {
     if (!processing) {
         processing = action;
-
+        checkForOngoingEffects();
         checkForExpiringEffects();
         if (!action && !gameState.characterOptionsOpen) {
             handleRandomEvent();
